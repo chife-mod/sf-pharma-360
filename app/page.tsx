@@ -1,103 +1,179 @@
-import Image from "next/image";
+import Link from "next/link";
+import {
+  IconActivityHeartbeat,
+  IconArrowUpRight,
+  IconChartLine,
+  IconPill,
+  IconStethoscope,
+  IconUsersGroup,
+} from "@tabler/icons-react";
+
+import { Button } from "@/components/ui/button";
+
+const KPI = [
+  { label: "DOLs tracked", value: "234", icon: IconUsersGroup, hint: "across 27 markets" },
+  { label: "Therapeutic areas", value: "18", icon: IconStethoscope, hint: "diabetes, obesity, cardio…" },
+  { label: "Medications", value: "62", icon: IconPill, hint: "GLP-1, semaglutide…" },
+  { label: "Signal volume / mo", value: "1.2M", icon: IconActivityHeartbeat, hint: "posts + comments" },
+];
+
+const MODULES = [
+  {
+    title: "DOLs",
+    blurb: "Find, segment and benchmark digital opinion leaders across pharma verticals.",
+    href: "/dols",
+    accent: "from-accent-cyan/30 to-transparent",
+    icon: IconUsersGroup,
+  },
+  {
+    title: "Disease signals",
+    blurb: "What patients are talking about — by therapeutic area, region and channel.",
+    href: "#",
+    accent: "from-accent-magenta/30 to-transparent",
+    icon: IconActivityHeartbeat,
+  },
+  {
+    title: "Brand monitoring",
+    blurb: "Mention share, sentiment shifts and competitive overlap for owned brands.",
+    href: "#",
+    accent: "from-accent-lime/25 to-transparent",
+    icon: IconChartLine,
+  },
+];
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main className="bg-aurora min-h-screen">
+      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
+        <div className="flex items-center gap-3">
+          <div className="size-9 rounded-xl bg-gradient-to-br from-accent-cyan via-accent-magenta to-accent-orange shadow-[0_0_24px_-4px_color-mix(in_oklch,var(--accent-magenta)_60%,transparent)]" />
+          <div className="leading-tight">
+            <div className="text-sm font-semibold tracking-wide">
+              PHARMA <span className="text-accent-cyan">360</span>
+            </div>
+            <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              by Market 360
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
+          <a className="hover:text-foreground" href="#">Platform</a>
+          <a className="hover:text-foreground" href="#">Use cases</a>
+          <a className="hover:text-foreground" href="#">About</a>
+          <a className="hover:text-foreground" href="#">Contacts</a>
+        </nav>
+        <Button variant="default" className="rounded-full bg-foreground text-background hover:bg-foreground/90">
+          Book a demo
+          <IconArrowUpRight className="size-4" />
+        </Button>
+      </header>
+
+      <section className="mx-auto max-w-7xl px-6 pt-12 pb-20 lg:px-10 lg:pt-20 lg:pb-32">
+        <div className="grid items-end gap-12 lg:grid-cols-[1.2fr_1fr]">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs uppercase tracking-[0.18em] text-muted-foreground backdrop-blur">
+              <span className="size-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px] shadow-accent-cyan" />
+              Pharma vertical · prototype
+            </span>
+            <h1 className="mt-6 text-balance text-5xl font-semibold leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
+              Market intelligence
+              <br />
+              for{" "}
+              <span className="bg-gradient-to-r from-accent-cyan via-accent-magenta to-accent-orange bg-clip-text text-transparent">
+                pharma
+              </span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
+              Track digital opinion leaders, disease conversations and brand
+              signal across social channels — in one place, built for pharma
+              teams.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild className="rounded-full" size="lg">
+                <Link href="/dols">
+                  Explore DOLs
+                  <IconArrowUpRight className="size-4" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" className="rounded-full bg-card/40 backdrop-blur">
+                See the platform
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            {KPI.map((k) => (
+              <div
+                key={k.label}
+                className="group relative overflow-hidden rounded-2xl border border-border bg-card/70 p-5 backdrop-blur transition hover:-translate-y-0.5 hover:border-accent-cyan/40 hover:shadow-[0_0_40px_-12px_color-mix(in_oklch,var(--accent-cyan)_70%,transparent)]"
+              >
+                <div className="flex items-center justify-between">
+                  <k.icon className="size-5 text-accent-cyan" stroke={1.5} />
+                  <span className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    Live
+                  </span>
+                </div>
+                <div className="mt-6 text-3xl font-semibold tracking-tight md:text-4xl">
+                  {k.value}
+                </div>
+                <div className="mt-1 text-xs text-muted-foreground">{k.label}</div>
+                <div className="mt-3 text-xs text-muted-foreground/80">{k.hint}</div>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-12 -right-12 size-32 rounded-full bg-accent-magenta/0 blur-2xl transition group-hover:bg-accent-magenta/30"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-24 lg:px-10">
+        <div className="flex items-end justify-between">
+          <div>
+            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              What you can do
+            </div>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+              Three modules, one signal layer
+            </h2>
+          </div>
+        </div>
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {MODULES.map((m) => (
+            <Link
+              key={m.title}
+              href={m.href}
+              className="group relative overflow-hidden rounded-3xl border border-border bg-card/70 p-7 backdrop-blur transition hover:-translate-y-0.5 hover:border-foreground/20"
+            >
+              <div
+                className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${m.accent} opacity-60 transition group-hover:opacity-100`}
+              />
+              <div className="relative">
+                <m.icon className="size-7 text-foreground/90" stroke={1.5} />
+                <h3 className="mt-6 text-2xl font-semibold tracking-tight">{m.title}</h3>
+                <p className="mt-3 text-sm text-muted-foreground">{m.blurb}</p>
+                <div className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-foreground/90">
+                  Open
+                  <IconArrowUpRight className="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <footer className="border-t border-border/60 bg-background/50 py-8 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 px-6 text-xs text-muted-foreground md:flex-row md:items-center lg:px-10">
+          <span>© 2026 SemanticForce · Pharma 360 prototype</span>
+          <span>
+            Built on Market 360 ·{" "}
+            <a className="hover:text-foreground" href="https://chife-mod.github.io/sfg-dashboard/">
+              SF Group dashboard
+            </a>
+          </span>
+        </div>
       </footer>
-    </div>
+    </main>
   );
 }

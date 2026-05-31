@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sf-pharma-360
 
-## Getting Started
+Pharma-vertical market-intelligence prototype for SemanticForce / Market 360.
+Modernized successor to [pharma.market360.ai](https://pharma.market360.ai/) —
+clean dark UI, Tabler icons, animated dashboards, built for the upcoming Big
+Pharma demo.
 
-First, run the development server:
+**Live:** https://chife-mod.github.io/sf-pharma-360/
+
+## Stack
+
+Next.js 15 (App Router, static export) · TypeScript · Tailwind v4 ·
+shadcn/ui · `@tabler/icons-react` · Framer Motion · Recharts ·
+Geist Sans + Geist Mono. Deployed to GitHub Pages via
+`peaceiris/actions-gh-pages`.
+
+## Local dev
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# → http://localhost:4310 (port set in workspace .claude/launch.json)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build      # → /out static export
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project context
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [CLAUDE.md](CLAUDE.md) for full project memory: source material,
+design direction, decisions made, and the next-session pickup list.
+Live page screenshots and Figma reference snapshots live in
+[Screenshots/](Screenshots/).
