@@ -18,8 +18,8 @@ const NAV = [
  */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-30 p-4">
-      <div className="flex items-center justify-between gap-6">
+    <header className="sticky top-0 z-30 py-4">
+      <div className="mx-auto flex max-w-[1650px] items-center justify-between gap-6 px-6">
         {/* LEFT PILL — logo + product nav */}
         <div className="flex items-center gap-6 rounded-[12px] border border-white/10 bg-[#05071b] py-3 pl-6 pr-3 backdrop-blur-[15px]">
           <Link

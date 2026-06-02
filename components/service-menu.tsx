@@ -15,16 +15,28 @@ const PROJECT_NAME = "SF Pharma 360";
 
 const CONCEPTS: Concept[] = [
   {
-    id: "v1-sterile-dark",
-    label: "v1 — Sterile Dark",
-    desc: "First polishing pass (rev 2). Committed baseline.",
+    id: "v1-main",
+    label: "v1 — main (dev)",
+    desc: "Active development branch. Based on Pharma OS visual; diverges from v3 snapshot over time.",
     path: "/dols",
   },
   {
-    id: "v2-pharma-os",
-    label: "v2 — Pharma OS",
-    desc: "Premium dark — aurora glass, neon accents (teal / magenta / orange / violet).",
+    id: "v2-sterile-dark",
+    label: "v2 — Sterile Dark",
+    desc: "Snapshot — Market360-mirror polish (rev 3). KPI hero + 2-col DOL cards + filter chip row.",
     path: "/concepts/v2/dols",
+  },
+  {
+    id: "v3-pharma-os",
+    label: "v3 — Pharma OS",
+    desc: "Snapshot — aurora glass + sidebar FilterPanel + InfluencerCard grid (frozen).",
+    path: "/concepts/v3/dols",
+  },
+  {
+    id: "launcher",
+    label: "Launcher",
+    desc: "Back to the dashboard index — all concepts and previews.",
+    path: "/",
   },
 ];
 

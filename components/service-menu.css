@@ -248,10 +248,10 @@
 }
 .grid-overlay__cols {
   height: 100%;
-  margin: 0 80px;
+  margin: 0 24px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 24px;
+  gap: 16px;
 }
 .grid-overlay__col {
   background: rgba(75, 108, 255, 0.08);
@@ -262,7 +262,7 @@
 @media (max-width: 600px) {
   .grid-toggle { width: 36px; height: 36px; }
   .grid-toggle svg { width: 16px; height: 16px; }
-  .grid-overlay__cols { margin: 0 16px; gap: 8px; }
+  .grid-overlay__cols { gap: 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

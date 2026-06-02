@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { Icons, channelMeta } from "./icons";
 import { Sparkline } from "./sparkline";
-import { TIERS, fmt, type Dol } from "@/app/concepts/v2/data";
+import { TIERS, fmt, type Dol } from "@/app/concepts/v3/data";
 
 /* InfluencerCard — verbatim port from the v2 source bundle
  * (project/app/card.jsx). Per-card tier color drives the
@@ -37,7 +37,14 @@ export function InfluencerCard({ d }: { d: Dol }) {
         <div className="id-cluster">
           <div className="avatar">
             <div className="avatar-ring" />
-            <span>{d.initials}</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={d.photo}
+              alt={d.name}
+              className="avatar-photo"
+              width={60}
+              height={60}
+            />
           </div>
           <div className="beads">
             {d.channels.map((c) => {
@@ -144,7 +151,9 @@ export function InfluencerCard({ d }: { d: Dol }) {
   );
 }
 
-type IconCmp = (p?: React.SVGProps<SVGSVGElement>) => React.ReactElement;
+type IconCmp = React.ComponentType<
+  React.SVGProps<SVGSVGElement> & { size?: number | string; stroke?: number | string }
+>;
 
 function Metric({
   icon: IconCmp,

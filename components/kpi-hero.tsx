@@ -46,13 +46,13 @@ export function KpiHero() {
   return (
     <section
       aria-label="DOL coverage overview"
-      className="mx-auto mt-4 mb-8 w-full max-w-[1440px] px-6"
+      className="mx-auto mt-4 mb-8 w-full max-w-[1650px] px-6"
     >
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {KPIS.map(({ Icon, label, value, sub }) => (
           <li
             key={label}
-            className="flex flex-col gap-8 rounded-[12px] border border-white/10 bg-surface-elevated p-8"
+            className="flex flex-col gap-4 rounded-[12px] border border-white/10 bg-surface-elevated p-4"
           >
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-1">

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Icons } from "./icons";
-import { SORTS, type SortKey } from "@/app/concepts/v2/data";
+import { SORTS, type SortKey } from "@/app/concepts/v3/data";
 
 type Props = {
   count: number;

@@ -12,7 +12,7 @@ import {
   type Channel,
   type Dol,
   type SortKey,
-} from "@/app/concepts/v2/data";
+} from "@/app/concepts/v3/data";
 
 /* Verbatim port of App() from the v2 source bundle
  * (project/app/main.jsx). State: filters, query, sort,
@@ -110,7 +110,7 @@ export function Dashboard() {
       />
       <div className={"layout" + (showFilters ? "" : " no-filters")}>
         <FilterPanel filters={filters} onToggle={toggle} onClear={clearAll} />
-        <div>
+        <div className="dashboard-main">
           {chips.length ? (
             <div className="active-chips">
               {chips.map((ch) => (

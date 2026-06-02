@@ -278,3 +278,99 @@ teal-glow shadow.
   Pharma OS", desc: "Premium dark Pharma OS, OKLCH + glass +
   aurora", path: "/concepts/v2/dols" }`.
 - **Landing tile:** add a "v2 Pharma OS" tile that links to the v2 route.
+
+---
+
+## Evolution log — new v1 active dev (2026-06-02)
+
+After rotation (v2 → v3 snapshot, v1 — Sterile Dark → v2 snapshot, new
+v1 = active Pharma OS clone at `/dols`), the live v1 spec evolves here.
+Snapshots at `/concepts/v2/dols` and `/concepts/v3/dols` are frozen.
+
+### Layout
+
+- **Container max-width:** `1650px` (bumped from 1440 — premium analytics
+  norm matching Stripe / Amplitude). Outer padding `24px`.
+- **12-col CSS grid** binds content: `.layout` is the grid container,
+  filter sidebar = `col-span-3`, dashboard main = `col-span-9`. Inside
+  main, cards use a nested `repeat(2, 1fr)` grid.
+- **Gap:** `16px` everywhere (between grid columns, between cards,
+  between KPI tiles, between landing tiles, in grid overlay).
+- **Inner tile padding:** `16px`.
+- **Outer rail symmetric** — header pills, KPI hero, toolbar,
+  sidebar, main content all align to the same content rail (24 from
+  viewport edge to 1650 max).
+
+### Colors
+
+- **Bg:** `#0C0E25` (less blueish, more navy-violet lift than original
+  Pharma OS `#080C18`).
+- **Muted icon / nav rest:** `#949EB8` (light blue-grey, not white).
+  Used for icon-button rest, inactive nav items.
+- **Active text / icon-on-hover:** white.
+- **Hover bg on dark glass:** `rgba(255, 255, 255, 0.20)` (was 5% —
+  too subtle on most monitors). Used on icon-buttons, nav items.
+- **Divider on dark glass:** `rgba(255, 255, 255, 0.20)` — same as
+  hover bg, subtle but visible.
+
+### Icon-button standard
+
+Single icon convention across the product:
+- **Button:** `40×40` (size-10) — same height as 40-px avatar / photo
+- **Icon glyph:** `20×20` Tabler (`size={20}` on `@tabler/icons-react`)
+- **Breathing ring:** 10px around glyph
+- **Centering:** `inline-flex items-center justify-center` (not
+  `grid place-items-center` — SVG default inline-block didn't always
+  center horizontally in CSS Grid; flex is robust)
+- **Hover:** `bg-white/20` (visible) + `text-white`
+- **Notification dot:** `absolute right-[3px] top-[3px] size-1.5`
+  (6px dot, 3px gap from button top-right corner) with `outline: 1.5px
+  solid bg-color` for "pop out" effect
+
+Applied to: top-nav search/bell/settings, card menu-btn (top-right
+dots), card channel tabs (`.ch-tab`).
+
+### Typography (header right pill)
+
+- **Name (Rana El-Khoury):** Inter Regular `14px`, font-weight 600,
+  `leading-none`
+- **Role (STRATEGY LEAD):** Inter Medium `10px`, UPPERCASE,
+  `tracking-[0.08em]`, `leading-none`, color `white/45`
+- **Gap name ↔ role:** `4px` (gap-1)
+
+Round-number font sizes only (10 / 11 / 12 / 13 / 14 / 16 / 18 / 20 /
+24 / 28 / 32 / 40). No `12.5 / 10.5`.
+
+### Spacing scale (strict 8-px grid)
+
+`2 / 4 / 8 / 12 / 16 / 24 / 32 / 64`. Reach for these first;
+deviate only with explicit reason.
+
+### Header right pill — anatomy (current)
+
+```
+[pl-3=12] [icons cluster gap-1=4] [ml-3=12 → divider h-10 w-px white/20 →
+ml-6=24] [name block ml-6 + photo ml-4=16] [pr-3=12]
+```
+
+Symmetric paddings around icons (12 on all 4 sides). Divider matches
+photo height (40) and role label color brightness (white/20 — half
+of white/45).
+
+### Images / retina
+
+- All avatar / photo sources at **2× display size minimum**, ideally
+  4× for hi-DPI safety.
+- Pravatar `?w=240` for a 60-px display (card avatar).
+- Unsplash `?w=160&q=85` for a 40-px display (header photo).
+- `object-fit: cover` to handle aspect mismatch.
+
+### Test content
+
+Real DOL names sourced from `pharma.market360.ai/influencers` (live
+portal, visible in `Screenshots/01.png`). Channels per profile aligned
+with portal visibility. KPI values synthetic (deferred per user).
+
+Real names in use: Aayed Alqahtani, Abdullah Al-Barrak, Abdulrahman
+Al-Saigh, Adina Bachar, Akshay Jain, Alberto Langione. Plausible MENA
+synthetic: Leila Karimi, Omar Benali, Sara Al-Mutairi.

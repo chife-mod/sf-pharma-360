@@ -2,12 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { IconBell, IconSearch, IconSettings } from "@tabler/icons-react";
 
 const NAV = [
   { label: "Pharma Media", href: "#" },
-  { label: "DOLs", href: "/concepts/v2/dols" },
+  { label: "DOLs", href: "/dols" },
   { label: "Reports", href: "#" },
 ];
+
+/* Source at 2x display (40px display × 2 = 80; bumped to 160 for 4× safety
+ * on hi-DPI / future zoom). Unsplash auto-serves correct resolution. */
+const USER_PHOTO =
+  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&h=160&fit=crop&crop=face&auto=format&q=85";
 
 /**
  * v2 SiteHeader — hybrid chrome.
@@ -24,12 +30,12 @@ const NAV = [
 export function SiteHeaderV2() {
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-30 p-4">
-      <div className="flex items-center justify-between gap-6">
+    <header className="sticky top-0 z-30 py-4">
+      <div className="mx-auto flex max-w-[1650px] items-center justify-between gap-6 px-6">
         {/* LEFT PILL — Pharma 360 logo + product nav */}
         <div className="flex items-center gap-6 rounded-[12px] border border-white/10 bg-[#05071b] py-3 pl-6 pr-3 backdrop-blur-[15px]">
           <Link
-            href="/concepts/v2/dols"
+            href="/dols"
             className="flex shrink-0 items-center gap-2"
             aria-label="SF Pharma 360"
           >
@@ -55,7 +61,10 @@ export function SiteHeaderV2() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="relative inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[8px] px-[18px] text-[14px] font-normal leading-none text-white transition-colors hover:bg-white/5"
+                  className={
+                    "relative inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[8px] px-[18px] text-[14px] font-normal leading-none transition-colors hover:bg-white/20 hover:text-white " +
+                    (active ? "text-white" : "text-[#949EB8]")
+                  }
                   aria-current={active ? "page" : undefined}
                   style={{
                     fontFamily:
@@ -75,43 +84,48 @@ export function SiteHeaderV2() {
           </nav>
         </div>
 
-        {/* RIGHT PILL — search + bell-dot + settings + name + avatar */}
-        <div className="flex items-center gap-2 rounded-[12px] border border-white/10 bg-[#05071b] p-3 backdrop-blur-[15px]">
-          <button
-            type="button"
-            aria-label="Search"
-            className="grid h-10 w-10 place-items-center rounded-[8px] text-white/80 transition-colors hover:bg-white/5 hover:text-white"
-          >
-            <SearchGlyph />
-          </button>
-          <button
-            type="button"
-            aria-label="Notifications"
-            className="relative grid h-10 w-10 place-items-center rounded-[8px] text-white/80 transition-colors hover:bg-white/5 hover:text-white"
-          >
-            <BellGlyph />
-            <span
-              aria-hidden
-              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-[#F25CB0]"
-              style={{
-                boxShadow: "0 0 6px rgba(242, 92, 176, 0.6)",
-                outline: "2px solid #05071b",
-              }}
-            />
-          </button>
-          <button
-            type="button"
-            aria-label="Settings"
-            className="grid h-10 w-10 place-items-center rounded-[8px] text-white/80 transition-colors hover:bg-white/5 hover:text-white"
-          >
-            <SettingsGlyph />
-          </button>
+        {/* RIGHT PILL — Tabler icons (24×24 buttons) + dashline + name + photo
+         * Spacing (8-px grid): pl-24 pr-12 py-12, icons gap 4, icons→dashline 24,
+         * dashline→name 16, name→photo 16. */}
+        <div className="flex items-center rounded-[12px] border border-white/10 bg-[#05071b] py-3 pl-3 pr-3 backdrop-blur-[15px]">
+          {/* icons cluster — Tabler 16×16 centered in 32×32 button (8px ring) */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              aria-label="Search"
+              className="inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <IconSearch size={20} stroke={1.6} />
+            </button>
+            <button
+              type="button"
+              aria-label="Notifications"
+              className="relative inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <IconBell size={20} stroke={1.6} />
+              <span
+                aria-hidden
+                className="absolute right-[3px] top-[3px] size-1.5 rounded-full bg-[#F25CB0]"
+                style={{
+                  boxShadow: "0 0 4px rgba(242, 92, 176, 0.7)",
+                  outline: "1.5px solid #05071b",
+                }}
+              />
+            </button>
+            <button
+              type="button"
+              aria-label="Settings"
+              className="inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <IconSettings size={20} stroke={1.6} />
+            </button>
+          </div>
 
-          <span aria-hidden className="mx-1 h-6 w-px bg-white/10" />
-
-          <div className="flex flex-col pr-1 text-right leading-tight">
+          {/* 12 → dashline (h-40 = photo, half-contrast) → 24 → name+role */}
+          <span aria-hidden className="ml-3 h-10 w-px bg-white/20" />
+          <div className="ml-6 flex flex-col gap-1 text-right">
             <span
-              className="whitespace-nowrap text-[12.5px] font-semibold text-white"
+              className="whitespace-nowrap text-[14px] font-semibold leading-none text-white"
               style={{
                 fontFamily:
                   "var(--font-inter), Inter, system-ui, sans-serif",
@@ -119,23 +133,21 @@ export function SiteHeaderV2() {
             >
               Rana El-Khoury
             </span>
-            <span className="whitespace-nowrap text-[10.5px] font-medium uppercase tracking-[0.08em] text-white/45">
+            <span className="whitespace-nowrap text-[10px] font-medium uppercase leading-none tracking-[0.08em] text-white/45">
               Strategy Lead
             </span>
           </div>
-          <div
-            className="grid h-10 w-10 place-items-center rounded-full text-[12px] font-semibold tracking-[0.04em] text-white"
-            style={{
-              background:
-                "linear-gradient(135deg, rgba(45,212,191,0.22), rgba(167,139,250,0.22)), #111A30",
-              border: "1px solid rgba(160, 180, 220, 0.18)",
-              fontFamily:
-                "var(--font-space-grotesk), 'Space Grotesk', sans-serif",
-            }}
-            aria-label="User avatar"
-          >
-            RE
-          </div>
+
+          {/* 16 → photo */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={USER_PHOTO}
+            alt="Rana El-Khoury"
+            width={40}
+            height={40}
+            className="ml-4 size-10 shrink-0 rounded-full object-cover"
+            style={{ border: "1px solid rgba(160, 180, 220, 0.18)" }}
+          />
         </div>
       </div>
     </header>
@@ -191,61 +203,3 @@ function PharmaMark() {
   );
 }
 
-/* ------------- glyphs (lucide stroke style, 24×24) ------------- */
-
-function SearchGlyph() {
-  return (
-    <svg
-      width={17}
-      height={17}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M11 19a8 8 0 100-16 8 8 0 000 16z" />
-      <path d="M21 21l-4.3-4.3" />
-    </svg>
-  );
-}
-
-function BellGlyph() {
-  return (
-    <svg
-      width={17}
-      height={17}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-      <path d="M13.7 21a2 2 0 01-3.4 0" />
-    </svg>
-  );
-}
-
-function SettingsGlyph() {
-  return (
-    <svg
-      width={17}
-      height={17}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" />
-      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1.08-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 005.1 15a1.65 1.65 0 00-1.51-1H3.5a2 2 0 110-4h.09A1.65 1.65 0 005.1 9a1.65 1.65 0 00-.33-1.82l-.06-.06A2 2 0 117.54 4.29l.06.06A1.65 1.65 0 009.42 4.7c.6-.25 1-.84 1-1.51V3a2 2 0 114 0v.09c0 .67.4 1.26 1 1.51a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82c.25.6.84 1 1.51 1H21a2 2 0 110 4h-.09c-.67 0-1.26.4-1.51 1z" />
-    </svg>
-  );
-}

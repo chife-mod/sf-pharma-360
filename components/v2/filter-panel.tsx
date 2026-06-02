@@ -9,7 +9,7 @@ import {
   type Channel,
   type Dol,
   type FilterDef,
-} from "@/app/concepts/v2/data";
+} from "@/app/concepts/v3/data";
 
 export type FilterState = Record<string, string[]>;
 
