@@ -241,7 +241,9 @@
 
 .grid-overlay__frame {
   width: 100%;
-  max-width: 1440px;
+  /* Matches content shell max-w (1650px) on /dols + snapshots. Columns
+   * stretch fluidly with viewport, gap stays fixed at 16. */
+  max-width: 1650px;
   height: 100%;
   border-left:  1px dashed rgba(75, 108, 255, 0.5);
   border-right: 1px dashed rgba(75, 108, 255, 0.5);

@@ -127,7 +127,7 @@ export function InfluencerCard({ d }: { d: Dol }) {
         <Metric icon={Icons.doc} label="Posts" value={fmt(cp)} delta={(d.seed % 9) - 3} />
         <Metric
           icon={Icons.comment}
-          label="Audience Comments"
+          label="Comments"
           value={fmt(cac)}
           delta={(d.seed % 11) - 4}
         />
@@ -139,7 +139,7 @@ export function InfluencerCard({ d }: { d: Dol }) {
         />
         <Metric
           icon={Icons.pulse}
-          label="Engagement Rate"
+          label="Engagement"
           value={ceng + "%"}
           accent
           color={engColor}

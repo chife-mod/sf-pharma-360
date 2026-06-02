@@ -164,6 +164,14 @@
 }
 
 @layer base {
+  /* Reserve symmetric scrollbar gutters so document and fixed-position
+   * overlays (grid-overlay, modals) share the same effective centering.
+   * Without this, vertical scrollbar pushes document content left while
+   * fixed elements stay centered in the full viewport — misaligns
+   * grid overlay against content rail. */
+  html {
+    scrollbar-gutter: stable both-edges;
+  }
   * {
     @apply border-border outline-ring/50;
   }
