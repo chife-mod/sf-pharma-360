@@ -1,76 +1,139 @@
 import Link from "next/link";
-import { IconArrowRight } from "@tabler/icons-react";
 
-import { SiteHeader } from "@/components/site-header";
+type Tile = {
+  id: string;
+  word1: string;
+  word2: string;
+  desc: string;
+  count: string;
+  badge?: { tone: "live" | "planned"; label: string };
+  href?: string;
+};
 
-const STATS = [
-  { label: "DOLs tracked", value: "234" },
-  { label: "Markets", value: "27" },
-  { label: "Therapeutic areas", value: "18" },
-  { label: "Medications", value: "62" },
+const TILES: Tile[] = [
+  {
+    id: "dols-list",
+    word1: "DOLs",
+    word2: "list",
+    desc: "Browse the 234 digital opinion leaders. Filter by audience size, specialty, country, channel. Sort, paginate, drill into a profile.",
+    count: "234 influencers",
+    badge: { tone: "live", label: "Live" },
+    href: "/dols",
+  },
+  {
+    id: "dol-detail",
+    word1: "DOL",
+    word2: "detail",
+    desc: "Single influencer profile — Audience & Eng Rate, Brands, Diseases, Medicaments, Hashtags, Posts Key Topics, commenter insights.",
+    count: "Sample: Andrea Filipponi",
+    badge: { tone: "live", label: "Live" },
+    href: "/dols/andrea-filipponi",
+  },
+  {
+    id: "v2-pharma-os",
+    word1: "v2",
+    word2: "Pharma OS",
+    desc: "Premium dark concept — aurora glass, neon accents. Header + bg foundation up; hero, toolbar, sidebar, card grid coming next.",
+    count: "Foundation only · WIP",
+    badge: { tone: "live", label: "WIP" },
+    href: "/concepts/v2/dols",
+  },
+  {
+    id: "sandbox",
+    word1: "Design",
+    word2: "sandbox",
+    desc: "Token + recipe playground. Surfaces the system from DESIGN-SYSTEM.md so the next AI-tool output can be diffed against it.",
+    count: "Planned · after first AI output",
+    badge: { tone: "planned", label: "Planned" },
+  },
+  {
+    id: "uikit",
+    word1: "UI",
+    word2: "kit",
+    desc: "Live primitives gallery — card states (default / hover / selected), chip tones, KPI tiles, pagination, social icons, empty lines.",
+    count: "Planned · after sandbox lands",
+    badge: { tone: "planned", label: "Planned" },
+  },
 ];
 
 export default function Home() {
   return (
-    <>
-      <SiteHeader />
-      <main className="mx-auto flex max-w-[1280px] flex-col gap-12 px-6 py-12 lg:py-20">
-        <section className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:items-end">
-          <div>
-            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-text-faint">
-              Market 360 · Pharma vertical
-            </span>
-            <h1 className="mt-4 text-[44px] font-semibold leading-[1.05] tracking-[-0.02em] text-text-primary md:text-[56px]">
-              Market intelligence
-              <br />
-              for pharma.
-            </h1>
-            <p className="mt-6 max-w-[560px] text-[15px] leading-relaxed text-text-muted">
-              Track digital opinion leaders, disease conversations and brand
-              signal across social channels — in one quiet place, built for
-              pharma teams.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                href="/dols"
-                className="inline-flex h-10 items-center gap-2 rounded bg-primary px-4 text-[13px] font-medium text-primary-foreground hover:opacity-90"
-              >
-                Explore DOLs
-                <IconArrowRight size={15} stroke={1.7} />
-              </Link>
-              <Link
-                href="#"
-                className="inline-flex h-10 items-center rounded border border-border px-4 text-[13px] text-text-muted hover:border-border-strong hover:text-text-primary"
-              >
-                See the platform
-              </Link>
-            </div>
+    <div className="landing">
+      <header className="landing-header">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/pharma-360-logo.svg" alt="SF Pharma 360" />
+        <div className="landing-header__meta">
+          Internal preview · not for distribution
+        </div>
+      </header>
+
+      <main className="landing-main">
+        <section className="landing-hero">
+          <div className="landing-hero__label">
+            <span className="landing-hero__dot" />
+            <span>SF Group · Pharma vertical</span>
           </div>
-
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border">
-            {STATS.map((s) => (
-              <div key={s.label} className="flex flex-col gap-2 bg-surface px-5 py-5">
-                <dt className="text-[10px] font-medium uppercase tracking-[0.1em] text-text-faint">
-                  {s.label}
-                </dt>
-                <dd className="tabular text-[28px] font-semibold leading-none text-text-primary">
-                  {s.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="border-t border-border pt-10 text-[12px] text-text-faint">
-          <p>
-            Prototype for the upcoming demo. Not the live portal — see{" "}
-            <Link href="https://pharma.market360.ai/" className="text-text-muted hover:text-text-primary">
+          <h1 className="landing-hero__title">
+            Pharma 360 — <span>preview</span>
+          </h1>
+          <p className="landing-hero__sub">
+            Open a section to preview the design. Concept versions switch via
+            the pill bottom-right. Live production lives at{" "}
+            <a
+              href="https://pharma.market360.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "inherit", textDecoration: "underline" }}
+            >
               pharma.market360.ai
-            </Link>
-            {" "}for current production.
+            </a>
+            .
           </p>
         </section>
+
+        <div className="landing-grid">
+          {TILES.map((t) =>
+            t.href ? (
+              <Link key={t.id} href={t.href} className="landing-tile">
+                <TileBody tile={t} />
+              </Link>
+            ) : (
+              <div
+                key={t.id}
+                className="landing-tile"
+                data-status="planned"
+                aria-disabled="true"
+              >
+                <TileBody tile={t} />
+              </div>
+            )
+          )}
+        </div>
       </main>
+    </div>
+  );
+}
+
+function TileBody({ tile }: { tile: Tile }) {
+  return (
+    <>
+      <div className="landing-tile__name">
+        {tile.word1} <span>{tile.word2}</span>
+      </div>
+      <p className="landing-tile__desc">{tile.desc}</p>
+      <div className="landing-tile__footer">
+        <span>{tile.count}</span>
+        {tile.badge ? (
+          <span
+            className="landing-tile__badge"
+            data-tone={tile.badge.tone}
+          >
+            {tile.badge.label}
+          </span>
+        ) : (
+          <span>{tile.href ? "→" : "·"}</span>
+        )}
+      </div>
     </>
   );
 }

@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Inter,
+  Inter_Tight,
+  Montserrat,
+  Space_Grotesk,
+} from "next/font/google";
 import "./globals.css";
+
+import { ServiceMenu } from "@/components/service-menu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,10 +21,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["800"],
+});
+
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "Pharma 360 — Market Intelligence for Pharma",
+  title: "SF Pharma 360 — Preview",
   description:
-    "Modern pharma market-intelligence portal: track DOLs, brand mentions, disease & medication signals across social channels.",
+    "Internal preview of the SF Pharma 360 design iterations. Live production lives at pharma.market360.ai.",
 };
 
 export default function RootLayout({
@@ -26,9 +59,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
+        className={`${inter.variable} ${interTight.variable} ${montserrat.variable} ${spaceGrotesk.variable} ${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
       >
         {children}
+        <ServiceMenu />
       </body>
     </html>
   );

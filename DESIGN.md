@@ -1,8 +1,45 @@
 # DESIGN.md — sf-pharma-360 polishing
 
-> **Revision 2 (2026-06-01).** Первая итерация была light off-white (Codex)
-> — Всеволод откатил: исходник Market 360 dark (Figma
-> [oR5AwDiD7ek4IxUOgyZCbU](https://www.figma.com/design/oR5AwDiD7ek4IxUOgyZCbU/Market-360-Design?node-id=4-19862)),
+> **Revision 3 (2026-06-02) — Market360-native pivot.**
+>
+> Client direction reset: Pharma 360 не редизайн, а **визуальный слой
+> поверх существующего Market360 DNA**. UX-структура FROZEN (DOL list/
+> detail, фильтры, поиск, сортировка, card composition — без изменений).
+> Меняется только визуальный язык.
+>
+> **Палитра пивот:** violet → cyan. Primary = `#46caff` (Pharma vertical
+> color из Figma frame `119:4015`). Secondary = teal/green из той же
+> industry-палитры. Purple — только sparingly accent (НЕ primary).
+> Background — глубокий navy (`#0A0E26` ish), surface — Market360
+> canonical `#111539` (из Figma Card `100:400`).
+>
+> **Глассы:** разрешены на top nav (Market360 canonical pattern),
+> запрещены на cards. Card = solid surface с тонким white-outline
+> border (1px @20% opacity).
+>
+> **Источник истины:** не «Sterile Enterprise Dark» extrapolation, а
+> прямой mirror Figma `oR5AwDiD7ek4IxUOgyZCbU`. Все recipes ссылаются
+> на конкретные node IDs.
+>
+> **Клиентский бриф в Figma:** в самом файле есть две annotation'ы
+> ([`365:2039`](https://www.figma.com/design/oR5AwDiD7ek4IxUOgyZCbU/Market-360-Design?node-id=365-2039) для
+> DOL List, [`365:2041`](https://www.figma.com/design/oR5AwDiD7ek4IxUOgyZCbU/Market-360-Design?node-id=365-2041)
+> для DOL Detail) — verbatim quotes в [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md).
+>
+> **Что осталось из rev 2:** anti-list дисциплина (tabular numerals,
+> Inter sans, sparse empty states, NO box-shadows, NO gradient text,
+> monochrome social icons). Эти правила остаются — только колор и
+> surface tokens изменились.
+>
+> **Rev 2 ниже — sterile dark history.** Сохранён для контекста почему
+> пивот произошёл (violet+sterile была reaction на Watch360 beige, не
+> sourced from Market360). Не реализовывать.
+
+---
+
+> **Revision 2 (2026-06-01) — superseded by rev 3.** Первая итерация была
+> light off-white (Codex) — Всеволод откатил: исходник Market 360 dark
+> (Figma [oR5AwDiD7ek4IxUOgyZCbU](https://www.figma.com/design/oR5AwDiD7ek4IxUOgyZCbU/Market-360-Design?node-id=4-19862)),
 > sans throughout, никакой антиквы / serif. Палитра ниже выровнена под
 > исходник; «форма» (типографика, формы карточек, anti-list) сохранена
 > из синтеза Consilium.

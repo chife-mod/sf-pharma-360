@@ -7,9 +7,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist-sans);
+  --font-heading: var(--font-inter);
+  --font-display: var(--font-montserrat);
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -114,52 +115,52 @@
  * violet/indigo accent. Categorical colors desaturated, used only on
  * chips/charts — never as global accents. No gradient text, no glow. */
 .dark {
-  --background: oklch(0.17 0.025 265);              /* ~ #0c0f1d */
+  --background: #0c0e25;                             /* Figma 365:5036 Verticals bg — page canvas */
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.215 0.028 265);                    /* ~ #181c2b — `surface` */
+  --card: #111539;                                    /* Figma Card 100:400 canonical bg */
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.215 0.028 265);
+  --popover: #111539;
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.7 0.16 270);                    /* violet/indigo — single CTA */
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.255 0.03 265);
+  --primary: #46CAFF;                                 /* Pharma vertical primary (Figma 119:4015) */
+  --primary-foreground: #0c0e25;                      /* dark navy text on cyan fills */
+  --secondary: #1A2050;
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.255 0.03 265);
+  --muted: #1A2050;
   --muted-foreground: oklch(0.72 0.012 265);
-  --accent: oklch(0.255 0.03 265);
+  --accent: #1A2050;
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 8%);
-  --border-strong: oklch(1 0 0 / 14%);
+  --border: oklch(1 0 0 / 10%);
+  --border-strong: oklch(1 0 0 / 20%);                 /* Market360 Card canonical border */
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.7 0.16 270 / 50%);
+  --ring: oklch(0.78 0.13 220 / 50%);                  /* cyan-tinted, matches Pharma primary */
 
-  /* Chart series — desaturated categorical, NOT neon */
-  --chart-1: oklch(0.75 0.10 200);                   /* engagement — pastel cyan */
-  --chart-2: oklch(0.72 0.10 145);                   /* audience — pastel mint */
-  --chart-3: oklch(0.78 0.10 55);                    /* activity — soft amber */
+  /* Chart series — Market360-mirror palette (rev 3) */
+  --chart-1: #46CAFF;                                 /* primary — Pharma cyan */
+  --chart-2: #46FFC4;                                 /* secondary — teal/green */
+  --chart-3: oklch(0.78 0.10 55);                    /* tertiary — soft amber */
   --chart-4: oklch(0.72 0.13 350);                   /* disease/topic — soft pink */
-  --chart-5: oklch(0.7 0.16 270);                    /* primary accent — violet */
+  --chart-5: #9C46FF;                                 /* accent — purple, sparingly */
 
-  --sidebar: oklch(0.195 0.028 265);
+  --sidebar: #111539;
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.7 0.16 270);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.255 0.03 265);
+  --sidebar-primary: #46CAFF;
+  --sidebar-primary-foreground: #0c0e25;
+  --sidebar-accent: #1A2050;
   --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.7 0.16 270 / 50%);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.78 0.13 220 / 50%);
 
-  --surface: oklch(0.215 0.028 265);
-  --surface-elevated: oklch(0.255 0.03 265);
+  --surface: #111539;                                 /* Market360 Card 100:400 canonical */
+  --surface-elevated: #1A2050;                        /* one step up — hover, hero tiles */
   --text-primary: oklch(0.985 0 0);
   --text-muted: oklch(0.72 0.012 265);
   --text-faint: oklch(0.55 0.012 265);
 
-  --cat-1: oklch(0.75 0.10 200);
-  --cat-2: oklch(0.72 0.10 145);
-  --cat-3: oklch(0.78 0.10 55);
-  --cat-4: oklch(0.72 0.13 350);
+  --cat-1: #46CAFF;                                   /* Pharma cyan (was pastel cyan) */
+  --cat-2: #46FFC4;                                   /* Pharma teal (was pastel mint) */
+  --cat-3: oklch(0.78 0.10 55);                       /* soft amber — unchanged */
+  --cat-4: oklch(0.72 0.13 350);                      /* soft pink — unchanged */
 }
 
 @layer base {
@@ -174,4 +175,185 @@
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* ───────────────────────────────────────────────────────────────
+ * Landing — SFG Dashboard pattern (umbrella chrome, NOT product UI).
+ * Scoped via .landing so it never leaks into /dols, /dols/[id], etc.
+ * Mirrors /Users/oleg/Dev/vsevolod/!sfg-dashboard!/index.html
+ * (cyan #00c3d9 SFG-accent, NOT the Market360 Pharma cyan #46caff).
+ * ─────────────────────────────────────────────────────────────── */
+
+.landing {
+  --sfg-bg: #0d0d0d;
+  --sfg-surface: rgba(22, 22, 22, 0.85);
+  --sfg-surface-hover: rgba(30, 30, 30, 0.95);
+  --sfg-border: rgba(255, 255, 255, 0.07);
+  --sfg-border-hover: rgba(0, 195, 217, 0.4);
+  --sfg-accent: #00c3d9;
+  --sfg-text-primary: #ffffff;
+  --sfg-text-secondary: rgba(255, 255, 255, 0.5);
+  --sfg-text-muted: rgba(255, 255, 255, 0.28);
+  --sfg-radius: 12px;
+
+  position: relative;
+  min-height: 100vh;
+  background: var(--sfg-bg);
+  color: var(--sfg-text-primary);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  padding-bottom: 96px;
+}
+
+.landing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+  border-bottom: 1px solid var(--sfg-border);
+}
+
+.landing-header img {
+  display: block;
+  height: 40px;
+  width: auto;
+}
+
+.landing-header__meta {
+  font-size: 12px;
+  color: var(--sfg-text-muted);
+}
+
+.landing-main {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 36px 48px 0;
+}
+
+.landing-hero {
+  margin-bottom: 32px;
+}
+
+.landing-hero__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sfg-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.landing-hero__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sfg-accent);
+}
+
+.landing-hero__title {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--sfg-text-primary);
+  margin-bottom: 10px;
+}
+
+.landing-hero__title span {
+  color: var(--sfg-accent);
+}
+
+.landing-hero__sub {
+  font-size: 15px;
+  color: var(--sfg-text-secondary);
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+.landing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.landing-tile {
+  background: var(--sfg-surface);
+  border: 1px solid var(--sfg-border);
+  border-radius: var(--sfg-radius);
+  padding: 28px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  min-height: 200px;
+}
+
+a.landing-tile:hover {
+  border-color: var(--sfg-border-hover);
+  background: var(--sfg-surface-hover);
+  transform: translateY(-2px);
+}
+
+.landing-tile[data-status="planned"] {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.landing-tile__name {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--sfg-text-primary);
+}
+
+.landing-tile__name span {
+  color: var(--sfg-accent);
+}
+
+.landing-tile__desc {
+  font-size: 13px;
+  color: var(--sfg-text-secondary);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.landing-tile__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--sfg-text-muted);
+  padding-top: 12px;
+  border-top: 1px solid var(--sfg-border);
+}
+
+.landing-tile__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.landing-tile__badge[data-tone="live"] {
+  background: rgba(75, 197, 156, 0.16);
+  color: #4FC59C;
+}
+
+.landing-tile__badge[data-tone="planned"] {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--sfg-text-muted);
 }

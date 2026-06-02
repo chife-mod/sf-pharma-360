@@ -49,8 +49,8 @@ export function DolCard({ dol }: { dol: Dol }) {
 
         <div className="flex flex-wrap gap-1.5">
           <Chip tone="cat-1">{dol.tier}</Chip>
-          <Chip tone="cat-2">{dol.kind}</Chip>
-          <Chip tone="cat-3">{dol.audienceType}</Chip>
+          <Chip tone="default">{dol.kind}</Chip>
+          <Chip tone="cat-2">{dol.audienceType}</Chip>
           <Chip>Gr.{dol.group}</Chip>
         </div>
 

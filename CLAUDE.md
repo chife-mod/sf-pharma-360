@@ -1,15 +1,26 @@
 # sf-pharma-360 — Project Memory
 
-> **Статус (2026-05-31):** инициация завершена.
-> Stack согласован, Next.js + shadcn + Tabler подняты, репо `chife-mod/sf-pharma-360`
-> опубликован, live на https://chife-mod.github.io/sf-pharma-360/, карточка
-> в SFG Dashboard добавлена.
+> **📍 СВЕЖИЙ СТАТУС — читать первым:** [HANDOFF.md](HANDOFF.md). Там — где
+> мы сейчас, какие открытые вопросы, как продолжить «на лету». Этот файл
+> ниже — долговременная память проекта, не точка входа.
 >
-> **🔥 СЕЙЧАС в работе:** discovery. Всеволод прислал голосовую транскрибацию
-> (см. [BRIEF.md](BRIEF.md)) — там ВАЖНОЕ: клиент просит ЛЁГКИЙ стайлинг, а
-> мы уже сделали полноценный «макси»-рефакторинг. Эту разницу надо обсудить
-> до следующих изменений. Ждём вторую транскрибацию + Consilium-ресёрч →
-> `RESEARCH.md`.
+> **Статус (2026-06-02):** discovery + v1 polishing pass завершены. Сейчас
+> в фазе **handoff-spec** — готовим материалы для AI design tools (Lovable
+> / Figma Make / Stitch / v0) на полишинг DOLs list page.
+>
+> **Свежие артефакты:**
+> - [HANDOFF.md](HANDOFF.md) — handoff для следующей сессии (читать первым)
+> - [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md) — full Aether-format design system spec для AI tools (tokens + component recipes)
+> - [BRIEF-dols-list.md](BRIEF-dols-list.md) — self-contained brief для одного экрана (DOLs list page)
+>
+> **Discovery-цепочка (исторические артефакты, изменять не нужно):**
+> - [BRIEF.md](BRIEF.md) — клиентский voice transcript + решения
+> - [RESEARCH.md](RESEARCH.md) — Consilium Gemini+Codex синтез
+> - [DESIGN.md](DESIGN.md) — direction note rev 2 (dark over light, violet over cyan)
+>
+> **⚠ Open conflict** (не решён): adoption glass-pill nav из Figma node
+> `365:622` vs «no glass / no display font» правила в DESIGN-SYSTEM.md. См.
+> HANDOFF.md секцию 3-4.
 
 ---
 
