@@ -161,9 +161,14 @@
   -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 48%, transparent 88%);
   mask-image: linear-gradient(180deg, #000 0%, #000 48%, transparent 88%);
 }
+/* single clean line per column (left edge); close the right end on the
+ * last column. No doubled lines around the gaps. Starts at the content's
+ * left edge, ends at its right edge. */
 .v2-app-grid > span {
-  border-left: 1px solid rgba(150, 170, 210, 0.05);
-  border-right: 1px solid rgba(150, 170, 210, 0.05);
+  border-left: 1px solid rgba(150, 170, 210, 0.055);
+}
+.v2-app-grid > span:last-child {
+  border-right: 1px solid rgba(150, 170, 210, 0.055);
 }
 
 /* ---- shell ---- */
