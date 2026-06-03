@@ -33,10 +33,14 @@ export function KpiHero() {
           <span className="hero-dot" />
           Digital Opinion Leaders
         </span>
+        {/* One continuous gradient runs across the whole h1; the plain
+         * words are painted back to solid white via text-fill-color, so
+         * "pharma voices," and "in real time." share a single diagonal
+         * blue→magenta sweep (P at top → the period after "time"). */}
         <h1 className="hero-title">
-          The pulse of <span className="hero-accent">pharma voices</span>,
+          <span className="hero-plain">The pulse of </span>pharma voices,
           <br />
-          decoded in real time.
+          <span className="hero-plain">decoded </span>in real time.
         </h1>
         <p className="hero-sub">
           234 vetted clinicians, researchers and patient advocates across 7

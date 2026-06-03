@@ -213,8 +213,11 @@
 .v2-root .hero-intro { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
 .v2-root .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 6px 12px; border-radius: var(--r-pill); border: 1px solid var(--line); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mute); }
 .v2-root .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal-glow); }
-.v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; color: var(--text); }
-.v2-root .hero-accent { background: linear-gradient(90deg, var(--teal), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* One diagonal gradient over the whole headline; plain words are painted
+ * back to white (text-fill-color) so the accent phrases share a single
+ * continuous blue→violet→magenta sweep (top-left P → period after time). */
+.v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; background: linear-gradient(125deg, var(--blue) 6%, var(--violet) 46%, var(--magenta) 92%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--text); }
+.v2-root .hero-title .hero-plain { -webkit-text-fill-color: var(--text); color: var(--text); }
 .v2-root .hero-sub { margin: 14px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-mute); max-width: 520px; }
 .v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 0 0 auto; width: 880px; }
 /* Tile: coloured (accent) outline, content split top↔bottom (icon row up,
@@ -229,7 +232,7 @@
 .v2-root .kpi-icon { display: inline-flex; color: var(--kpi-accent); }
 .v2-root .kpi-icon svg { width: 20px; height: 20px; }
 .v2-root .kpi-delta { font-size: 11px; font-weight: 600; color: var(--kpi-accent); }
-.v2-root .kpi-foot { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 4px; }
+.v2-root .kpi-foot { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 8px; }
 .v2-root .kpi-val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 700; font-size: 32px; line-height: 1; letter-spacing: -0.02em; color: var(--text); }
 .v2-root .kpi-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); }
 @media (max-width: 1180px) {
