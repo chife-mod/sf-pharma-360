@@ -38,7 +38,9 @@ export function KpiHero() {
          * "pharma voices," and "in real time." share a single diagonal
          * blue→magenta sweep (P at top → the period after "time"). */}
         <h1 className="hero-title">
-          <span className="hero-plain">The pulse of </span>pharma voices,
+          {/* nbsp glues "pharma voices," so it never wraps to a lone
+           * "voices," line — the rest wraps naturally. */}
+          <span className="hero-plain">The pulse of </span>pharma&nbsp;voices,
           <br />
           <span className="hero-plain">decoded </span>in real time.
         </h1>

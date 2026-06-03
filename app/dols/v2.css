@@ -164,7 +164,11 @@
   padding: 0 24px 80px;
 }
 
-.v2-root { overflow-x: clip; }
+/* NB: do NOT put overflow-x:clip/hidden here — it makes .v2-root a
+ * scroll-clip context and breaks `position: sticky` on the header
+ * (the bar would scroll away instead of pinning). The fixed .v2-app-bg
+ * and its absolute .v2-app-grid are already viewport-bounded, so the
+ * page has no horizontal overflow to clip. */
 
 /* ============================ TOP BAR ============================ */
 
@@ -272,7 +276,10 @@
 .v2-root .kpi-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); }
 /* Stack only once the intro is at its 4-line min AND the tiles are at
  * their min (intro 360 + gap 32 + kpis 676 ≈ 1068 rail ≈ 1116 vw). */
-@media (max-width: 1120px) {
+/* Stack BEFORE the row stops fitting: intro 360 + gap 32 + kpis 676 +
+ * hero padding 64 + shell padding 48 ≈ 1180vw. Old 1120 was ~60px too
+ * low and clipped the 4th tile in the 1120–1180 band. 1200 = safety. */
+@media (max-width: 1200px) {
   .v2-root .hero { flex-direction: column; align-items: stretch; gap: 24px; }
   /* reset flex: in a column container flex-basis maps to HEIGHT, so the
    * old `flex: 1 1 676px` made the KPI block 676px+ tall (giant empty
@@ -280,8 +287,13 @@
   .v2-root .hero-intro { flex: none; min-width: 0; }
   .v2-root .hero-kpis { flex: none; width: 100%; min-width: 0; }
 }
-@media (max-width: 560px) {
+/* Below ~768 four 1fr tiles get too narrow and clip their value/label —
+ * drop to a 2×2 grid (each tile stays ≥ ~150px). */
+@media (max-width: 768px) {
   .v2-root .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .v2-root .hero { padding: 24px; }
   .v2-root .hero-title { font-size: 28px; }
 }
 
@@ -321,6 +333,23 @@
 .v2-root .sort-opt.sel { color: var(--teal); }
 .v2-root .sort-opt.sel .sort-opt-dir { color: color-mix(in srgb, var(--teal) 72%, transparent); }
 .v2-root .sort-opt.sel svg { width: 14px; height: 14px; color: var(--teal); }
+
+/* --- toolbar responsive: keep the sort control from overflowing on
+ * narrow screens (the original problem). Search + sort drop to their own
+ * full-width row; search grows, sort stays compact by shedding its label,
+ * then its value. The dropdown still shows the active key. --- */
+@media (max-width: 720px) {
+  .v2-root .toolbar-right { width: 100%; gap: 10px; }
+  .v2-root .search { width: auto; flex: 1 1 auto; min-width: 0; }
+  .v2-root .sort { flex: none; }
+  .v2-root .sort-label { display: none; }   /* drop the "SORT" word */
+}
+@media (max-width: 440px) {
+  /* icon-only trigger — sort icon + chevron + the dir flip; the open menu
+   * still surfaces the current key (teal + check). */
+  .v2-root .sort-value { display: none; }
+  .v2-root .sort-trigger { gap: 6px; padding: 0 10px; }
+}
 
 /* ============================ LAYOUT ============================ */
 /* 12-column CSS grid container. Children snap to grid lines via

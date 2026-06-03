@@ -170,7 +170,13 @@
    * fixed elements stay centered in the full viewport — misaligns
    * grid overlay against content rail. */
   html {
-    scrollbar-gutter: stable both-edges;
+    /* NB: deliberately NOT `scrollbar-gutter: stable both-edges`. That
+     * reserved phantom strips on BOTH inline edges (and shrank the fixed
+     * bg's containing block), so the corner glows stopped ~15px short and
+     * read as dark stripes. With overlay scrollbars (macOS) and an always-
+     * present scrollbar (tall page) the fixed bg + centred content share
+     * the same effective width, so the grid still aligns to the rail. */
+    scrollbar-gutter: auto;
     /* native scrollbars + form controls render dark (was a light/white
      * scrollbar on the dark UI). */
     color-scheme: dark;

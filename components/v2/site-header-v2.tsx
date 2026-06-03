@@ -39,8 +39,30 @@ export function SiteHeaderV2() {
   const pathname = usePathname();
   const [navOpen, setNavOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const acctRef = useRef<HTMLDivElement>(null);
+
+  /* Auto-hide on scroll-down, reveal on the slightest scroll-up
+   * ("headroom" pattern). Always shown near the top. Reads scrollY
+   * straight off the passive event — React bails out of re-renders
+   * when `hidden` is unchanged, so this stays cheap without an rAF. */
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      if (y < 80) setHidden(false);
+      else if (delta > 6) {
+        setHidden(true);
+        setNavOpen(false);
+        setAcctOpen(false);
+      } else if (delta < -6) setHidden(false);
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
@@ -69,7 +91,19 @@ export function SiteHeaderV2() {
     "size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/[0.08] hover:text-white";
 
   return (
-    <header className="sticky top-0 z-30 py-4">
+    <header
+      className="sticky top-0 z-30 py-4"
+      style={{
+        // Drive the slide via the `transform` property explicitly:
+        //  - Tailwind v4's `translate-y-*` writes the `translate` property,
+        //    which `transition-transform` would NOT animate.
+        //  - `will-change: transform` silently breaks `position: sticky` in
+        //    Chrome, so it's deliberately omitted.
+        //  - a plain translateY(0) does NOT break sticky (verified).
+        transform: hidden ? "translateY(-100%)" : "translateY(0)",
+        transition: "transform 0.3s ease-out",
+      }}
+    >
       <div className="mx-auto flex max-w-[1650px] items-center justify-between gap-6 px-6">
         {/* LEFT PILL — logo + product nav (folds into a hamburger ≤900) */}
         <div
