@@ -124,7 +124,9 @@ documented in `DESIGN-SYSTEM-V2.md`; this is the cheat sheet.
    / 13 / 14 / 16 / 18 / 20 / 21 / 22 / 24 / 28). No `12.5px`.
 3. **WCAG 2.1 AA minimum** — text ≥ 4.5:1 (normal) / 3:1 (large).
    Audit every new text surface.
-4. **8-pixel spacing grid** — 2 / 4 / 8 / 12 / 16 / 24 / 32 / 64.
+4. **8-pixel spacing grid** — 2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48
+   / 56 / 64 … Banned: 20, 28, 36, 44 (off-grid). Only 12 is allowed
+   as a half-step in the dense end.
 5. **Icon-button standard** — 40×40 button + **20px Tabler** icon,
    centered via `inline-flex items-center justify-center` (NOT `grid
    place-items-center` — Tabler SVG default doesn't center horizontally

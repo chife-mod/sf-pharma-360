@@ -124,9 +124,10 @@ ER-метрику.
 > the binding scale + rationale.
 
 - **Spacing scale (strict 8-px grid):** **2 / 4 / 8 / 12 / 16 / 24 /
-  32 / 64 px.** Reach for these first; deviate only with explicit
-  reason. No 20, 28, 36, 48 — those signal an unconsidered eyeball
-  value.
+  32 / 40 / 48 / 56 / 64 …** (continues on multiples of 8). Reach for
+  these first; deviate only with explicit reason. Banned values: **20,
+  28, 36, 44** — anything not a multiple of 8 (12 is the one allowed
+  half-step in the dense end of the scale).
 - **Radius:**
   - Pills, tags, кнопки → `rounded-full` или `rounded-xl` (12px).
   - Cards → `rounded-2xl` (16px) / `rounded-3xl` (24px) для главных
@@ -411,8 +412,11 @@ for large) is a bug, not a style preference.
 
 ### Spacing scale (strict 8-px grid)
 
-`2 / 4 / 8 / 12 / 16 / 24 / 32 / 64`. Reach for these first;
-deviate only with explicit reason.
+`2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 56 / 64 …` (continues on
+multiples of 8). Reach for these first; deviate only with explicit
+reason. **Banned:** 20, 28, 36, 44 — anything off the 8-px grid.
+**Exception:** 12 is the one allowed half-step in the dense end of
+the scale (between 8 and 16).
 
 ### Header right pill — anatomy (current)
 
