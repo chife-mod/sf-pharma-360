@@ -13,9 +13,9 @@ import "./ai-assistant.css";
  * 120° apart → three dots end up evenly spread. Same brand colours.
  */
 const ARCS = [
-  { id: "y", grad: "g-y2", d: "M22 12 A9.5 9.5 0 0 1 31.36 19.85" },
-  { id: "m", grad: "g-m2", d: "M30.23 26.25 A9.5 9.5 0 0 1 18.75 30.43" },
-  { id: "c", grad: "g-c2", d: "M13.77 26.25 A9.5 9.5 0 0 1 15.89 14.22" },
+  { id: "y", grad: "g-y2", d: "M22 9.5 A12 12 0 0 1 33.82 19.42" },
+  { id: "m", grad: "g-m2", d: "M32.39 27.5 A12 12 0 0 1 17.90 32.78" },
+  { id: "c", grad: "g-c2", d: "M11.61 27.5 A12 12 0 0 1 14.29 12.31" },
 ];
 
 export function AiAssistantDots() {
