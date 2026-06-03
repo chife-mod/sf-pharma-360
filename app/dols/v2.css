@@ -285,10 +285,13 @@
 .v2-root .fchip.on { color: var(--text); border-color: rgba(45, 212, 191, 0.5); background: rgba(45, 212, 191, 0.1); box-shadow: 0 0 14px -2px var(--teal-glow); }
 
 /* ============================ CARD GRID ============================ */
-/* Inside .dashboard-main (9 cols of outer grid). Cards 2 per row at
- * lg+, 1 per row below. Gap 16 matches outer grid gap. */
-.v2-root .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-@media (max-width: 900px) { .v2-root .grid { grid-template-columns: 1fr; } }
+/* Inside .dashboard-main. Cards never go below 420px so the 4-metric
+ * strip + labels always fit (no clipping, no icon-only fallback). The
+ * grid drops column count instead of crushing cards: 2-up with the
+ * sidebar, 3-up when the sidebar is hidden (wider main), 1-up on phones.
+ * min(100%, 420px) keeps a single card from overflowing a <420px screen.
+ * Gap 16 matches the outer grid gap. */
+.v2-root .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
 
 /* ============================ CARD ============================ */
 /* Default state quiet (calm) — no tier-color border highlight, no glow.
