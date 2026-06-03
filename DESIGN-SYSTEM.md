@@ -20,6 +20,35 @@
 
 ---
 
+## ⏮ Rollback — surface de-blue (2026-06-03)
+
+On 2026-06-03 the whole surface palette was darkened and de-blued (the
+navy read "too blue" next to the SFG landing). **To revert everything in
+one command:** `git revert 976471f` (the de-blue commit). If you'd
+rather hand-restore the pre-de-blue values, here's the full table.
+
+| Token / surface | Pre-de-blue (old) | Current (de-blued) |
+|---|---|---|
+| `--v2-bg` | `#0C0E25` | `#0A0B16` |
+| `--v2-bg-grad-a` | `#0E1230` | `#0D0F22` |
+| `--v2-bg-grad-b` | `#0D0E26` | `#0A0B16` |
+| `--v2-panel` | `#0E1426` | `#10111B` |
+| `--v2-panel-2` | `#111A30` | `#161824` |
+| `--v2-panel-3` | `#0C1222` | `#0D0E17` |
+| `--v2-raise` | `#15203A` | `#1A1C28` |
+| `--v2-inset` | `#0A0F1F` | `#0B0C14` |
+| `.card` gradient | `rgba(21,32,58,.65)` / `rgba(12,18,34,.85)` | `rgba(28,30,44,.65)` / `rgba(13,14,22,.85)` |
+| `.filters` gradient | `rgba(17,26,48,.55)` / `rgba(12,18,34,.55)` | `rgba(22,24,36,.55)` / `rgba(13,14,22,.55)` |
+| `.hero` gradient | `rgba(20,28,52,.55)` / `rgba(12,16,34,.6)` | `rgba(24,26,40,.55)` / `rgba(13,14,22,.6)` |
+| `.metrics` gradient | `rgba(8,12,24,.4)` / `rgba(6,9,20,.85)` | `rgba(10,11,18,.4)` / `rgba(7,8,13,.85)` |
+| `.v2-avatar-pill` bg | `rgba(17,26,48,.55/.80)` | `rgba(22,24,36,.55/.80)` |
+
+All edits are in `app/dols/v2.css`. The aurora glow tints (teal/violet/
+magenta `.v2-app-bg`) and the blue-grey line tokens (`rgba(150,170,210,…)`)
+were left untouched.
+
+---
+
 ## Market360 Pharma — Dashboard Design System
 
 **Direction:** Premium dark "Pharma OS" — глубокий midnight navy/violet
