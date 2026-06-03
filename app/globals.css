@@ -171,6 +171,9 @@
    * grid overlay against content rail. */
   html {
     scrollbar-gutter: stable both-edges;
+    /* native scrollbars + form controls render dark (was a light/white
+     * scrollbar on the dark UI). */
+    color-scheme: dark;
   }
   * {
     @apply border-border outline-ring/50;
