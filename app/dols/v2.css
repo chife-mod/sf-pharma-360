@@ -216,7 +216,7 @@
 .v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; color: var(--text); }
 .v2-root .hero-accent { background: linear-gradient(90deg, var(--teal), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .v2-root .hero-sub { margin: 14px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-mute); max-width: 520px; }
-.v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 0 0 auto; width: 700px; }
+.v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 0 0 auto; width: 880px; }
 /* Tile: coloured (accent) outline, content split top↔bottom (icon row up,
  * value pinned down), taller. */
 .v2-root .kpi { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 152px; padding: 16px; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--kpi-accent) 30%, transparent); background: rgba(150, 170, 210, 0.03); }
