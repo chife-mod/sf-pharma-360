@@ -24,31 +24,55 @@ type FilterPanelProps = {
   filters: FilterState;
   onToggle: (key: string, opt: string) => void;
   onClear: () => void;
+  /* drawer mode (≤1024): close handler + live result count for the
+   * sticky "Show N" apply button. Both no-ops / hidden on desktop. */
+  onClose?: () => void;
+  resultCount?: number;
 };
 
-export function FilterPanel({ filters, onToggle, onClear }: FilterPanelProps) {
+export function FilterPanel({
+  filters,
+  onToggle,
+  onClear,
+  onClose,
+  resultCount,
+}: FilterPanelProps) {
   const total = Object.values(filters).reduce((a, v) => a + v.length, 0);
   return (
     <aside className="filters">
       <div className="filter-head">
         <h3>Filters</h3>
-        <button
-          className="filter-clear"
-          disabled={!total}
-          onClick={onClear}
-        >
+        <button className="filter-clear" disabled={!total} onClick={onClear}>
           {total ? "Clear all" : "No filters"}
         </button>
+        {/* drawer-only close (X) — hidden on desktop via CSS */}
+        <button
+          className="filter-close"
+          aria-label="Close filters"
+          onClick={onClose}
+        >
+          <Icons.close />
+        </button>
       </div>
-      {FILTER_DEFS.map((def, i) => (
-        <FilterSection
-          key={def.key as string}
-          def={def}
-          sel={filters[def.key as string] || []}
-          onToggle={onToggle}
-          openByDefault={i === 0}
-        />
-      ))}
+
+      <div className="filter-sections">
+        {FILTER_DEFS.map((def, i) => (
+          <FilterSection
+            key={def.key as string}
+            def={def}
+            sel={filters[def.key as string] || []}
+            onToggle={onToggle}
+            openByDefault={i === 0}
+          />
+        ))}
+      </div>
+
+      {/* drawer-only sticky apply — hidden on desktop via CSS */}
+      <div className="filter-apply">
+        <button className="filter-apply-btn" onClick={onClose}>
+          Show {resultCount ?? 0} result{resultCount === 1 ? "" : "s"}
+        </button>
+      </div>
     </aside>
   );
 }

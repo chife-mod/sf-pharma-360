@@ -9,6 +9,7 @@ type Props = {
   total: number;
   showFilters: boolean;
   onToggleFilters: () => void;
+  activeCount: number;
   query: string;
   onQuery: (v: string) => void;
   sort: SortKey;
@@ -20,6 +21,7 @@ export function Toolbar({
   total,
   showFilters,
   onToggleFilters,
+  activeCount,
   query,
   onQuery,
   sort,
@@ -43,11 +45,15 @@ export function Toolbar({
   return (
     <div className="toolbar">
       <div className="toolbar-left">
-        <button className="toggle-filters" onClick={onToggleFilters}>
+        <button
+          className={"toggle-filters" + (showFilters ? " is-open" : "")}
+          onClick={onToggleFilters}
+          aria-label="Filters"
+        >
           <Icons.sliders />
-          {showFilters ? "Hide filters" : "Show filters"}
-          {showFilters ? (
-            <Icons.close style={{ width: 13, height: 13, opacity: 0.6 }} />
+          Filters
+          {activeCount > 0 ? (
+            <span className="tf-badge">{activeCount}</span>
           ) : null}
         </button>
         <div className="count-badge">

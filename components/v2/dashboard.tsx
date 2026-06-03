@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Icons, channelMeta } from "./icons";
 import { InfluencerCard } from "./influencer-card";
 import { FilterPanel, emptyFilters, type FilterState } from "./filter-panel";
@@ -21,10 +21,35 @@ import {
  * active-chips row above the grid when filters are set.
  */
 export function Dashboard() {
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(true); // desktop inline
+  const [drawerOpen, setDrawerOpen] = useState(false); // ≤1024 drawer
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("name");
+
+  const activeCount = Object.values(filters).reduce((a, v) => a + v.length, 0);
+
+  /* The Filters button is viewport-aware (decided at click time, no
+   * hydration issue): desktop toggles the inline sidebar, tablet/mobile
+   * opens the drawer overlay. */
+  const onFilterButton = () => {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 1025px)").matches
+    ) {
+      setShowFilters((s) => !s);
+    } else {
+      setDrawerOpen((o) => !o);
+    }
+  };
+
+  // Esc closes the drawer
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const h = (e: KeyboardEvent) => e.key === "Escape" && setDrawerOpen(false);
+    document.addEventListener("keydown", h);
+    return () => document.removeEventListener("keydown", h);
+  }, [drawerOpen]);
 
   const toggle = (key: string, opt: string) =>
     setFilters((f) => {
@@ -104,14 +129,32 @@ export function Dashboard() {
         count={results.length}
         total={DOLS.length}
         showFilters={showFilters}
-        onToggleFilters={() => setShowFilters((s) => !s)}
+        onToggleFilters={onFilterButton}
+        activeCount={activeCount}
         query={query}
         onQuery={setQuery}
         sort={sort}
         onSort={setSort}
       />
-      <div className={"layout" + (showFilters ? "" : " no-filters")}>
-        <FilterPanel filters={filters} onToggle={toggle} onClear={clearAll} />
+      <div
+        className={
+          "layout" +
+          (showFilters ? "" : " no-filters") +
+          (drawerOpen ? " drawer-open" : "")
+        }
+      >
+        <div
+          className="filters-backdrop"
+          onClick={() => setDrawerOpen(false)}
+          aria-hidden
+        />
+        <FilterPanel
+          filters={filters}
+          onToggle={toggle}
+          onClear={clearAll}
+          onClose={() => setDrawerOpen(false)}
+          resultCount={results.length}
+        />
         <div className="dashboard-main">
           {chips.length ? (
             <div className="active-chips">
