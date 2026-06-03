@@ -49,6 +49,9 @@
   height: 42px;
   display: block;
   overflow: visible;
+  /* ONE shadow for the whole mark (not per-ring) — so overlaps don't cast a
+     ring's shadow onto another (no "yellow shadow on yellow" artefacts) */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 }
 .ai-rings .ring {
   fill: none;
@@ -56,7 +59,6 @@
   stroke-linecap: round;
   stroke-dasharray: 66; /* path length ≈ 2π·10.5 */
   stroke-dashoffset: 0; /* resting = fully drawn */
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)); /* soft shadow per ring */
   /* all three synchronised (no stagger) so the weave draws as one */
   animation: ai-draw 4.6s linear forwards;
 }
@@ -67,17 +69,21 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* Two cycles, then hold drawn. Appearance and disappearance BOTH via the
-   stroke (no opacity fade): draw on from the centre (66→0), un-draw as the
-   exact reverse (0→66, vanishes from the centre outward), draw on again,
-   hold. Both draws share span + easing, so they look identical. */
+/* Two cycles, then hold drawn. Appearance AND disappearance both via the
+   stroke (no opacity fade) and ALWAYS from the centre outward — the active
+   end always travels away from the start point, never reversing:
+     draw1   66 → 0     (fills from centre out)
+     erase   0  → −66   (empties from centre out — NOT a reverse)
+     draw2   −66 → −132 (fills from centre out again; −132 ≡ full)
+   ease-OUT so the stroke shoots out of zero (no lingering "dots" + pause).
+   Both draws share span + easing → identical. */
 @keyframes ai-draw {
-  0%   { stroke-dashoffset: 66; animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1); } /* draw 1 */
-  28%  { stroke-dashoffset: 0;  animation-timing-function: linear; }                          /* hold */
-  40%  { stroke-dashoffset: 0;  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1); }  /* un-draw (reverse) */
-  60%  { stroke-dashoffset: 66; animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1); }  /* draw 2 (same as draw 1) */
-  88%  { stroke-dashoffset: 0;  animation-timing-function: linear; }                          /* hold final */
-  100% { stroke-dashoffset: 0; }
+  0%   { stroke-dashoffset: 66;   animation-timing-function: cubic-bezier(0.3, 0.85, 0.35, 1); } /* draw 1 */
+  26%  { stroke-dashoffset: 0;    animation-timing-function: linear; }                          /* hold */
+  40%  { stroke-dashoffset: 0;    animation-timing-function: cubic-bezier(0.3, 0.85, 0.35, 1); }  /* erase (from centre) */
+  62%  { stroke-dashoffset: -66;  animation-timing-function: cubic-bezier(0.3, 0.85, 0.35, 1); }  /* draw 2 (== draw 1) */
+  88%  { stroke-dashoffset: -132; animation-timing-function: linear; }                          /* hold final */
+  100% { stroke-dashoffset: -132; }
 }
 
 /* slow colour drift + breathe of the under-glow */
