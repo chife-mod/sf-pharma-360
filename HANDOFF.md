@@ -1,7 +1,7 @@
 # HANDOFF — sf-pharma-360 — 2026-06-03 (rev 4)
 
 > **Entry point.** New Claude session reads this **FIRST**, then
-> `CLAUDE.md`, then `DESIGN-SYSTEM-V2.md` (the active dev spec — `/dols`
+> `CLAUDE.md`, then `DESIGN-SYSTEM.md` (the active dev spec — `/dols`
 > is built on it). Run `pnpm dev` (port 4310 per `.claude/launch.json`).
 >
 > Previous handoff archived as
@@ -108,7 +108,7 @@ Token shifts (only on active /dols):
 | Header divider | `bg-white/20` | **`bg-white/[0.28]`** | (decorative, keeps ~2:1 vs role) |
 
 All 8 prior failures verified live, now AA or AAA. A paste-ready
-contrast-audit snippet lives in `DESIGN-SYSTEM-V2.md` under
+contrast-audit snippet lives in `DESIGN-SYSTEM.md` under
 "Accessibility — WCAG 2.1 AA contrast". Run it on every new surface.
 
 ---
@@ -116,7 +116,7 @@ contrast-audit snippet lives in `DESIGN-SYSTEM-V2.md` under
 ## 3. Project rules now in force (carry forward)
 
 These are project-wide invariants. New work must respect them. They are
-documented in `DESIGN-SYSTEM-V2.md`; this is the cheat sheet.
+documented in `DESIGN-SYSTEM.md`; this is the cheat sheet.
 
 1. **Minimum font-size = 11px** (`labelSmall` floor). No 9 / 10 / 9.5 /
    10.5 ever.
@@ -155,12 +155,24 @@ documented in `DESIGN-SYSTEM-V2.md`; this is the cheat sheet.
     nav glyphs, status icons, social brand marks — use Tabler. When
     porting a source bundle that ships inline SVGs, rewrite to Tabler
     before declaring the port done; don't leave the inline tail.
+12. **Two-page sprint, THEN extract** — until DOL detail page ships,
+    write inline JSX in `components/v2/*`. Don't pre-build a primitive
+    library against assumed needs — the second page reveals the real
+    reuse inventory. After both pages ship, extract primitives into
+    `components/ui/` and catalog them in a `/system` route (single
+    source of truth for the visual system). Storybook / Ladle only if
+    `/system` proves insufficient.
 
 ---
 
 ## 4. Open punch list — next session pickup
 
-Stack-ranked from "user implied next" to "nice-to-have":
+**Strategy locked 2026-06-03:** ship the two pages the client is waiting
+for (DOLs list polish + DOL detail rebuild), THEN extract primitives
+into `components/ui/`, THEN catalog them in a `/system` route. Storybook
+or Ladle only if `/system` proves insufficient. See §3 rule #12.
+
+Stack-ranked:
 
 1. **Channels selector polish** (the 6 large channel icons below the
    bio on each card — `.channels` / `.ch-tab`). They already use the
@@ -172,9 +184,22 @@ Stack-ranked from "user implied next" to "nice-to-have":
 3. **Sidebar filter panel** — re-do with the same pixel-perfect pass
    we just applied to the header + cards (spacing, hover states,
    accordion chevron motion).
-4. **Single DOL detail page** — `/dols/[id]` still exists in legacy
-   form. Needs full rebuild in the new aesthetic. Live ref:
-   https://pharma.market360.ai/influencers/[id]
+4. **Single DOL detail page** — `/dols/[id]`. Full rebuild in the
+   new aesthetic. Live ref:
+   https://pharma.market360.ai/influencers/[id]. Detail-page anatomy
+   (from the live portal): KPI hero with photo + halo + 5 big numbers,
+   tabbed view (Brands / Diseases / Medicaments / Engagement /
+   Comments), CTA footer (CREATE DASHBOARD / CREATE REPORT).
+5. **Component extraction pass** — once #4 ships, both pages have
+   revealed the real primitive inventory. Move inline JSX → typed
+   primitives in `components/ui/{tag,kpi-tile,card,filter-chip,
+   channel-selector,sidebar-section,…}.tsx`. Each one owns its
+   variants (default / hover / active / disabled / empty).
+6. **`/system` catalog route** — Next.js page that renders every
+   primitive from `components/ui/` with all variants, plus token
+   tables (colors, spacing, type scale, radius, motion). Pattern
+   mirrored from shadcn-ui.com docs site. Deploys with the prototype;
+   client gets a single link to the visual system.
 5. **Focus indicators (`:focus-visible`)** — WCAG 2.4.7 / 2.4.11. Not
    audited yet. Keyboard nav, skip-links, ARIA on custom controls
    (filter panel) — all open.
@@ -201,8 +226,10 @@ Stack-ranked from "user implied next" to "nice-to-have":
   `components/v2/*` and `app/dols/v2.css`.
 - **Frozen snapshots (don't edit):** `app/concepts/v2/dols/` and
   `app/concepts/v3/dols/`.
-- **Design system spec:** `DESIGN-SYSTEM-V2.md` (active dev spec) +
-  `DESIGN-SYSTEM.md` (rev 3, Market360 mirror — kept for v2 reference).
+- **Design system spec:** `DESIGN-SYSTEM.md` (single source of truth).
+  Historic Market360-mirror is archived as
+  `DESIGN-SYSTEM-2026-06-02-market360-mirror.md` — read only for
+  history.
 - **Concept switcher:** `components/service-menu.tsx` +
   `components/service-menu.css`.
 - **Floating grid-overlay:** the same `service-menu.css` — toggle button
