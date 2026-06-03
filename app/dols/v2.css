@@ -27,8 +27,11 @@
   --v2-line-strong: rgba(160, 180, 220, 0.18);
   --v2-text: #EAEEF8;
   --v2-text-dim: #93A0BC;
-  --v2-text-mute: #5E6A87;
-  --v2-text-faint: #45506C;
+  /* WCAG AA — both pass 4.5:1 on var(--v2-bg) = #0C0E25.
+   * text-mute  ratio ≈ 5.5  (target ≥4.5)
+   * text-faint ratio ≈ 4.6  (target ≥4.5) */
+  --v2-text-mute: #8993AD;
+  --v2-text-faint: #7C869D;
   --v2-teal: #2DD4BF;
   --v2-teal-bright: #34E7CE;
   --v2-cyan: #22D3EE;

@@ -361,6 +361,45 @@ Refactored 2026-06-03 from a fractional scale (9.5 / 10.5 / 11.5 /
 surface is clean; concept snapshots (`/concepts/v2/dols`,
 `/concepts/v3/dols`) preserve their original sizes by design.
 
+### Accessibility — WCAG 2.1 AA contrast (project-wide, 2026-06-03)
+
+**Every text surface must hit AA 4.5:1** (normal text) or 3:1 (large
+text ≥18.66px bold / ≥24px). Audited live on /dols on 2026-06-03;
+seven surfaces failed and were fixed by lifting two color tokens.
+
+Token shifts (active dev `/dols` only — snapshots frozen):
+
+| Token | Before | After | Ratio on `--v2-bg` (#0C0E25) |
+|---|---|---|---|
+| `--v2-text-mute` | `#5E6A87` | **`#8993AD`** | 3.5 → **5.5** AA ✓ |
+| `--v2-text-faint` | `#45506C` | **`#7C869D`** | 2.4 → **4.6** AA ✓ |
+| Header role label | `text-white/45` | **`text-white/55`** | 4.48 → **6.26** AAA ✓ |
+| Header divider | `bg-white/20` | **`bg-white/[0.28]`** | (decorative, keeps ~2:1 vs role) |
+
+Affected surfaces (all now AA or better):
+- Card handle (@dr.alqahtani · Riyadh, Saudi Arabia) → 6.19
+- Tag-kv key ("Type", "Group") → 5.88
+- Metric label (FOLLOWERS, POSTS, COMMENTS, COMMENTERS, ENGAGEMENT) → 6.19
+- Filter section h3 (FILTERS) → 6.19
+- Filter opt-tally (234 / 0 / etc) → 5.21
+- Toolbar count-label (INFLUENCERS) → 6.19
+- Sort label (SORT) → 5.88
+- Header role (STRATEGY LEAD) → 6.26
+
+### Live contrast audit snippet (paste into browser console)
+
+```js
+// WCAG 2.1 contrast — surveys key surfaces on /dols.
+// Walk bg stack, composite alpha, compute relative luminance.
+const channelL = c => { c = c/255; return c<=0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055,2.4); };
+const lum = (r,g,b) => 0.2126*channelL(r) + 0.7152*channelL(g) + 0.0722*channelL(b);
+const parseColor = s => { const m = s.match(/rgba?\(([^)]+)\)/); if(!m) return null; const p = m[1].split(',').map(x=>parseFloat(x.trim())); return {r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1}; };
+// ...full helper in app code (see WCAG audit in git history)
+```
+
+When adding a new surface, run the audit. Anything < 4.5:1 (or 3:1
+for large) is a bug, not a style preference.
+
 ### Spacing scale (strict 8-px grid)
 
 `2 / 4 / 8 / 12 / 16 / 24 / 32 / 64`. Reach for these first;

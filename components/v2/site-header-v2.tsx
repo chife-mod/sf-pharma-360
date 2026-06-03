@@ -121,8 +121,10 @@ export function SiteHeaderV2() {
             </button>
           </div>
 
-          {/* 12 → dashline (h-40 = photo, half-contrast) → 24 → name+role */}
-          <span aria-hidden className="ml-3 h-10 w-px bg-white/20" />
+          {/* 12 → dashline (h-40 = photo, half-contrast vs role) → 24 → name+role
+           * Role lifted from white/45 (4.48 — marginal fail) → white/55 (6.2,
+           * passes AA). Divider tracks at white/28 to keep ~2:1 vs role. */}
+          <span aria-hidden className="ml-3 h-10 w-px bg-white/[0.28]" />
           <div className="ml-6 flex flex-col gap-1 text-right">
             <span
               className="whitespace-nowrap text-[14px] font-semibold leading-none text-white"
@@ -133,7 +135,7 @@ export function SiteHeaderV2() {
             >
               Rana El-Khoury
             </span>
-            <span className="whitespace-nowrap text-[10px] font-medium uppercase leading-none tracking-[0.08em] text-white/45">
+            <span className="whitespace-nowrap text-[11px] font-medium uppercase leading-none tracking-[0.08em] text-white/55">
               Strategy Lead
             </span>
           </div>
