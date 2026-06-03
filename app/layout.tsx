@@ -7,6 +7,8 @@ import { AiAssistant } from "@/components/ai-assistant";
 import { AiAssistantDots } from "@/components/ai-assistant-dots";
 import { AiAssistantSparkles } from "@/components/ai-assistant-sparkles";
 import { AiAssistantTri } from "@/components/ai-assistant-tri";
+import { AiAssistantRingsDots } from "@/components/ai-assistant-ringsdots";
+import { AiAssistantOrbit } from "@/components/ai-assistant-orbit";
 
 /* One typeface across the whole product: Inter. Hierarchy comes from
  * weight + size, not from font pairing. (Geist / Inter Tight /
@@ -39,6 +41,8 @@ export default function RootLayout({
         <AiAssistantDots />
         <AiAssistantSparkles />
         <AiAssistantTri />
+        <AiAssistantRingsDots />
+        <AiAssistantOrbit />
       </body>
     </html>
   );
