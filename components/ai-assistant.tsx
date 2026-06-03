@@ -5,30 +5,23 @@ import "./ai-assistant.css";
 /**
  * AI assistant FAB — bottom-right on every page. Solid black tile with a
  * faint colour glow from under, and the Pharma-360 mark as three GRADIENT
- * outline rings woven Celtic-style. The weave is done by paint order (no
- * gaps / cut-outs): the three full rings are drawn whole, then three short
- * "bridge" arcs are painted ON TOP at the crossings where the base order is
- * wrong — so a ring's piece simply goes over the other (the contrast carries
- * the over/under). Two synchronised draw cycles, from the centre, then hold.
- * Placeholder for now (no panel yet).
+ * outline rings woven Celtic-style — NO gaps.
  *
- * Base paint order Y(bottom) → M → C(top). Bridges flip the z at 3 crossings
- * to make a Borromean alternation (each ring over at 2 crossings, under at 2):
- *   Y over M @ P1, Y over C @ P3, M over C @ P6.
- * pathLength=66 on every path so the bridges share the rings' draw timing.
+ * The weave (over/under) is done WITHOUT cutting the rings and WITHOUT
+ * desynced bridge segments: the three full rings are drawn whole (one
+ * continuous stroke each), then a couple of them are drawn AGAIN on top but
+ * CLIPPED to just the crossing discs where they must go over. Because the
+ * over-layer is the very same path with the very same animation, its
+ * over-piece appears exactly when the ring's draw-head reaches that crossing
+ * → perfect sync with the big ring. Base order Y(bottom)→M→C(top); the
+ * clipped over-copies flip z at: Y>M @P1, Y>C @P3, M>C @P6 (Borromean).
+ *
+ * Two synchronised draw cycles, from the centre outward, then hold.
+ * Placeholder for now (no panel yet).
  */
-const RINGS = [
-  { id: "y", grad: "g-y", d: "M22 26.5 A10.5 10.5 0 0 1 22 5.5 A10.5 10.5 0 0 1 22 26.5" },
-  { id: "m", grad: "g-m", d: "M25.07 21.21 A10.5 10.5 0 0 1 6.93 31.79 A10.5 10.5 0 0 1 25.07 21.21" },
-  { id: "c", grad: "g-c", d: "M18.93 21.21 A10.5 10.5 0 0 1 37.07 31.79 A10.5 10.5 0 0 1 18.93 21.21" },
-];
-
-// short over-segments, painted on top to flip z at 3 crossings (no gaps)
-const BRIDGES = [
-  { id: "b1", grad: "g-y", d: "M28.62 24.15 A10.5 10.5 0 0 1 24.02 26.30" }, // Y over M @ P1
-  { id: "b2", grad: "g-y", d: "M32.38 14.43 A10.5 10.5 0 0 1 31.90 19.49" }, // Y over C @ P3
-  { id: "b3", grad: "g-m", d: "M19.73 16.69 A10.5 10.5 0 0 1 23.90 19.58" }, // M over C @ P6
-];
+const Y = "M22 26.5 A10.5 10.5 0 0 1 22 5.5 A10.5 10.5 0 0 1 22 26.5";
+const M = "M25.07 21.21 A10.5 10.5 0 0 1 6.93 31.79 A10.5 10.5 0 0 1 25.07 21.21";
+const C = "M18.93 21.21 A10.5 10.5 0 0 1 37.07 31.79 A10.5 10.5 0 0 1 18.93 21.21";
 
 export function AiAssistant() {
   return (
@@ -49,16 +42,25 @@ export function AiAssistant() {
             <stop offset="0" stopColor="#FFE627" />
             <stop offset="1" stopColor="#FB923C" />
           </linearGradient>
+          {/* crossing discs where a ring must be drawn over on top */}
+          <clipPath id="clip-y" clipPathUnits="userSpaceOnUse">
+            <circle cx="26.45" cy="25.51" r="3.2" /> {/* P1: Y over M */}
+            <circle cx="32.45" cy="16.99" r="3.2" /> {/* P3: Y over C */}
+          </clipPath>
+          <clipPath id="clip-m" clipPathUnits="userSpaceOnUse">
+            <circle cx="22" cy="17.88" r="3.2" /> {/* P6: M over C */}
+          </clipPath>
         </defs>
 
-        {/* full rings (whole, no cut-outs) */}
-        {RINGS.map((r) => (
-          <path key={r.id} className="ring" pathLength={66} d={r.d} stroke={`url(#${r.grad})`} />
-        ))}
-        {/* over-segments on top → the weave, by paint order */}
-        {BRIDGES.map((b) => (
-          <path key={b.id} className="ring" pathLength={66} d={b.d} stroke={`url(#${b.grad})`} />
-        ))}
+        {/* base: three whole rings, continuous (Y under, C over) */}
+        <path className="ring" pathLength={66} d={Y} stroke="url(#g-y)" />
+        <path className="ring" pathLength={66} d={M} stroke="url(#g-m)" />
+        <path className="ring" pathLength={66} d={C} stroke="url(#g-c)" />
+
+        {/* same paths + same animation, clipped to the crossing discs and
+            painted on top → over-pieces, perfectly in sync with the rings */}
+        <path className="ring" pathLength={66} d={Y} stroke="url(#g-y)" clipPath="url(#clip-y)" />
+        <path className="ring" pathLength={66} d={M} stroke="url(#g-m)" clipPath="url(#clip-m)" />
       </svg>
     </button>
   );
