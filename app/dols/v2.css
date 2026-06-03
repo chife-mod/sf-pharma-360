@@ -302,14 +302,19 @@
  * no scroll-jump. Clamped via max-height + overflow:hidden on .hero. --- */
 .v2-root .hero-toggle { position: absolute; top: 16px; right: 16px; z-index: 2; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-sm); border: 1px solid var(--line); background: rgba(150, 170, 210, 0.04); color: var(--text-mute); cursor: pointer; transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease); }
 .v2-root .hero-toggle:hover { background: rgba(255, 255, 255, 0.06); color: var(--text); border-color: var(--line-strong); }
-/* minified strip: ~58px, headline only (eyebrow + tiles hidden) */
-.v2-root .hero.is-min { max-height: 58px; padding-top: 14px; padding-bottom: 14px; }
+/* minified strip: headline only (eyebrow + tiles hidden). Headline keeps
+ * its MAX size on desktop and fluidly shrinks within a min–max range so it
+ * always fits one line down to phones (no ellipsis until very narrow). */
+.v2-root .hero.is-min { padding-top: 16px; padding-bottom: 16px; }
 .v2-root .hero.is-min .hero-toggle { top: 50%; transform: translateY(-50%); }
 .v2-root .hero.is-min .hero-eyebrow,
 .v2-root .hero.is-min .hero-kpis { display: none; }
+/* intro takes the full width in the strip (tiles are gone), so the
+ * one-line headline isn't capped at the 600px intro basis. */
+.v2-root .hero.is-min .hero-intro { flex: 1 1 auto; min-width: 0; }
 .v2-root .hero.is-min .hero-glow,
 .v2-root .hero.is-min::before { opacity: 0; }
-.v2-root .hero.is-min .hero-title { margin: 0; font-size: 18px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 44px); }
+.v2-root .hero.is-min .hero-title { margin: 0; font-size: clamp(16px, 2.4vw, 36px); line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 44px); }
 .v2-root .hero.is-min .hero-title br { display: none; }
 
 /* ============================ TOOLBAR ============================ */
@@ -324,7 +329,7 @@
 .v2-root .count-num { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 600; font-size: 16px; color: var(--text); }
 .v2-root .count-label { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-mute); }
 .v2-root .toolbar-right { display: flex; align-items: center; gap: 12px; }
-.v2-root .search { display: flex; align-items: center; gap: 9px; padding: 0 14px; height: 42px; width: 230px; border-radius: var(--r-sm); background: rgba(150, 170, 210, 0.04); border: 1px solid var(--line); transition: all 0.2s var(--ease); }
+.v2-root .search { display: flex; align-items: center; gap: 9px; padding: 0 14px; height: 42px; width: 460px; border-radius: var(--r-sm); background: rgba(150, 170, 210, 0.04); border: 1px solid var(--line); transition: all 0.2s var(--ease); }
 .v2-root .search:focus-within { border-color: rgba(45, 212, 191, 0.45); box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.08); }
 .v2-root .search svg { width: 15px; height: 15px; color: var(--text-mute); flex: none; }
 .v2-root .search input { background: none; border: none; outline: none; color: var(--text); font-family: var(--font); font-size: 14px; width: 100%; }

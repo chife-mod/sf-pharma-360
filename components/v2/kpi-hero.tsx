@@ -1,6 +1,6 @@
 "use client";
 
-import { type CSSProperties, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { Icons } from "./icons";
 
@@ -26,11 +26,25 @@ const KPIS: Kpi[] = [
 ];
 
 export function KpiHero() {
-  /* Manual minimise toggle (a −/+ button, NOT scroll). Scroll-collapse
-   * changed the in-flow height mid-scroll and made the page jump; a manual
-   * toggle only changes layout on an explicit click, so no jank. Folds the
-   * bar to a thin headline strip and the catalog rises up. */
   const [min, setMin] = useState(false);
+
+  /* Auto-collapse ONCE when you scroll down past the hero, then it stays
+   * collapsed on scroll-up — only the −/+ button re-expands it. We fire on
+   * the downward threshold crossing (not "scrollY > T" every frame), so the
+   * height change happens exactly once. The threshold sits below the hero so
+   * the collapse happens with the hero already above the viewport → browser
+   * scroll-anchoring keeps the visible content from jumping. */
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const THRESHOLD = 300;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (lastY <= THRESHOLD && y > THRESHOLD) setMin(true);
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <section className={"hero" + (min ? " is-min" : "")}>
