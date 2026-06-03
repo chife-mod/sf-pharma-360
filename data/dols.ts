@@ -216,11 +216,15 @@ export const FILTER_DEFS: FilterDef[] = [
     options: ["facebook", "instagram", "x", "linkedin", "youtube", "tiktok", "threads"] },
 ];
 
+export type SortDir = "asc" | "desc";
+
+/* Each key carries a sensible default direction + explicit direction
+ * phrases (Baymard: spell out "High → Low" instead of a bare arrow). */
 export const SORTS = [
-  { key: "name",       label: "Influencer Name" },
-  { key: "followers",  label: "Followers" },
-  { key: "engagement", label: "Engagement Rate" },
-  { key: "posts",      label: "Posts" },
+  { key: "name",       label: "Influencer Name", defaultDir: "asc",  asc: "A → Z",         desc: "Z → A" },
+  { key: "followers",  label: "Followers",       defaultDir: "desc", asc: "Low → High",    desc: "High → Low" },
+  { key: "engagement", label: "Engagement",      defaultDir: "desc", asc: "Low → High",    desc: "High → Low" },
+  { key: "posts",      label: "Posts",           defaultDir: "desc", asc: "Fewest → Most", desc: "Most → Fewest" },
 ] as const;
 
 export type SortKey = (typeof SORTS)[number]["key"];

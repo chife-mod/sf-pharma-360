@@ -10,8 +10,10 @@ import {
   BUCKET_LABEL,
   DOLS,
   FILTER_DEFS,
+  SORTS,
   type Channel,
   type Dol,
+  type SortDir,
   type SortKey,
 } from "@/data/dols";
 
@@ -26,6 +28,16 @@ export function Dashboard() {
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("name");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
+
+  // picking a key resets to that key's sensible default direction
+  const onSort = (key: SortKey) => {
+    setSort(key);
+    setSortDir(
+      (SORTS.find((s) => s.key === key)?.defaultDir as SortDir) ?? "asc",
+    );
+  };
+  const flipDir = () => setSortDir((d) => (d === "asc" ? "desc" : "asc"));
 
   const activeCount = Object.values(filters).reduce((a, v) => a + v.length, 0);
 
@@ -96,14 +108,16 @@ export function Dashboard() {
       return true;
     });
     list = [...list].sort((a, b) => {
-      if (sort === "name") return a.name.localeCompare(b.name);
-      if (sort === "followers") return b.metrics.followers - a.metrics.followers;
-      if (sort === "engagement") return b.metrics.engagement - a.metrics.engagement;
-      if (sort === "posts") return b.metrics.posts - a.metrics.posts;
-      return 0;
+      // compute ascending comparison, then flip for descending
+      let cmp = 0;
+      if (sort === "name") cmp = a.name.localeCompare(b.name);
+      else if (sort === "followers") cmp = a.metrics.followers - b.metrics.followers;
+      else if (sort === "engagement") cmp = a.metrics.engagement - b.metrics.engagement;
+      else if (sort === "posts") cmp = a.metrics.posts - b.metrics.posts;
+      return sortDir === "asc" ? cmp : -cmp;
     });
     return list;
-  }, [filters, query, sort]);
+  }, [filters, query, sort, sortDir]);
 
   // active filter chips
   const chips: { key: string; opt: string; label: string }[] = [];
@@ -134,7 +148,9 @@ export function Dashboard() {
         query={query}
         onQuery={setQuery}
         sort={sort}
-        onSort={setSort}
+        sortDir={sortDir}
+        onSort={onSort}
+        onFlipDir={flipDir}
       />
       <div
         className={
