@@ -37,7 +37,7 @@ export function AiAssistantTri() {
           </linearGradient>
         </defs>
         {CIRCLES.map((c) => (
-          <circle key={c.id} className="tri" cx={c.cx} cy={c.cy} r="5" stroke={`url(#${c.grad})`} />
+          <circle key={c.id} className="tri" cx={c.cx} cy={c.cy} r="5" fill={`url(#${c.grad})`} />
         ))}
       </svg>
     </button>
