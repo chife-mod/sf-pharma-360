@@ -44,6 +44,9 @@
   /* cool end of the tier ramp (Elite). Bright enough that dark chip
    * text clears WCAG AA. */
   --v2-blue: #60A5FA;
+  /* leaf-green for Type/Group meta chips — distinct from the teal that
+   * the Mid Tier rung of the ramp uses. */
+  --v2-green: #4ADE80;
   --v2-teal-glow: rgba(45, 212, 191, 0.35);
   --v2-magenta-glow: rgba(242, 92, 176, 0.30);
   --v2-orange-glow: rgba(251, 146, 60, 0.28);
@@ -84,6 +87,7 @@
   --amber: var(--v2-amber);
   --rose: var(--v2-rose);
   --blue: var(--v2-blue);
+  --green: var(--v2-green);
   --teal-glow: var(--v2-teal-glow);
   --magenta-glow: var(--v2-magenta-glow);
   --orange-glow: var(--v2-orange-glow);
@@ -97,8 +101,13 @@
   --shadow-card: var(--v2-shadow-card);
   --shadow-pop: var(--v2-shadow-pop);
   --ease: var(--v2-ease);
-  --font: var(--font-inter-tight), "Inter Tight", "Inter", system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), "Space Grotesk", "Inter Tight", sans-serif;
+  /* Type system (locked 2026-06-03): Inter everywhere, Geist for the
+   * big KPI numerals (its figures read cleaner than Space Grotesk —
+   * esp. the "1"). Space Grotesk dropped. Brand wordmark stays
+   * Montserrat (set inline on the header). */
+  --font: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-num: var(--font-geist-sans), "Geist", var(--font-inter), system-ui, sans-serif;
 
   position: relative;
   min-height: 100vh;
@@ -198,7 +207,7 @@
 .v2-root .toggle-filters:hover { border-color: var(--line-strong); background: rgba(150, 170, 210, 0.08); }
 .v2-root .toggle-filters svg { width: 15px; height: 15px; color: var(--teal); }
 .v2-root .count-badge { display: flex; align-items: baseline; gap: 7px; }
-.v2-root .count-num { font-family: var(--font-display); font-weight: 600; font-size: 16px; color: var(--text); }
+.v2-root .count-num { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 600; font-size: 16px; color: var(--text); }
 .v2-root .count-label { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-mute); }
 .v2-root .toolbar-right { display: flex; align-items: center; gap: 12px; }
 .v2-root .search { display: flex; align-items: center; gap: 9px; padding: 0 14px; height: 42px; width: 230px; border-radius: var(--r-sm); background: rgba(150, 170, 210, 0.04); border: 1px solid var(--line); transition: all 0.2s var(--ease); }
@@ -303,21 +312,22 @@
 .v2-root .card-name { font-family: var(--font-display); font-weight: 600; font-size: 20px; letter-spacing: -0.01em; margin: 0; color: var(--text); line-height: 1.15; }
 .v2-root .card-handle { font-size: 13px; color: var(--text-mute); margin: 0; line-height: 1.3; }
 
-/* Tags — exactly 3 colour roles (sphere / size / type). More visible
- * than the old thin outlines: solid fills, dark text on bright fills
- * (all clear WCAG AA), neutral metadata for the rest. */
+/* Tags — muted: coloured (or neutral) outline + translucent tint, no
+ * glow. Three roles: tier (size-ranked ramp + star) · specialty (sphere,
+ * neutral grey — no colour) · type+group (green). Colour-on-dark text
+ * clears WCAG AA on all of them. */
 .v2-root .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
-.v2-root .tag { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: var(--r-pill); font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; border: 1px solid transparent; }
+.v2-root .tag { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: var(--r-pill); font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; border: 1px solid transparent; background: transparent; }
 .v2-root .tag svg { width: 13px; height: 13px; }
-/* Tier (size) — ramp colour fill + graduated star, dark ink */
-.v2-root .tag.tier { color: #0B1020; background: var(--tier-color); box-shadow: 0 1px 10px -3px var(--tier-color); }
+/* Tier (size) — ramp colour, outline + 12% tint, star in the same hue */
+.v2-root .tag.tier { color: var(--tier-color); border-color: color-mix(in srgb, var(--tier-color) 42%, transparent); background: color-mix(in srgb, var(--tier-color) 12%, transparent); }
 .v2-root .tag .tier-star { width: 13px; height: 13px; margin-left: -1px; }
-/* Specialty (sphere) — fixed violet fill */
-.v2-root .tag.specialty { color: #0B1020; background: var(--violet); }
-/* Type + Group — neutral metadata, quiet */
-.v2-root .tag.meta { gap: 6px; color: var(--text); background: rgba(150, 170, 210, 0.10); border-color: var(--line); }
-.v2-root .tag.meta .k { color: var(--text-mute); font-weight: 500; }
-.v2-root .tag.meta .v { color: var(--text); font-weight: 600; }
+/* Specialty (sphere) — neutral grey, no colour, no glow */
+.v2-root .tag.specialty { color: var(--text-dim); border-color: var(--line-strong); background: rgba(150, 170, 210, 0.05); }
+/* Type + Group — green outline + tint */
+.v2-root .tag.meta { gap: 6px; color: var(--green); border-color: color-mix(in srgb, var(--green) 38%, transparent); background: color-mix(in srgb, var(--green) 10%, transparent); }
+.v2-root .tag.meta .k { color: color-mix(in srgb, var(--green) 72%, transparent); font-weight: 500; }
+.v2-root .tag.meta .v { color: var(--green); font-weight: 700; }
 .v2-root .card-bio { margin: 14px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 43px; }
 .v2-root .channels { display: flex; align-items: center; gap: 4px; margin: 16px 0 18px; flex-wrap: wrap; }
 /* Channel tabs — 40×40 button + 20px Tabler (icon-button standard) */
@@ -332,7 +342,7 @@
 .v2-root .metric-head { display: flex; align-items: center; gap: 5px; }
 .v2-root .metric-head svg { width: 16px; height: 16px; color: var(--text-mute); }
 .v2-root .metric-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); line-height: 1.25; }
-.v2-root .metric-val { font-family: var(--font-display); font-weight: 600; font-size: 21px; color: var(--text); line-height: 1; letter-spacing: -0.01em; }
+.v2-root .metric-val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 600; font-size: 20px; color: var(--text); line-height: 1; letter-spacing: -0.01em; }
 .v2-root .metric-val.accent { color: var(--metric-accent, var(--teal)); }
 .v2-root .metric-spark { height: 16px; margin-top: 2px; }
 .v2-root .metric-delta { font-size: 10px; display: flex; align-items: center; gap: 3px; }
