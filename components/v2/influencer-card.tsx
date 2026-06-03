@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { CSSProperties } from "react";
-import { Icons, channelMeta } from "./icons";
+import { Icons, channelMeta, tierStar } from "./icons";
 import { Sparkline } from "./sparkline";
 import { TIERS, fmt, type Dol } from "@/data/dols";
 
@@ -22,17 +22,19 @@ export function InfluencerCard({ d }: { d: Dol }) {
   const cf = Math.round(m.followers * mult);
   const cp = Math.max(1, Math.round(m.posts * (0.85 + idx * 0.05)));
   const cac = Math.max(0, Math.round(m.audienceComments * mult));
-  const ccm = Math.max(0, Math.round(m.commenters * mult));
   const ceng = +(m.engagement * (1 + ((idx % 3) - 1) * 0.07)).toFixed(2);
 
   const engColor =
     ceng >= 6 ? "var(--teal)" : ceng >= 3 ? "var(--amber)" : "var(--rose)";
 
+  const TierStar = tierStar[tier.star];
+
   return (
     <div className="card" style={{ "--tier-color": tier.color } as CSSProperties}>
       <div className="card-glow" />
 
-      {/* top row */}
+      {/* top row — avatar + name/handle beside it (beads removed; the
+       * channel row below the bio is the single channel surface). */}
       <div className="card-top">
         <div className="id-cluster">
           <div className="avatar">
@@ -46,21 +48,11 @@ export function InfluencerCard({ d }: { d: Dol }) {
               height={60}
             />
           </div>
-          <div className="beads">
-            {d.channels.map((c) => {
-              const Icon = channelMeta[c].icon;
-              return (
-                <div
-                  key={c}
-                  className={"bead" + (c === active ? " live" : "")}
-                  title={channelMeta[c].name}
-                  style={c === active ? { color: channelMeta[c].color } : undefined}
-                  onClick={() => setActive(c)}
-                >
-                  <Icon />
-                </div>
-              );
-            })}
+          <div className="id-text">
+            <h3 className="card-name">{d.name}</h3>
+            <div className="card-handle">
+              {d.handle + "  ·  " + d.city + ", " + d.country}
+            </div>
           </div>
         </div>
         <button className="menu-btn" aria-label="More">
@@ -68,27 +60,20 @@ export function InfluencerCard({ d }: { d: Dol }) {
         </button>
       </div>
 
-      {/* name */}
-      <h3 className="card-name">{d.name}</h3>
-      <div className="card-handle">{d.handle + "  ·  " + d.city + ", " + d.country}</div>
-
-      {/* tags */}
+      {/* tags — 3 colour roles: tier (size-ranked ramp + graduated star),
+       * specialty (sphere, fixed violet), type+group (neutral metadata). */}
       <div className="tags">
-        <span className={"tag tier" + (tier.star ? "" : " outline")}>
-          {tier.star && (
-            <svg viewBox="0 0 24 24" fill="currentColor" width={11} height={11} aria-hidden>
-              <path d="M12 2.5l2.9 6.26 6.85.6-5.18 4.52 1.55 6.7L12 17.3 5.88 21.1l1.55-6.7L2.25 9.36l6.85-.6L12 2.5z" />
-            </svg>
-          )}
+        <span className="tag tier">
+          <TierStar className="tier-star" />
           {d.tier}
         </span>
-        <span className="tag">{d.specialty}</span>
-        <span className="tag tag-kv">
-          <span className="k">Type </span>
+        <span className="tag specialty">{d.specialty}</span>
+        <span className="tag meta">
+          <span className="k">Type</span>
           <span className="v">{d.type}</span>
         </span>
-        <span className="tag tag-kv">
-          <span className="k">Group </span>
+        <span className="tag meta">
+          <span className="k">Group</span>
           <span className="v">{d.group}</span>
         </span>
       </div>
@@ -130,12 +115,6 @@ export function InfluencerCard({ d }: { d: Dol }) {
           label="Comments"
           value={fmt(cac)}
           delta={(d.seed % 11) - 4}
-        />
-        <Metric
-          icon={Icons.commenters}
-          label="Commenters"
-          value={fmt(ccm)}
-          delta={(d.seed % 7) - 2}
         />
         <Metric
           icon={Icons.pulse}

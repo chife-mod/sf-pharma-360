@@ -40,12 +40,20 @@ export type Dol = {
   bucket: Bucket;
 };
 
-export const TIERS: Record<Tier, { color: string; star: boolean; label: string }> = {
-  Elite:       { color: "var(--teal)",    star: true,  label: "Elite" },
-  Macro:       { color: "var(--violet)",  star: true,  label: "Macro" },
-  "Mid Tier":  { color: "var(--cyan)",    star: true,  label: "Mid Tier" },
-  Rising:      { color: "var(--magenta)", star: false, label: "Rising" },
-  Micro:       { color: "var(--orange)",  star: false, label: "Micro" },
+/* Tier = audience-size ladder. Color ramps warm→cool with size
+ * (small = orange, big = blue); star fills up with size. Both signal
+ * the SAME thing — magnitude — so the chip reads at a glance.
+ * Ordered smallest → largest. */
+export type StarState = "empty" | "half" | "full";
+export const TIERS: Record<
+  Tier,
+  { color: string; star: StarState; label: string; rank: number }
+> = {
+  Micro:      { color: "var(--orange)", star: "empty", label: "Micro",    rank: 1 },
+  Rising:     { color: "var(--amber)",  star: "half",  label: "Rising",   rank: 2 },
+  "Mid Tier": { color: "var(--teal)",   star: "half",  label: "Mid Tier", rank: 3 },
+  Macro:      { color: "var(--cyan)",   star: "full",  label: "Macro",    rank: 4 },
+  Elite:      { color: "var(--blue)",   star: "full",  label: "Elite",    rank: 5 },
 };
 
 /* Source at 2x display (avatar 60px × 2 = 120; bumped to 240 for 4× retina

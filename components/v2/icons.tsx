@@ -26,6 +26,9 @@ import {
   IconSearch,
   IconSearchOff,
   IconSortAscendingNumbers,
+  IconStar,
+  IconStarFilled,
+  IconStarHalfFilled,
   IconTrendingUp,
   IconUsers,
   IconUsersGroup,
@@ -58,6 +61,17 @@ export const Icons = {
   commenters: IconUsers,
   pulse: IconActivityHeartbeat,
   emptyGlass: IconSearchOff,
+  star: IconStar,
+  starHalf: IconStarHalfFilled,
+  starFull: IconStarFilled,
+} satisfies Record<string, Glyph>;
+
+/* Tier → star fill, graduated by audience size.
+ * empty = smallest tier · half = mid · full = largest. */
+export const tierStar = {
+  empty: IconStar,
+  half: IconStarHalfFilled,
+  full: IconStarFilled,
 } satisfies Record<string, Glyph>;
 
 /* ---- social glyphs (Tabler brand icons — monochrome via currentColor) ---- */
