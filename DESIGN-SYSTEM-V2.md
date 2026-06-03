@@ -97,11 +97,14 @@ ER-метрику.
 
 ### 3. Typography
 
+> Updated 2026-06-03 — floor lifted to **11px**, fractional sizes
+> banned. See "Typography floor + scale" below for the binding scale.
+
 | Роль | Font | Size / Weight | Tracking |
 |---|---|---|---|
 | Display (H1, KPI numbers, заголовки карточек) | **Space Grotesk** / Geist | 4xl–5xl, 700 | -0.02em |
 | Body / UI | **Inter** | sm (14px), 400–500 | normal |
-| Micro-labels (UPPERCASE) | Inter | 10–11px, 600 | 0.2em–0.32em |
+| Micro-labels (UPPERCASE) | Inter | **11px** (floor), 500–600 | 0.2em–0.32em |
 | Mono (опционально, метрики) | JetBrains Mono | — | — |
 
 **Hierarchy moves:**
