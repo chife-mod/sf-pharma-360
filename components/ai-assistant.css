@@ -60,7 +60,7 @@
   stroke-dasharray: 66; /* path length ≈ 2π·10.5 */
   stroke-dashoffset: 0; /* resting = fully drawn */
   /* all three synchronised (no stagger) so the weave draws as one */
-  animation: ai-draw 4.6s linear forwards;
+  animation: ai-draw 5.2s linear forwards;
 }
 
 @keyframes ai-pop {
@@ -78,10 +78,10 @@
    ease-OUT so the stroke shoots out of zero (no lingering "dots" + pause).
    Both draws share span + easing → identical. */
 @keyframes ai-draw {
-  0%   { stroke-dashoffset: 66;   animation-timing-function: cubic-bezier(0.3, 0.85, 0.35, 1); } /* draw 1 */
+  0%   { stroke-dashoffset: 66;   animation-timing-function: cubic-bezier(0.25, 0.6, 0.3, 1); } /* draw 1 */
   26%  { stroke-dashoffset: 0;    animation-timing-function: linear; }                          /* hold */
-  40%  { stroke-dashoffset: 0;    animation-timing-function: cubic-bezier(0.3, 0.85, 0.35, 1); }  /* erase (from centre) */
-  62%  { stroke-dashoffset: -66;  animation-timing-function: cubic-bezier(0.3, 0.85, 0.35, 1); }  /* draw 2 (== draw 1) */
+  40%  { stroke-dashoffset: 0;    animation-timing-function: cubic-bezier(0.25, 0.6, 0.3, 1); }  /* erase (from centre) */
+  62%  { stroke-dashoffset: -66;  animation-timing-function: cubic-bezier(0.25, 0.6, 0.3, 1); }  /* draw 2 (== draw 1) */
   88%  { stroke-dashoffset: -132; animation-timing-function: linear; }                          /* hold final */
   100% { stroke-dashoffset: -132; }
 }
