@@ -137,12 +137,33 @@
   content: "";
   position: absolute;
   inset: 0;
+  /* horizontal rule lines only — the vertical lines now come from the
+   * content-aligned .v2-app-grid so they land on the real columns. */
   background-image:
-    linear-gradient(rgba(150, 170, 210, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(150, 170, 210, 0.045) 1px, transparent 1px);
+    linear-gradient(rgba(150, 170, 210, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
   -webkit-mask-image: radial-gradient(ellipse 100% 85% at 50% 0%, #000 35%, transparent 85%);
   mask-image: radial-gradient(ellipse 100% 85% at 50% 0%, #000 35%, transparent 85%);
+}
+
+/* Background 12-column guide, bound to the SAME rail as the content
+ * (max-w 1650, centred, 24px gutters, 16px gaps) so the lines fall on
+ * the real columns. Faint; fades out toward the bottom. */
+.v2-app-grid {
+  position: absolute;
+  inset: 0;
+  max-width: 1650px;
+  margin-inline: auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 48%, transparent 88%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 48%, transparent 88%);
+}
+.v2-app-grid > span {
+  border-left: 1px solid rgba(150, 170, 210, 0.05);
+  border-right: 1px solid rgba(150, 170, 210, 0.05);
 }
 
 /* ---- shell ---- */
@@ -251,8 +272,11 @@
  * their min (intro 360 + gap 32 + kpis 676 ≈ 1068 rail ≈ 1116 vw). */
 @media (max-width: 1120px) {
   .v2-root .hero { flex-direction: column; align-items: stretch; gap: 24px; }
+  /* reset flex: in a column container flex-basis maps to HEIGHT, so the
+   * old `flex: 1 1 676px` made the KPI block 676px+ tall (giant empty
+   * space under the tiles). flex:none → size to content (168px tiles). */
   .v2-root .hero-intro { flex: none; min-width: 0; }
-  .v2-root .hero-kpis { width: 100%; min-width: 0; }
+  .v2-root .hero-kpis { flex: none; width: 100%; min-width: 0; }
 }
 @media (max-width: 560px) {
   .v2-root .hero-kpis { grid-template-columns: repeat(2, 1fr); }
