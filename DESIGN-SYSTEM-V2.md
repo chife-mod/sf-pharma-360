@@ -338,8 +338,28 @@ dots), card channel tabs (`.ch-tab`).
   `tracking-[0.08em]`, `leading-none`, color `white/45`
 - **Gap name ↔ role:** `4px` (gap-1)
 
-Round-number font sizes only (10 / 11 / 12 / 13 / 14 / 16 / 18 / 20 /
-24 / 28 / 32 / 40). No `12.5 / 10.5`.
+### Typography floor + scale (project-wide rule, 2026-06-03)
+
+**Minimum font-size = 11px.** Anything smaller is forbidden, including
+eyebrow labels, axis ticks, and badge counters. Matches Material 3
+`labelSmall`, Apple HIG `caption2`, Atlassian DS "UI Text smallest".
+
+Round-number sizes only — no half-pixel values:
+
+| Role | px |
+|---|---|
+| KPI numbers / metric values | 21 |
+| Card name / display heading | 22 |
+| Body input / sort value / bio | 14 |
+| Card handle / body small | 13 |
+| Nav uppercase / count badge / opt-label | 12 |
+| **Floor**: uppercase labels, filter chips, badge | **11** |
+| ⛔ forbidden | < 11 |
+
+Refactored 2026-06-03 from a fractional scale (9.5 / 10.5 / 11.5 /
+12.5 / 13.5) inherited from the Pharma OS source bundle. Active /dols
+surface is clean; concept snapshots (`/concepts/v2/dols`,
+`/concepts/v3/dols`) preserve their original sizes by design.
 
 ### Spacing scale (strict 8-px grid)
 
