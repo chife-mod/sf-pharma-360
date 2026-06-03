@@ -1,7 +1,8 @@
 /* AI assistant — premium round product FAB, bottom-right.
    Black glass tile (like the header pills) + backdrop blur, a colourful
-   glow shimmering from underneath, and the Pharma-360 mark as three outline
-   rings that draw on, bloom for a few cycles, then settle. Placeholder. */
+   glow shimmering from UNDER it, and the Pharma-360 mark as three outline
+   rings that draw on from the central intersection, bloom twice, then stop
+   on the drawn frame. Placeholder. */
 
 .ai-fab {
   position: fixed;
@@ -15,6 +16,7 @@
   place-items: center;
   padding: 0;
   cursor: pointer;
+  isolation: isolate; /* own stacking context so the glow stays UNDER */
   /* black glass, matches header pills (#05071b) — slightly translucent so a
      hint of the under-glow seeps through */
   background: rgba(5, 7, 27, 0.82);
@@ -29,7 +31,8 @@
   animation: ai-pop 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-/* colourful glow seeping from under the tile — the "power inside" shimmer */
+/* colourful glow UNDER the tile (z-index below the bg) — slow drift, the
+   "power inside" shimmer. 3× slower than before. */
 .ai-fab::before {
   content: "";
   position: absolute;
@@ -47,36 +50,34 @@
   );
   filter: blur(11px);
   opacity: 0.3;
-  animation: ai-glow 4.5s ease-in-out infinite;
+  animation: ai-glow 13.5s ease-in-out infinite;
 }
 .ai-fab:hover { transform: translateY(-2px); }
 .ai-fab:hover::before { opacity: 0.55; }
 
+/* bigger mark, closer to the tile edges (tight viewBox + larger px) */
 .ai-rings {
-  width: 32px;
-  height: 32px;
+  width: 42px;
+  height: 42px;
   display: block;
   overflow: visible;
 }
 .ai-rings circle {
   fill: none;
-  stroke-width: 2.6;
+  stroke-width: 2.4;
   stroke-linecap: round;
   stroke-dasharray: 66; /* ≈ circumference of r=10.5 */
-  stroke-dashoffset: 0; /* resting (settled) = fully drawn */
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.4));
-  animation: ai-draw 2.4s ease-in-out infinite;
-}
-.ai-rings circle:nth-of-type(2) { animation-delay: 0.18s; }
-.ai-rings circle:nth-of-type(3) { animation-delay: 0.36s; }
-
-/* after the bloom cycles: stop drawing, hold the mark drawn, glow continues */
-.ai-fab.is-settled .ai-rings circle {
-  animation: none;
   stroke-dashoffset: 0;
-  opacity: 1;
-  transition: stroke-dashoffset 0.7s ease, opacity 0.5s ease;
+  /* rotate each ring around its own centre (the inline rotate aims the
+     draw start at the shared centre) */
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.4));
+  /* one timeline: two blooms, then holds the drawn frame (forwards) */
+  animation: ai-draw 4.4s ease-in-out forwards;
 }
+.ai-rings circle:nth-of-type(2) { animation-delay: 0.16s; }
+.ai-rings circle:nth-of-type(3) { animation-delay: 0.32s; }
 
 @keyframes ai-pop {
   0%   { opacity: 0; transform: scale(0.5); }
@@ -84,14 +85,18 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* one bloom cycle: each ring draws from 0→100, holds, fades, resets */
+/* two blooms then STOP drawn: draw → hold → fade → (reset while invisible)
+   → draw → hold drawn forever. `forwards` pins the 100% (drawn) frame. */
 @keyframes ai-draw {
   0%   { stroke-dashoffset: 66; opacity: 0; }
-  12%  { opacity: 1; }
-  45%  { stroke-dashoffset: 0; opacity: 1; }
-  70%  { stroke-dashoffset: 0; opacity: 1; }
-  90%  { stroke-dashoffset: 0; opacity: 0; }
-  100% { stroke-dashoffset: 66; opacity: 0; }
+  6%   { opacity: 1; }
+  26%  { stroke-dashoffset: 0; }
+  40%  { stroke-dashoffset: 0; opacity: 1; }
+  47%  { stroke-dashoffset: 0; opacity: 0; }
+  50%  { stroke-dashoffset: 66; opacity: 0; }
+  56%  { opacity: 1; }
+  82%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
 }
 
 /* slow colour drift + breathe of the under-glow */
