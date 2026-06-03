@@ -46,9 +46,9 @@ export function SiteHeaderV2() {
             <img
               src={`${BASE}/pharma-360-logo.svg`}
               alt="Pharma 360"
-              width={145}
-              height={40}
-              className="block h-10 w-auto"
+              width={116}
+              height={32}
+              className="block h-8 w-auto"
             />
           </Link>
           <nav className="flex items-center">
