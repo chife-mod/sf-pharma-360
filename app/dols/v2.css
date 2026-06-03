@@ -174,7 +174,9 @@
 /* ---- shell ---- */
 .v2-shell {
   position: relative;
-  z-index: 1;
+  /* NB: no z-index here on purpose. A positive z-index would make the
+   * shell a stacking context and trap the fixed filter drawer below the
+   * header. Content still paints above the fixed bg by tree order. */
   max-width: 1650px;
   margin: 0 auto;
   padding: 0 24px 80px;
@@ -480,11 +482,11 @@
   .v2-root .layout.no-filters .dashboard-main { grid-column: 1 / -1; }
 
   .v2-root .filters {
-    position: fixed; top: 0; left: 0; bottom: 0; z-index: 220;
+    position: fixed; top: 0; right: 0; left: auto; bottom: 0; z-index: 1000;
     display: flex; flex-direction: column;
     width: min(380px, 88vw); max-height: 100vh; margin: 0;
-    border-radius: 0 var(--r-lg) var(--r-lg) 0;
-    transform: translateX(-100%);
+    border-radius: var(--r-lg) 0 0 var(--r-lg);
+    transform: translateX(100%);
     transition: transform 0.32s var(--ease);
     opacity: 1; pointer-events: auto;
   }
@@ -497,7 +499,7 @@
   .v2-root .filter-apply { display: block; padding: 12px; border-top: 1px solid var(--line); background: var(--panel); }
 
   .v2-root .filters-backdrop {
-    display: block; position: fixed; inset: 0; z-index: 210;
+    display: block; position: fixed; inset: 0; z-index: 990;
     background: rgba(5, 7, 18, 0.62);
     -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
     opacity: 0; pointer-events: none; transition: opacity 0.32s var(--ease);
