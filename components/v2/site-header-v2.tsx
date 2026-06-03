@@ -60,7 +60,7 @@ export function SiteHeaderV2() {
                   key={item.label}
                   href={item.href}
                   className={
-                    "relative inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[8px] px-[18px] text-[14px] font-normal leading-none transition-colors hover:bg-white/20 hover:text-white " +
+                    "relative inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[8px] px-[18px] text-[14px] font-normal leading-none transition-colors hover:bg-white/[0.08] hover:text-white " +
                     (active ? "text-white" : "text-[#949EB8]")
                   }
                   aria-current={active ? "page" : undefined}
@@ -91,14 +91,14 @@ export function SiteHeaderV2() {
             <button
               type="button"
               aria-label="Search"
-              className="inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/20 hover:text-white"
+              className="inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/[0.08] hover:text-white"
             >
               <IconSearch size={20} stroke={1.6} />
             </button>
             <button
               type="button"
               aria-label="Notifications"
-              className="relative inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/20 hover:text-white"
+              className="relative inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/[0.08] hover:text-white"
             >
               <IconBell size={20} stroke={1.6} />
               <span
@@ -113,7 +113,7 @@ export function SiteHeaderV2() {
             <button
               type="button"
               aria-label="Settings"
-              className="inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/20 hover:text-white"
+              className="inline-flex size-10 items-center justify-center rounded-[8px] text-[#949EB8] transition-colors hover:bg-white/[0.08] hover:text-white"
             >
               <IconSettings size={20} stroke={1.6} />
             </button>
