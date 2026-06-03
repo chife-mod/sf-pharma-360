@@ -138,11 +138,11 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(150, 170, 210, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(150, 170, 210, 0.025) 1px, transparent 1px);
-  background-size: 64px 64px;
-  -webkit-mask-image: radial-gradient(ellipse 100% 80% at 50% 0%, #000 30%, transparent 80%);
-  mask-image: radial-gradient(ellipse 100% 80% at 50% 0%, #000 30%, transparent 80%);
+    linear-gradient(rgba(150, 170, 210, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(150, 170, 210, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse 100% 85% at 50% 0%, #000 35%, transparent 85%);
+  mask-image: radial-gradient(ellipse 100% 85% at 50% 0%, #000 35%, transparent 85%);
 }
 
 /* ---- shell ---- */
@@ -210,7 +210,10 @@
  * sources as the page bg, so the bar reads as lit by the same light. */
 .v2-root .hero-glow { position: absolute; top: -120px; right: -80px; width: 380px; height: 280px; border-radius: 50%; background: radial-gradient(circle, var(--violet), transparent 70%); opacity: 0.08; filter: blur(20px); pointer-events: none; }
 .v2-root .hero::before { content: ""; position: absolute; left: -100px; bottom: -120px; width: 360px; height: 260px; border-radius: 50%; background: radial-gradient(circle, var(--teal), transparent 70%); opacity: 0.07; filter: blur(20px); pointer-events: none; }
-.v2-root .hero-intro { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+/* Priority to the text block: it holds ~600px and only shrinks once the
+ * KPIs hit their own min — never below min-width 360 (the 4-line-title
+ * width). The KPIs flex/shrink in width first (they have room). */
+.v2-root .hero-intro { position: relative; flex: 0 1 600px; min-width: 360px; display: flex; flex-direction: column; justify-content: center; }
 .v2-root .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 6px 12px; border-radius: var(--r-pill); border: 1px solid var(--line); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mute); }
 .v2-root .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal-glow); }
 /* One diagonal gradient over the whole headline; plain words are painted
@@ -218,10 +221,13 @@
  * continuous blue→violet→magenta sweep (top-left P → period after time). */
 /* vivid one-off gradient (brighter than the muted tokens), 135° = a true
  * 45° down-right diagonal: pure cyan → blue-violet → magenta → orange. */
-.v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; background: linear-gradient(135deg, #22D3EE 0%, #6D5CFF 33%, #FF49C3 66%, #FF8A2A 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--text); }
+.v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; background: linear-gradient(155deg, #22D3EE 0%, #6D5CFF 33%, #FF49C3 66%, #FF8A2A 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--text); }
 .v2-root .hero-title .hero-plain { -webkit-text-fill-color: var(--text); color: var(--text); }
 .v2-root .hero-sub { margin: 14px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-mute); max-width: 520px; }
-.v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 0 0 auto; width: 880px; }
+/* Flexible width (grows to take spare room → wider tiles; shrinks first
+ * when space tightens). min-width 676 keeps each of the 4 tiles ≥ ~160px
+ * so values + labels never clip. Tiles share the width via 1fr. */
+.v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 1 1 676px; min-width: 676px; }
 /* Tile: coloured (accent) outline, content split top↔bottom (icon row up,
  * value pinned down), taller. */
 .v2-root .kpi { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 168px; padding: 16px; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--kpi-accent) 30%, transparent); background: rgba(150, 170, 210, 0.03); }
@@ -241,9 +247,12 @@
 .v2-root .kpi-foot { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 8px; }
 .v2-root .kpi-val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 700; font-size: 32px; line-height: 1; letter-spacing: -0.02em; color: var(--text); }
 .v2-root .kpi-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); }
-@media (max-width: 1300px) {
+/* Stack only once the intro is at its 4-line min AND the tiles are at
+ * their min (intro 360 + gap 32 + kpis 676 ≈ 1068 rail ≈ 1116 vw). */
+@media (max-width: 1120px) {
   .v2-root .hero { flex-direction: column; align-items: stretch; gap: 24px; }
-  .v2-root .hero-kpis { width: 100%; }
+  .v2-root .hero-intro { flex: none; min-width: 0; }
+  .v2-root .hero-kpis { width: 100%; min-width: 0; }
 }
 @media (max-width: 560px) {
   .v2-root .hero-kpis { grid-template-columns: repeat(2, 1fr); }
@@ -294,7 +303,7 @@
 .v2-root .layout.no-filters .dashboard-main { grid-column: 1 / -1; }
 
 /* ============================ FILTER PANEL ============================ */
-.v2-root .filters { position: sticky; top: 96px; background: linear-gradient(180deg, rgba(22, 24, 36, 0.55), rgba(13, 14, 22, 0.55)); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 8px; overflow: hidden; backdrop-filter: blur(8px); }
+.v2-root .filters { position: sticky; top: 96px; background: radial-gradient(70% 40% at 0% 100%, rgba(255, 255, 255, 0.02), transparent 60%), linear-gradient(180deg, rgba(22, 24, 36, 0.55), rgba(13, 14, 22, 0.55)); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 8px; overflow: hidden; backdrop-filter: blur(8px); }
 .v2-root .layout.no-filters .filters { opacity: 0; pointer-events: none; }
 .v2-root .filter-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 10px; }
 .v2-root .filter-head h3 { margin: 0; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-mute); font-weight: 600; }
@@ -344,7 +353,7 @@
 /* ============================ CARD ============================ */
 /* Default state quiet (calm) — no tier-color border highlight, no glow.
  * Hover restores: lift, tier-color border gradient, top-right glow. */
-.v2-root .card { position: relative; background: linear-gradient(180deg, rgba(28, 30, 44, 0.65), rgba(13, 14, 22, 0.85)); border: 1px solid var(--line); border-radius: var(--r-xl); padding: 24px 24px 0; overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease); isolation: isolate; }
+.v2-root .card { position: relative; background: radial-gradient(90% 95% at 0% 100%, rgba(255, 255, 255, 0.022), transparent 58%), linear-gradient(180deg, rgba(28, 30, 44, 0.65), rgba(13, 14, 22, 0.85)); border: 1px solid var(--line); border-radius: var(--r-xl); padding: 24px 24px 0; overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease); isolation: isolate; }
 .v2-root .card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, var(--tier-color, var(--teal)), transparent 40%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.35s var(--ease); pointer-events: none; }
 .v2-root .card:hover { transform: translateY(-5px); border-color: var(--line-strong); box-shadow: var(--shadow-card); }
 .v2-root .card:hover::before { opacity: 0.9; }
