@@ -232,7 +232,7 @@
 /* ============================ HERO KPI BAR ============================ */
 /* Sits above the toolbar. Muted to match the surface: soft fills, light
  * corner glows (not neon), accent only on icon / delta / glow. */
-.v2-root .hero { position: relative; display: flex; gap: 32px; align-items: center; margin-top: 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--r-xl); background: linear-gradient(135deg, rgba(24, 26, 40, 0.55), rgba(13, 14, 22, 0.6)); overflow: hidden; }
+.v2-root .hero { position: relative; display: flex; gap: 32px; align-items: center; margin-top: 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--r-xl); background: linear-gradient(135deg, rgba(24, 26, 40, 0.55), rgba(13, 14, 22, 0.6)); overflow: hidden; transition: padding 0.35s var(--ease), gap 0.35s var(--ease); }
 /* whole-bar ambient: violet top-right + teal bottom-left — same two
  * sources as the page bg, so the bar reads as lit by the same light. */
 .v2-root .hero-glow { position: absolute; top: -120px; right: -80px; width: 380px; height: 280px; border-radius: 50%; background: radial-gradient(circle, var(--violet), transparent 70%); opacity: 0.08; filter: blur(20px); pointer-events: none; }
@@ -240,7 +240,7 @@
 /* Priority to the text block: it holds ~600px and only shrinks once the
  * KPIs hit their own min — never below min-width 360 (the 4-line-title
  * width). The KPIs flex/shrink in width first (they have room). */
-.v2-root .hero-intro { position: relative; flex: 0 1 600px; min-width: 360px; display: flex; flex-direction: column; justify-content: center; }
+.v2-root .hero-intro { position: relative; flex: 0 1 600px; min-width: 360px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; max-height: 500px; transition: max-height 0.4s var(--ease), opacity 0.3s var(--ease), margin 0.35s var(--ease); }
 .v2-root .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 6px 12px; border-radius: var(--r-pill); border: 1px solid var(--line); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mute); }
 .v2-root .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal-glow); }
 /* One diagonal gradient over the whole headline; plain words are painted
@@ -257,7 +257,7 @@
 .v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 1 1 676px; min-width: 676px; }
 /* Tile: coloured (accent) outline, content split top↔bottom (icon row up,
  * value pinned down), taller. */
-.v2-root .kpi { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 168px; padding: 16px; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--kpi-accent) 30%, transparent); background: rgba(150, 170, 210, 0.03); }
+.v2-root .kpi { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 168px; padding: 16px; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--kpi-accent) 30%, transparent); background: rgba(150, 170, 210, 0.03); transition: height 0.35s var(--ease), padding 0.35s var(--ease); }
 /* Two glows echoing the page bg: teal from the left (bg has teal at 18%),
  * violet from the right (bg has violet at 92%). Same hue per side, just a
  * touch brighter than the bg + a tighter spread. Not the tile accent. */
@@ -272,7 +272,7 @@
 .v2-root .kpi-icon svg { width: 20px; height: 20px; }
 .v2-root .kpi-delta { font-size: 12px; font-weight: 600; color: var(--kpi-accent); }
 .v2-root .kpi-foot { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 8px; }
-.v2-root .kpi-val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 700; font-size: 32px; line-height: 1; letter-spacing: -0.02em; color: var(--text); }
+.v2-root .kpi-val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 700; font-size: 32px; line-height: 1; letter-spacing: -0.02em; color: var(--text); transition: font-size 0.35s var(--ease); }
 .v2-root .kpi-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); }
 /* Stack only once the intro is at its 4-line min AND the tiles are at
  * their min (intro 360 + gap 32 + kpis 676 ≈ 1068 rail ≈ 1116 vw). */
@@ -296,6 +296,24 @@
   .v2-root .hero { padding: 24px; }
   .v2-root .hero-title { font-size: 28px; }
 }
+
+/* --- collapsed hero (scrolled): intro folds away, tiles shrink to a
+ * compact stat strip. Mirrors the header's headroom — reclaims the
+ * vertical the full hero eats on every visit. Column count is left to
+ * the breakpoints above (4-up desktop / 2-up ≤768), only the tile
+ * HEIGHT shrinks, so nothing clips on mobile. --- */
+.v2-root .hero.is-collapsed { padding-top: 14px; padding-bottom: 14px; gap: 0; }
+.v2-root .hero.is-collapsed .hero-intro {
+  flex: 0 0 0; width: 0; max-width: 0; max-height: 0; min-width: 0;
+  opacity: 0; margin: 0; padding: 0;
+}
+.v2-root .hero.is-collapsed .hero-glow,
+.v2-root .hero.is-collapsed::before,
+.v2-root .hero.is-collapsed .kpi-glow-l,
+.v2-root .hero.is-collapsed .kpi-glow-r { opacity: 0; }
+.v2-root .hero.is-collapsed .kpi { height: 88px; padding: 12px 14px; }
+.v2-root .hero.is-collapsed .kpi-val { font-size: 22px; }
+.v2-root .hero.is-collapsed .kpi-foot { gap: 4px; }
 
 /* ============================ TOOLBAR ============================ */
 .v2-root .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 30px 0 22px; gap: 18px; flex-wrap: wrap; }

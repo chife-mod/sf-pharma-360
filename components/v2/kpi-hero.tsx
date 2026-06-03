@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { Icons } from "./icons";
 
 /* Hero KPI bar — sits above the toolbar. Intro copy on the left, four
@@ -25,8 +25,20 @@ const KPIS: Kpi[] = [
 ];
 
 export function KpiHero() {
+  /* Collapse the marketing hero on scroll-down (mirrors the header's
+   * headroom): intro folds away and the KPI tiles shrink to a compact
+   * stat strip, so the catalog isn't buried under a full-height hero on
+   * every visit. Expands back near the top. */
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setCollapsed(window.scrollY > 150);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <section className="hero">
+    <section className={"hero" + (collapsed ? " is-collapsed" : "")}>
       <div className="hero-glow" />
       <div className="hero-intro">
         <span className="hero-eyebrow">
