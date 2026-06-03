@@ -32,7 +32,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 
-import type { Channel } from "@/app/concepts/v3/data";
+import type { Channel } from "@/data/dols";
 
 type TablerIconProps = SVGProps<SVGSVGElement> & {
   size?: number | string;

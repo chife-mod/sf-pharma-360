@@ -1,14 +1,14 @@
-# DESIGN-SYSTEM.md — Pharma 360 active design system
+# DESIGN-SYSTEM.md — Pharma 360 design system
 
-> **Active spec** for the live dev surface at `/dols` (the new v1 main).
-> This file replaces the old `DESIGN-SYSTEM-V2.md` (promoted to
-> canonical on 2026-06-03) and the older `DESIGN-SYSTEM.md`
-> Market360-mirror (archived as
-> [`DESIGN-SYSTEM-2026-06-02-market360-mirror.md`](DESIGN-SYSTEM-2026-06-02-market360-mirror.md)).
+> **The** design system for the live dev surface at `/dols`. Single
+> source of truth — there is no "v2" doc; this is it. A historic
+> Market360-mirror spec is archived as
+> [`DESIGN-SYSTEM-2026-06-02-market360-mirror.md`](DESIGN-SYSTEM-2026-06-02-market360-mirror.md)
+> (read only for history).
 >
-> One file. The active rules live below. Frozen concept snapshots
-> (`/concepts/v2/dols`, `/concepts/v3/dols`) preserve their original
-> styles for comparison; they are not driven by this spec.
+> The active rules live below. The frozen concept snapshots under
+> `/concepts/` preserve their own original styles for side-by-side
+> comparison; they are not driven by this spec.
 >
 > **Source materials (origin trail):**
 > - Premium Dark "Pharma OS" source bundle:

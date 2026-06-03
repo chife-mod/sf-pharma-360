@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { Icons, channelMeta } from "./icons";
 import { Sparkline } from "./sparkline";
-import { TIERS, fmt, type Dol } from "@/app/concepts/v3/data";
+import { TIERS, fmt, type Dol } from "@/data/dols";
 
 /* InfluencerCard — verbatim port from the v2 source bundle
  * (project/app/card.jsx). Per-card tier color drives the

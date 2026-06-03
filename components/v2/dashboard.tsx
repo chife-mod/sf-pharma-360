@@ -12,7 +12,7 @@ import {
   type Channel,
   type Dol,
   type SortKey,
-} from "@/app/concepts/v3/data";
+} from "@/data/dols";
 
 /* Verbatim port of App() from the v2 source bundle
  * (project/app/main.jsx). State: filters, query, sort,
