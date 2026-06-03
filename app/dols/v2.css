@@ -205,7 +205,7 @@
 /* ============================ HERO KPI BAR ============================ */
 /* Sits above the toolbar. Muted to match the surface: soft fills, light
  * corner glows (not neon), accent only on icon / delta / glow. */
-.v2-root .hero { position: relative; display: flex; gap: 32px; align-items: stretch; margin-top: 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--r-xl); background: linear-gradient(135deg, rgba(24, 26, 40, 0.55), rgba(13, 14, 22, 0.6)); overflow: hidden; }
+.v2-root .hero { position: relative; display: flex; gap: 32px; align-items: center; margin-top: 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--r-xl); background: linear-gradient(135deg, rgba(24, 26, 40, 0.55), rgba(13, 14, 22, 0.6)); overflow: hidden; }
 /* whole-bar ambient: violet top-right + teal bottom-left — same two
  * sources as the page bg, so the bar reads as lit by the same light. */
 .v2-root .hero-glow { position: absolute; top: -120px; right: -80px; width: 380px; height: 280px; border-radius: 50%; background: radial-gradient(circle, var(--violet), transparent 70%); opacity: 0.08; filter: blur(20px); pointer-events: none; }
@@ -216,13 +216,15 @@
 /* One diagonal gradient over the whole headline; plain words are painted
  * back to white (text-fill-color) so the accent phrases share a single
  * continuous blue→violet→magenta sweep (top-left P → period after time). */
-.v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; background: linear-gradient(125deg, var(--cyan) 2%, var(--violet) 36%, var(--magenta) 68%, var(--orange) 98%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--text); }
+/* vivid one-off gradient (brighter than the muted tokens), 135° = a true
+ * 45° down-right diagonal: pure cyan → blue-violet → magenta → orange. */
+.v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; background: linear-gradient(135deg, #22D3EE 0%, #6D5CFF 33%, #FF49C3 66%, #FF8A2A 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--text); }
 .v2-root .hero-title .hero-plain { -webkit-text-fill-color: var(--text); color: var(--text); }
 .v2-root .hero-sub { margin: 14px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-mute); max-width: 520px; }
 .v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 0 0 auto; width: 880px; }
 /* Tile: coloured (accent) outline, content split top↔bottom (icon row up,
  * value pinned down), taller. */
-.v2-root .kpi { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 152px; padding: 16px; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--kpi-accent) 30%, transparent); background: rgba(150, 170, 210, 0.03); }
+.v2-root .kpi { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 168px; padding: 16px; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--kpi-accent) 30%, transparent); background: rgba(150, 170, 210, 0.03); }
 /* Two glows echoing the page bg: teal from the left (bg has teal at 18%),
  * violet from the right (bg has violet at 92%). Same hue per side, just a
  * touch brighter than the bg + a tighter spread. Not the tile accent. */
@@ -239,8 +241,8 @@
 .v2-root .kpi-foot { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 8px; }
 .v2-root .kpi-val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 700; font-size: 32px; line-height: 1; letter-spacing: -0.02em; color: var(--text); }
 .v2-root .kpi-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); }
-@media (max-width: 1180px) {
-  .v2-root .hero { flex-direction: column; gap: 24px; }
+@media (max-width: 1300px) {
+  .v2-root .hero { flex-direction: column; align-items: stretch; gap: 24px; }
   .v2-root .hero-kpis { width: 100%; }
 }
 @media (max-width: 560px) {
