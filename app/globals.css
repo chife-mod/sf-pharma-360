@@ -115,7 +115,7 @@
  * violet/indigo accent. Categorical colors desaturated, used only on
  * chips/charts — never as global accents. No gradient text, no glow. */
 .dark {
-  --background: #0c0e25;                             /* Figma 365:5036 Verticals bg — page canvas */
+  --background: #0a0b16;                             /* de-blued page canvas — matches --v2-bg so the scrollbar-gutter strips don't show the old navy */
   --foreground: oklch(0.985 0 0);
   --card: #111539;                                    /* Figma Card 100:400 canonical bg */
   --card-foreground: oklch(0.985 0 0);

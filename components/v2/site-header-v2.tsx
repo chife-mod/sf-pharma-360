@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
   IconBell,
+  IconChevronDown,
   IconLogout,
   IconMenu2,
   IconSearch,
@@ -202,31 +203,44 @@ export function SiteHeaderV2() {
             aria-hidden
             className="ml-3 h-10 w-px bg-white/[0.28] max-[1100px]:hidden"
           />
-          <div className="ml-6 flex flex-col gap-1 text-right max-[1100px]:ml-3 max-[600px]:hidden">
-            <span className="whitespace-nowrap text-[14px] font-semibold leading-none text-white">
-              Rana El-Khoury
-            </span>
-            <span className="whitespace-nowrap text-[11px] font-medium uppercase leading-none tracking-[0.08em] text-white/55 max-[1100px]:hidden">
-              Strategy Lead
-            </span>
-          </div>
 
-          {/* avatar = account-menu trigger */}
+          {/* account trigger — the WHOLE name + avatar + chevron zone opens
+           * the menu (chevron makes it read as a dropdown). Search stays
+           * separate, pushed away by the left margin. */}
           <button
             type="button"
-            aria-label="Account"
+            aria-label="Account menu"
             aria-expanded={acctOpen}
             onClick={() => setAcctOpen((o) => !o)}
-            className="ml-4 shrink-0 rounded-full max-[600px]:ml-0"
+            className={
+              "ml-4 flex shrink-0 items-center gap-3 rounded-[10px] py-1 pl-3 pr-2 transition-colors hover:bg-white/[0.06] max-[1100px]:ml-5 max-[600px]:gap-2 max-[600px]:pl-1 " +
+              (acctOpen ? "bg-white/[0.06]" : "")
+            }
           >
+            <div className="flex flex-col gap-1 text-right max-[600px]:hidden">
+              <span className="whitespace-nowrap text-[14px] font-semibold leading-none text-white">
+                Rana El-Khoury
+              </span>
+              <span className="whitespace-nowrap text-[11px] font-medium uppercase leading-none tracking-[0.08em] text-white/55 max-[1100px]:hidden">
+                Strategy Lead
+              </span>
+            </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={USER_PHOTO}
               alt="Rana El-Khoury"
               width={40}
               height={40}
-              className="block size-10 rounded-full object-cover"
+              className="block size-10 shrink-0 rounded-full object-cover"
               style={{ border: "1px solid rgba(160, 180, 220, 0.18)" }}
+            />
+            <IconChevronDown
+              size={16}
+              stroke={1.8}
+              className={
+                "shrink-0 text-[#949EB8] transition-transform " +
+                (acctOpen ? "rotate-180" : "")
+              }
             />
           </button>
 
