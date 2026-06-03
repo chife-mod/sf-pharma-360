@@ -17,12 +17,10 @@
   padding: 0;
   cursor: pointer;
   isolation: isolate; /* own stacking context so the glow stays UNDER */
-  /* black glass, matches header pills (#05071b) — slightly translucent so a
-     hint of the under-glow seeps through */
-  background: rgba(5, 7, 27, 0.82);
+  /* solid black, matches the header pills (#05071b) — opaque, so the glow
+     only reads as a faint halo around the edges */
+  background: #05071b;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: saturate(140%) blur(14px);
-  -webkit-backdrop-filter: saturate(140%) blur(14px);
   box-shadow:
     0 12px 36px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -49,11 +47,11 @@
     #dd45ff
   );
   filter: blur(11px);
-  opacity: 0.3;
+  opacity: 0.16;
   animation: ai-glow 13.5s ease-in-out infinite;
 }
 .ai-fab:hover { transform: translateY(-2px); }
-.ai-fab:hover::before { opacity: 0.55; }
+.ai-fab:hover::before { opacity: 0.32; }
 
 /* bigger mark, closer to the tile edges (tight viewBox + larger px) */
 .ai-rings {
@@ -101,12 +99,12 @@
 
 /* slow colour drift + breathe of the under-glow */
 @keyframes ai-glow {
-  0%, 100% { opacity: 0.2; transform: scale(0.92) rotate(0deg); }
-  50%      { opacity: 0.5; transform: scale(1.08) rotate(28deg); }
+  0%, 100% { opacity: 0.1; transform: scale(0.92) rotate(0deg); }
+  50%      { opacity: 0.24; transform: scale(1.08) rotate(28deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ai-fab { opacity: 1; animation: none; }
-  .ai-fab::before { animation: none; opacity: 0.3; }
+  .ai-fab::before { animation: none; opacity: 0.16; }
   .ai-rings circle { animation: none; stroke-dashoffset: 0; opacity: 1; }
 }
