@@ -36,7 +36,7 @@ senior-записью, нужен decision-workflow + обрамление case 
 - Нет диапазона состояний: hover / empty / loading / error + страница одного DOL.
 
 ## Roadmap к 9–10
-1. ✅ **Hero-collapse на скролл** — *сделано 2026-06-03* (headroom-логика как у шапки: при скролле intro сворачивается, KPI-плитки сжимаются в компактную полосу; разворачивается у верха).
+1. ✅ **Hero компактнее + ручной minimise** — *сделано 2026-06-03*. Hero ~30% ниже по умолчанию (убрана подпись-subcopy, KPI-плитки 168→116px, padding 32→24). Кнопка −/+ в углу сворачивает плашку в тонкую полоску только с заголовком (всё поднимается). Scroll-коллапс откатили — он давал layout-jump (прыжок контента при пересечении порога); ручной toggle меняет высоту только по клику = без прыжка.
 2. ⬜ Каталог → **decision-workflow**: multi-select + compare + add-to-campaign + один primary-score в карточке.
 3. ⬜ **Detail-страница DOL** + состояния (hover/empty/loading/error).
 4. ⬜ Enterprise-density режим: table/list toggle, compact cards, saved filters, pinned metrics.

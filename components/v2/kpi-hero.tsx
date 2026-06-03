@@ -1,6 +1,7 @@
 "use client";
 
-import { type CSSProperties, useEffect, useState } from "react";
+import { type CSSProperties, useState } from "react";
+import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { Icons } from "./icons";
 
 /* Hero KPI bar — sits above the toolbar. Intro copy on the left, four
@@ -25,20 +26,24 @@ const KPIS: Kpi[] = [
 ];
 
 export function KpiHero() {
-  /* Collapse the marketing hero on scroll-down (mirrors the header's
-   * headroom): intro folds away and the KPI tiles shrink to a compact
-   * stat strip, so the catalog isn't buried under a full-height hero on
-   * every visit. Expands back near the top. */
-  const [collapsed, setCollapsed] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setCollapsed(window.scrollY > 150);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  /* Manual minimise toggle (a −/+ button, NOT scroll). Scroll-collapse
+   * changed the in-flow height mid-scroll and made the page jump; a manual
+   * toggle only changes layout on an explicit click, so no jank. Folds the
+   * bar to a thin headline strip and the catalog rises up. */
+  const [min, setMin] = useState(false);
 
   return (
-    <section className={"hero" + (collapsed ? " is-collapsed" : "")}>
+    <section className={"hero" + (min ? " is-min" : "")}>
+      <button
+        type="button"
+        className="hero-toggle"
+        onClick={() => setMin((m) => !m)}
+        aria-expanded={!min}
+        aria-label={min ? "Expand summary" : "Collapse summary"}
+        title={min ? "Expand" : "Collapse"}
+      >
+        {min ? <IconPlus size={16} stroke={2} /> : <IconMinus size={16} stroke={2} />}
+      </button>
       <div className="hero-glow" />
       <div className="hero-intro">
         <span className="hero-eyebrow">
@@ -52,15 +57,10 @@ export function KpiHero() {
         <h1 className="hero-title">
           {/* nbsp glues "pharma voices," so it never wraps to a lone
            * "voices," line — the rest wraps naturally. */}
-          <span className="hero-plain">The pulse of </span>pharma&nbsp;voices,
+          <span className="hero-plain">The pulse of </span>pharma&nbsp;voices,{" "}
           <br />
           <span className="hero-plain">decoded </span>in real time.
         </h1>
-        <p className="hero-sub">
-          234 vetted clinicians, researchers and patient advocates across 7
-          channels. Filter, score and orchestrate outreach from a single
-          intelligence layer.
-        </p>
       </div>
 
       <div className="hero-kpis">
