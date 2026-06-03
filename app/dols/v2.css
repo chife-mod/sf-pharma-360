@@ -206,23 +206,31 @@
 /* Sits above the toolbar. Muted to match the surface: soft fills, light
  * corner glows (not neon), accent only on icon / delta / glow. */
 .v2-root .hero { position: relative; display: flex; gap: 32px; align-items: stretch; margin-top: 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--r-xl); background: linear-gradient(135deg, rgba(20, 28, 52, 0.55), rgba(12, 16, 34, 0.6)); overflow: hidden; }
-/* one big, very soft ambient glow top-right of the whole bar */
+/* whole-bar ambient: violet top-right + teal bottom-left — same two
+ * sources as the page bg, so the bar reads as lit by the same light. */
 .v2-root .hero-glow { position: absolute; top: -120px; right: -80px; width: 380px; height: 280px; border-radius: 50%; background: radial-gradient(circle, var(--violet), transparent 70%); opacity: 0.08; filter: blur(20px); pointer-events: none; }
+.v2-root .hero::before { content: ""; position: absolute; left: -100px; bottom: -120px; width: 360px; height: 260px; border-radius: 50%; background: radial-gradient(circle, var(--teal), transparent 70%); opacity: 0.07; filter: blur(20px); pointer-events: none; }
 .v2-root .hero-intro { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
 .v2-root .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 6px 12px; border-radius: var(--r-pill); border: 1px solid var(--line); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mute); }
 .v2-root .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal-glow); }
 .v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; color: var(--text); }
 .v2-root .hero-accent { background: linear-gradient(90deg, var(--teal), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .v2-root .hero-sub { margin: 14px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-mute); max-width: 520px; }
-.v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 0 0 auto; width: 620px; }
-.v2-root .kpi { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: var(--r-lg); border: 1px solid var(--line); background: rgba(150, 170, 210, 0.03); }
-/* the "light glow in the corner" — soft, low-opacity, accent-tinted */
-.v2-root .kpi-corner { position: absolute; top: -28px; right: -28px; width: 86px; height: 86px; border-radius: 50%; background: radial-gradient(circle, var(--kpi-accent), transparent 70%); opacity: 0.13; filter: blur(6px); pointer-events: none; }
-.v2-root .kpi-top { display: flex; align-items: center; justify-content: space-between; }
+.v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 0 0 auto; width: 700px; }
+/* Tile: coloured (accent) outline, content split top↔bottom (icon row up,
+ * value pinned down), taller. */
+.v2-root .kpi { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 152px; padding: 16px; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--kpi-accent) 30%, transparent); background: rgba(150, 170, 210, 0.03); }
+/* Two glows echoing the page bg: teal from the left (bg has teal at 18%),
+ * violet from the right (bg has violet at 92%). Same hue per side, just a
+ * touch brighter than the bg + a tighter spread. Not the tile accent. */
+.v2-root .kpi-glow-l { position: absolute; left: -44px; bottom: -44px; width: 130px; height: 130px; border-radius: 50%; background: radial-gradient(circle, var(--teal), transparent 70%); opacity: 0.16; filter: blur(8px); pointer-events: none; }
+.v2-root .kpi-glow-r { position: absolute; right: -50px; top: 50%; transform: translateY(-50%); width: 120px; height: 150px; border-radius: 50%; background: radial-gradient(circle, var(--violet), transparent 70%); opacity: 0.14; filter: blur(8px); pointer-events: none; }
+.v2-root .kpi-top { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; }
 .v2-root .kpi-icon { display: inline-flex; color: var(--kpi-accent); }
 .v2-root .kpi-icon svg { width: 18px; height: 18px; }
 .v2-root .kpi-delta { font-size: 11px; font-weight: 600; color: var(--kpi-accent); }
-.v2-root .kpi-val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 600; font-size: 28px; line-height: 1; letter-spacing: -0.01em; color: var(--text); }
+.v2-root .kpi-foot { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 4px; }
+.v2-root .kpi-val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 700; font-size: 32px; line-height: 1; letter-spacing: -0.02em; color: var(--text); }
 .v2-root .kpi-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); }
 @media (max-width: 1180px) {
   .v2-root .hero { flex-direction: column; gap: 24px; }

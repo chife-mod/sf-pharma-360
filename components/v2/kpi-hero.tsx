@@ -54,15 +54,21 @@ export function KpiHero() {
               className="kpi"
               style={{ "--kpi-accent": k.accent } as CSSProperties}
             >
-              <div className="kpi-corner" />
+              {/* two ambient glows echoing the page background: teal from
+               * the left, violet from the right — same hue as the bg on
+               * that side, just a touch brighter. */}
+              <span className="kpi-glow-l" />
+              <span className="kpi-glow-r" />
               <div className="kpi-top">
                 <span className="kpi-icon">
                   <Icon />
                 </span>
                 <span className="kpi-delta">{k.delta}</span>
               </div>
-              <div className="kpi-val">{k.value}</div>
-              <div className="kpi-label">{k.label}</div>
+              <div className="kpi-foot">
+                <div className="kpi-val">{k.value}</div>
+                <div className="kpi-label">{k.label}</div>
+              </div>
             </div>
           );
         })}
