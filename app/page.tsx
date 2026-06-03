@@ -50,8 +50,13 @@ export default function Home() {
   return (
     <div className="landing">
       <header className="landing-header">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/pharma-360-logo.svg" alt="SF Pharma 360" />
+        {/* basePath-prefixed: raw <img> isn't basePath-aware, so on GH
+         * Pages (/sf-pharma-360) a bare "/..." src 404s.
+         * eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/pharma-360-logo.svg`}
+          alt="SF Pharma 360"
+        />
         <div className="landing-header__meta">
           Internal preview · not for distribution
         </div>

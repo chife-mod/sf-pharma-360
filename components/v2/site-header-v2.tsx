@@ -10,6 +10,11 @@ const NAV = [
   { label: "Reports", href: "#" },
 ];
 
+/* Raw <img src> is NOT basePath-aware in Next (only next/image and
+ * next/link are). On GH Pages the app lives under /sf-pharma-360, so
+ * public assets must be prefixed manually. */
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 /* Source at 2x display (40px display × 2 = 80; bumped to 160 for 4× safety
  * on hi-DPI / future zoom). Unsplash auto-serves correct resolution. */
 const USER_PHOTO =
@@ -36,22 +41,19 @@ export function SiteHeaderV2() {
         <div className="flex items-center gap-6 rounded-[12px] border border-white/10 bg-[#05071b] py-3 pl-6 pr-3 backdrop-blur-[15px]">
           <Link
             href="/dols"
-            className="flex shrink-0 items-center gap-2"
+            className="flex shrink-0 items-center"
             aria-label="SF Pharma 360"
           >
-            <PharmaMark />
-            <span
-              className="flex flex-col font-extrabold leading-none"
-              style={{
-                fontFamily:
-                  "var(--font-montserrat), Montserrat, sans-serif",
-                fontSize: "13.652px",
-                letterSpacing: "0.13em",
-              }}
-            >
-              <span className="text-white">PHARMA</span>
-              <span className="text-[#979797]">360</span>
-            </span>
+            {/* Atomic logo SVG (mark + wordmark, fully vector). Replaces
+             * the inline mark + Montserrat live-text — no font dependency,
+             * pixel-locked. eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`${BASE}/pharma-360-logo.svg`}
+              alt="Pharma 360"
+              width={145}
+              height={40}
+              className="block h-10 w-auto"
+            />
           </Link>
           <nav className="flex items-center">
             {NAV.map((item) => {
@@ -153,55 +155,6 @@ export function SiteHeaderV2() {
         </div>
       </div>
     </header>
-  );
-}
-
-/* ------------- Pharma 360 mark (v1 inline SVG) ------------- */
-
-function PharmaMark() {
-  return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="block shrink-0"
-      aria-hidden
-    >
-      <path
-        d="M14.8226 10.3494C6.63632 10.3494 -3.57835e-07 16.987 0 25.1748C3.57835e-07 33.3627 6.63632 40.0002 14.8226 40.0002C23.0089 40.0002 29.6453 33.3627 29.6453 25.1748C29.6453 16.987 23.0089 10.3494 14.8226 10.3494Z"
-        fill="#DD45FF"
-      />
-      <path
-        d="M5.74581 14.8257C5.74581 23.0135 12.3821 29.6511 20.5684 29.6511C28.7548 29.6511 35.3911 23.0135 35.3911 14.8257C35.3911 6.63781 28.7548 0.000242709 20.5684 0.000244141C12.3821 0.000245572 5.74581 6.63782 5.74581 14.8257Z"
-        fill="#FFE627"
-      />
-      <path
-        d="M14.8226 10.3494C23.0089 10.3494 29.6453 16.987 29.6453 25.1748C29.6453 25.6548 29.6217 26.1297 29.5771 26.5979C27.0802 28.5122 23.9575 29.6511 20.5684 29.6511C12.3821 29.6511 5.74581 23.0135 5.74581 14.8257C5.74581 14.3453 5.7693 13.8703 5.81395 13.4017C8.31079 11.4875 11.4337 10.3494 14.8226 10.3494Z"
-        fill="#FF5E5E"
-      />
-      <path
-        d="M25.1421 10.3494C33.3284 10.3494 39.9647 16.987 39.9647 25.1748C39.9647 33.3627 33.3284 40.0002 25.1421 40.0002C16.9558 40.0002 10.3194 33.3627 10.3194 25.1748C10.3194 16.987 16.9558 10.3494 25.1421 10.3494Z"
-        fill="#939393"
-      />
-      <path
-        d="M25.1421 10.3494C33.3284 10.3494 39.9647 16.987 39.9647 25.1748C39.9647 33.3627 33.3284 40.0002 25.1421 40.0002C16.9558 40.0002 10.3194 33.3627 10.3194 25.1748C10.3194 16.987 16.9558 10.3494 25.1421 10.3494Z"
-        fill="#46FFE9"
-      />
-      <path
-        d="M25.1421 10.3494C29.1162 10.3494 32.7249 11.914 35.3865 14.4605C35.3895 14.5819 35.3911 14.7036 35.3911 14.8257C35.3911 23.0135 28.7548 29.6511 20.5684 29.6511C16.5941 29.6511 12.9854 28.0864 10.3238 25.5396C10.3208 25.4185 10.3194 25.2967 10.3194 25.1748C10.3194 16.987 16.9558 10.3494 25.1421 10.3494Z"
-        fill="#00B194"
-      />
-      <path
-        d="M19.9825 11.2727C25.6249 13.3685 29.6453 18.8019 29.6453 25.1748C29.6452 31.5477 25.6248 36.9811 19.9825 39.0768C14.3401 36.9811 10.3195 31.5477 10.3194 25.1748C10.3194 18.8019 14.34 13.3684 19.9825 11.2727Z"
-        fill="#5825FF"
-      />
-      <path
-        d="M19.9825 11.2727C25.6249 13.3685 29.6453 18.8019 29.6453 25.1748C29.6453 25.6548 29.6217 26.1297 29.5771 26.5979C27.0802 28.5122 23.9575 29.6511 20.5684 29.6511C16.5941 29.6511 12.9854 28.0864 10.3238 25.5396C10.3208 25.4185 10.3194 25.2967 10.3194 25.1748C10.3194 18.8019 14.34 13.3684 19.9825 11.2727Z"
-        fill="#050505"
-      />
-    </svg>
   );
 }
 
