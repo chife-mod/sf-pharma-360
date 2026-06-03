@@ -119,8 +119,14 @@ ER-метрику.
 
 ### 4. Spacing, Radius, Elevation
 
-- **Spacing scale:** 4 / 8 / 12 / 16 / 20 / 24 / 32 / 48 px
-  (Tailwind 1/2/3/4/5/6/8/12).
+> Updated 2026-06-03 — spacing scale tightened to a strict 8-px grid.
+> No more 20 / 48. See "Spacing scale (strict 8-px grid)" below for
+> the binding scale + rationale.
+
+- **Spacing scale (strict 8-px grid):** **2 / 4 / 8 / 12 / 16 / 24 /
+  32 / 64 px.** Reach for these first; deviate only with explicit
+  reason. No 20, 28, 36, 48 — those signal an unconsidered eyeball
+  value.
 - **Radius:**
   - Pills, tags, кнопки → `rounded-full` или `rounded-xl` (12px).
   - Cards → `rounded-2xl` (16px) / `rounded-3xl` (24px) для главных
