@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { ServiceMenu } from "@/components/service-menu";
 import { AiAssistant } from "@/components/ai-assistant";
+import { AiAssistantDots } from "@/components/ai-assistant-dots";
 
 /* One typeface across the whole product: Inter. Hierarchy comes from
  * weight + size, not from font pairing. (Geist / Inter Tight /
@@ -33,6 +34,7 @@ export default function RootLayout({
         {children}
         <ServiceMenu />
         <AiAssistant />
+        <AiAssistantDots />
       </body>
     </html>
   );

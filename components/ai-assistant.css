@@ -59,8 +59,10 @@
   stroke-linecap: round;
   stroke-dasharray: 66; /* path length ≈ 2π·10.5 */
   stroke-dashoffset: 0; /* resting = fully drawn */
-  /* all three synchronised (no stagger) so the weave draws as one */
-  animation: ai-draw 5.2s linear forwards;
+  /* all three synchronised (no stagger) so the weave draws as one.
+     0.6s delay + `both` fill: stays empty (backwards) until the page has
+     settled, so the first cycle isn't janky from load-time work. */
+  animation: ai-draw 5.2s linear 0.6s both;
 }
 
 @keyframes ai-pop {
@@ -96,4 +98,46 @@
   .ai-fab { opacity: 1; animation: none; }
   .ai-fab::before { animation: none; opacity: 0.16; }
   .ai-rings .ring { animation: none; stroke-dashoffset: 0; }
+}
+
+/* ============================================================
+   DOTS variant (second FAB, left of the rings one) — three colour
+   dots fade in, hold, then spin out along an arc trail and stop, with
+   a little overshoot twist on the whole group.
+   ============================================================ */
+.ai-fab--left { right: 92px; }
+@media (max-width: 600px) { .ai-fab--left { right: 72px; } }
+
+.ai-dots {
+  transform-origin: center;
+  /* whole-group "проворотик": untwists into place (with a tiny overshoot)
+     as the dots draw. Delay + both so it waits for load, like the rings. */
+  animation: v2-spin 2.9s cubic-bezier(0.25, 0.6, 0.3, 1) 0.6s both;
+}
+.ai-dots .arc {
+  fill: none;
+  stroke-width: 3.2; /* thick + round cap → the leading end reads as a dot */
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: v2-dot 2.9s cubic-bezier(0.25, 0.6, 0.3, 1) 0.6s both;
+}
+
+/* dot fades in (round cap) → holds → spins out drawing its arc trail → stops */
+@keyframes v2-dot {
+  0%   { stroke-dashoffset: 100;  opacity: 0; }
+  10%  { stroke-dashoffset: 99.3; opacity: 1; } /* the dot appears */
+  26%  { stroke-dashoffset: 99.3; opacity: 1; } /* hold a beat */
+  84%  { stroke-dashoffset: 0; }                /* spin out, trail draws */
+  100% { stroke-dashoffset: 0; }                /* stop */
+}
+@keyframes v2-spin {
+  0%   { transform: rotate(-24deg); }
+  84%  { transform: rotate(4deg); } /* little overshoot */
+  100% { transform: rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-dots { animation: none; transform: none; }
+  .ai-dots .arc { animation: none; stroke-dashoffset: 0; opacity: 1; }
 }
