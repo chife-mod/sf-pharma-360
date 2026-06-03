@@ -345,7 +345,7 @@
 /* Active-channel indicator sits ON the metrics plate's top border (14px
  * below the tab + 1px to straddle the 1px divider). Reads as the active
  * channel's colour underlining the section it feeds. */
-.v2-root .ch-tab.active::after { content: ""; position: absolute; left: 9px; right: 9px; bottom: -15px; height: 2px; border-radius: 2px; background: var(--ch-color, var(--teal)); box-shadow: 0 0 10px var(--ch-color, var(--teal)); }
+.v2-root .ch-tab.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -15px; height: 2px; border-radius: 2px; background: var(--ch-color, var(--teal)); box-shadow: 0 0 10px var(--ch-color, var(--teal)); }
 .v2-root .metrics { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 -24px; padding: 20px 24px 24px; background: linear-gradient(180deg, rgba(8, 12, 24, 0.4), rgba(6, 9, 20, 0.85)); border-top: 1px solid var(--line); }
 .v2-root .metric { display: flex; flex-direction: column; gap: 7px; position: relative; padding-right: 10px; }
 .v2-root .metric + .metric { padding-left: 14px; border-left: 1px solid var(--line-soft); }
