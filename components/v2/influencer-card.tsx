@@ -171,7 +171,7 @@ function Metric({
         </div>
       ) : delta != null ? (
         <div className={"metric-delta " + (delta >= 0 ? "up" : "down")}>
-          {delta >= 0 ? <Icons.arrowUp /> : <Icons.arrowDownRight />}
+          {delta >= 0 ? <Icons.arrowUp /> : <Icons.arrowDown />}
           <span>{Math.abs(delta) + "%"}</span>
         </div>
       ) : null}

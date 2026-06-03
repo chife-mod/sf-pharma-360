@@ -1,48 +1,16 @@
 import type { Metadata } from "next";
-import {
-  Geist,
-  Geist_Mono,
-  Inter,
-  Inter_Tight,
-  Montserrat,
-  Space_Grotesk,
-} from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ServiceMenu } from "@/components/service-menu";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+/* One typeface across the whole product: Inter. Hierarchy comes from
+ * weight + size, not from font pairing. (Geist / Inter Tight /
+ * Montserrat / Space Grotesk were all dropped 2026-06-03.) */
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-  weight: ["800"],
-});
-
-const interTight = Inter_Tight({
-  variable: "--font-inter-tight",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -59,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${interTight.variable} ${montserrat.variable} ${spaceGrotesk.variable} ${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
+        className={`${inter.variable} antialiased min-h-screen bg-background text-foreground`}
       >
         {children}
         <ServiceMenu />

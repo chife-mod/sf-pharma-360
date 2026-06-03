@@ -101,13 +101,15 @@
   --shadow-card: var(--v2-shadow-card);
   --shadow-pop: var(--v2-shadow-pop);
   --ease: var(--v2-ease);
-  /* Type system (locked 2026-06-03): Inter everywhere, Geist for the
-   * big KPI numerals (its figures read cleaner than Space Grotesk —
-   * esp. the "1"). Space Grotesk dropped. Brand wordmark stays
-   * Montserrat (set inline on the header). */
+  /* Type system (locked 2026-06-03): ONE typeface — Inter — across the
+   * whole product. Hierarchy from weight + size, not font pairing.
+   * --font-num is still its own token so the big KPI numerals can carry
+   * tabular-nums (equal-width digits → columns don't jitter), but the
+   * family is the same Inter. Geist / Inter Tight / Montserrat / Space
+   * Grotesk all dropped. Brand wordmark is the logo SVG (no font). */
   --font: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
   --font-display: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-num: var(--font-geist-sans), "Geist", var(--font-inter), system-ui, sans-serif;
+  --font-num: var(--font-inter), "Inter", system-ui, sans-serif;
 
   position: relative;
   min-height: 100vh;

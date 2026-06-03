@@ -5,7 +5,7 @@ import { SiteHeaderV2 } from "@/components/v2/site-header-v2";
 
 /**
  * Layout for the /dols route. Wraps the page with:
- * - .v2-root scope (token block + Inter Tight body font)
+ * - .v2-root scope (token block + Inter body font)
  * - AppBgV2 immersive backdrop (fixed gradients + 64px grid)
  * - SiteHeaderV2 top bar (brand + nav + right cluster)
  * - .v2-shell content rail (max-w 1650, px-24, pb-80)

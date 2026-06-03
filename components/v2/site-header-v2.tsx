@@ -21,16 +21,11 @@ const USER_PHOTO =
   "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&h=160&fit=crop&crop=face&auto=format&q=85";
 
 /**
- * v2 SiteHeader — hybrid chrome.
- * - LEFT pill: v1-style — Pharma 360 multi-circle mark + Montserrat
- *   ExtraBold wordmark (PHARMA / 360 stacked) + Inter Regular nav with
- *   cyan dot under active item.
- * - RIGHT pill: v1-style glass chrome + v2 content from Figma 370:6560
- *   (search + bell-with-dot + settings + divider + Rana El-Khoury name
- *   block + RE avatar circle with teal/violet gradient).
- *
- * User direction (2026-06-02): "Так Эдер возьми как в варианте один,
- * только в правую часть вставь, что ты уже вставил."
+ * SiteHeader — two-pill chrome.
+ * - LEFT pill: Pharma 360 logo (atomic SVG) + Inter nav with a cyan dot
+ *   under the active item.
+ * - RIGHT pill: glass chrome — search + bell-with-dot + settings +
+ *   divider + Rana El-Khoury name block + avatar photo.
  */
 export function SiteHeaderV2() {
   const pathname = usePathname();
@@ -45,8 +40,9 @@ export function SiteHeaderV2() {
             aria-label="SF Pharma 360"
           >
             {/* Atomic logo SVG (mark + wordmark, fully vector). Replaces
-             * the inline mark + Montserrat live-text — no font dependency,
-             * pixel-locked. eslint-disable-next-line @next/next/no-img-element */}
+             * the old inline mark + live-text wordmark — no font
+             * dependency, pixel-locked.
+             * eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`${BASE}/pharma-360-logo.svg`}
               alt="Pharma 360"

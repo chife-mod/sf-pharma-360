@@ -8,7 +8,7 @@ import type { ComponentType, SVGProps } from "react";
 import {
   IconActivityHeartbeat,
   IconAdjustmentsHorizontal,
-  IconArrowDownRight,
+  IconArrowDown,
   IconArrowUp,
   IconBell,
   IconBrandFacebook,
@@ -53,7 +53,7 @@ export const Icons = {
   sort: IconSortAscendingNumbers,
   bell: IconBell,
   arrowUp: IconArrowUp,
-  arrowDownRight: IconArrowDownRight,
+  arrowDown: IconArrowDown,
   trendUp: IconTrendingUp,
   users: IconUsersGroup,
   doc: IconFileText,
