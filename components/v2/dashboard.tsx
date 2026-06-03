@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Icons, channelMeta } from "./icons";
 import { InfluencerCard } from "./influencer-card";
 import { FilterPanel, emptyFilters, type FilterState } from "./filter-panel";
+import { KpiHero } from "./kpi-hero";
 import { Toolbar } from "./toolbar";
 import {
   BUCKET_LABEL,
@@ -98,6 +99,7 @@ export function Dashboard() {
 
   return (
     <>
+      <KpiHero />
       <Toolbar
         count={results.length}
         total={DOLS.length}
