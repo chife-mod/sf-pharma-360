@@ -144,6 +144,17 @@ documented in `DESIGN-SYSTEM-V2.md`; this is the cheat sheet.
    `col-span-9`. Grid overlay frame matches.
 10. **`scrollbar-gutter: stable both-edges`** on `html` — never remove,
     it keeps fixed overlays aligned to document content.
+11. **Icon library first, inline SVG only with reason.** Default is
+    `@tabler/icons-react` via the `Icons` / `Social` re-exports in
+    `components/v2/icons.tsx`. Reach for it before you reach for a
+    hand-rolled `<svg>`. Inline SVG is allowed ONLY for: (a) brand
+    marks not in any library (Pharma 360 multi-circle logo), (b)
+    one-off illustrations (empty-state graphics), (c) animated SVG
+    that needs `<animate>` morphs, (d) data visualization primitives
+    (sparkline path generation). For everything else — UI affordances,
+    nav glyphs, status icons, social brand marks — use Tabler. When
+    porting a source bundle that ships inline SVGs, rewrite to Tabler
+    before declaring the port done; don't leave the inline tail.
 
 ---
 
@@ -172,7 +183,13 @@ Stack-ranked from "user implied next" to "nice-to-have":
 7. **Color-blind sanity** — engagement traffic-light (red ≥3 / yellow
    ≥6 / green) and tier colors. Quick simulation via Chrome devtools
    "Emulate vision deficiencies".
-8. **Three placeholder templates** the client asked for on 2026-05-21
+8. **Inline-SVG audit on `/dols`** — sweep `components/v2/*` and
+   `app/dols/*.tsx` for stray hand-rolled `<svg>` blocks and rewrite
+   them to `@tabler/icons-react` per rule #11. Known exceptions to
+   leave alone: `<PharmaMark />` in `site-header-v2.tsx`, the
+   `Sparkline` component, the tier-star path inside the tier chip
+   (could be `IconStarFilled` — worth checking).
+9. **Three placeholder templates** the client asked for on 2026-05-21
    (carried from `vsevolod/CLAUDE.md`) — not relevant to this prototype
    but worth flagging when we move to the Vulcain deck.
 

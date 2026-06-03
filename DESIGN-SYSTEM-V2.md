@@ -323,6 +323,37 @@ Snapshots at `/concepts/v2/dols` and `/concepts/v3/dols` are frozen.
 - **Divider on dark glass:** `rgba(255, 255, 255, 0.20)` — same as
   hover bg, subtle but visible.
 
+### Icons — library first, inline only with reason (project-wide rule, 2026-06-03)
+
+**Default = `@tabler/icons-react`** via the `Icons` / `Social` re-exports
+in `components/v2/icons.tsx`. Reach for the library before hand-rolling
+an `<svg>`.
+
+**Why a library over inline SVG:**
+
+| Concern | Inline SVG | `@tabler/icons-react` |
+|---|---|---|
+| Sweep all sizes | 40 hand-edits | `size={20}` prop, one keystroke |
+| Sweep stroke-width | hand-edit every path | one `stroke={1.6}` prop |
+| Bundle size | full markup inlined | tree-shaken, pay only what you import |
+| Visual consistency | each author drifts | single optical grid (Pavel Kuna) |
+| IDE discovery | "where's that bell SVG" | `Icon<Tab>` autocomplete |
+| A11y defaults | author has to remember | shipped |
+| Updates | none | `pnpm up` brings new glyphs |
+
+**Inline SVG allowed only for:**
+1. **Brand marks** not in any library — e.g. the Pharma 360
+   multi-circle logo in `PharmaMark` (site-header-v2.tsx).
+2. **One-off illustrations** — empty-state graphics, marketing
+   hero artwork.
+3. **Animated SVG** — when the design needs `<animate>` morphs or
+   stroke-dash drawing.
+4. **Data viz primitives** — `Sparkline` (its `<path>` is generated
+   from data, not iconographic).
+
+**Porting source bundles** that ship inline SVGs: rewrite to Tabler
+before declaring the port done. Don't leave the inline tail.
+
 ### Icon-button standard
 
 Single icon convention across the product:
