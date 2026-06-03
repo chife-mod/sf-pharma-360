@@ -14,14 +14,14 @@
   /* ---- v2-prefixed tokens (collision-safe) ---- */
   /* Bg tuned 2026-06-02: user direction — less "blueish", more navy-violet
    * lift. v3 snapshot keeps original #080C18 for compare. */
-  --v2-bg: #0C0E25;
-  --v2-bg-grad-a: #0E1230;
-  --v2-bg-grad-b: #0D0E26;
-  --v2-panel: #0E1426;
-  --v2-panel-2: #111A30;
-  --v2-panel-3: #0C1222;
-  --v2-raise: #15203A;
-  --v2-inset: #0A0F1F;
+  --v2-bg: #0A0B16;
+  --v2-bg-grad-a: #0D0F22;
+  --v2-bg-grad-b: #0A0B16;
+  --v2-panel: #10111B;
+  --v2-panel-2: #161824;
+  --v2-panel-3: #0D0E17;
+  --v2-raise: #1A1C28;
+  --v2-inset: #0B0C14;
   --v2-line: rgba(150, 170, 210, 0.10);
   --v2-line-soft: rgba(150, 170, 210, 0.06);
   --v2-line-strong: rgba(160, 180, 220, 0.18);
@@ -195,8 +195,8 @@
 .v2-icon-btn:hover { color: var(--text); border-color: var(--line-strong); background: rgba(150, 170, 210, 0.09); }
 .v2-icon-btn svg { width: 17px; height: 17px; }
 .v2-icon-btn-dot { position: absolute; top: 7px; right: 7px; width: 7px; height: 7px; border-radius: 50%; background: var(--magenta); box-shadow: 0 0 6px var(--magenta-glow); border: 1.5px solid #0E1426; }
-.v2-avatar-pill { display: inline-flex; align-items: center; gap: 10px; padding: 4px 4px 4px 14px; height: 44px; border-radius: var(--r-pill); background: rgba(17, 26, 48, 0.55); border: 1px solid var(--line); text-decoration: none; color: inherit; cursor: pointer; transition: all 0.2s var(--ease); }
-.v2-avatar-pill:hover { border-color: var(--line-strong); background: rgba(17, 26, 48, 0.80); }
+.v2-avatar-pill { display: inline-flex; align-items: center; gap: 10px; padding: 4px 4px 4px 14px; height: 44px; border-radius: var(--r-pill); background: rgba(22, 24, 36, 0.55); border: 1px solid var(--line); text-decoration: none; color: inherit; cursor: pointer; transition: all 0.2s var(--ease); }
+.v2-avatar-pill:hover { border-color: var(--line-strong); background: rgba(22, 24, 36, 0.80); }
 .v2-avatar-pill__text { display: flex; flex-direction: column; line-height: 1.15; text-align: right; }
 .v2-avatar-pill__name { font-family: var(--font); font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; }
 .v2-avatar-pill__role { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mute); white-space: nowrap; }
@@ -205,7 +205,7 @@
 /* ============================ HERO KPI BAR ============================ */
 /* Sits above the toolbar. Muted to match the surface: soft fills, light
  * corner glows (not neon), accent only on icon / delta / glow. */
-.v2-root .hero { position: relative; display: flex; gap: 32px; align-items: stretch; margin-top: 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--r-xl); background: linear-gradient(135deg, rgba(20, 28, 52, 0.55), rgba(12, 16, 34, 0.6)); overflow: hidden; }
+.v2-root .hero { position: relative; display: flex; gap: 32px; align-items: stretch; margin-top: 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--r-xl); background: linear-gradient(135deg, rgba(24, 26, 40, 0.55), rgba(13, 14, 22, 0.6)); overflow: hidden; }
 /* whole-bar ambient: violet top-right + teal bottom-left — same two
  * sources as the page bg, so the bar reads as lit by the same light. */
 .v2-root .hero-glow { position: absolute; top: -120px; right: -80px; width: 380px; height: 280px; border-radius: 50%; background: radial-gradient(circle, var(--violet), transparent 70%); opacity: 0.08; filter: blur(20px); pointer-events: none; }
@@ -216,7 +216,7 @@
 /* One diagonal gradient over the whole headline; plain words are painted
  * back to white (text-fill-color) so the accent phrases share a single
  * continuous blue→violet→magenta sweep (top-left P → period after time). */
-.v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; background: linear-gradient(125deg, var(--cyan) 4%, var(--violet) 46%, var(--magenta) 94%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--text); }
+.v2-root .hero-title { margin: 18px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.12; letter-spacing: -0.02em; background: linear-gradient(125deg, var(--cyan) 2%, var(--violet) 36%, var(--magenta) 68%, var(--orange) 98%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--text); }
 .v2-root .hero-title .hero-plain { -webkit-text-fill-color: var(--text); color: var(--text); }
 .v2-root .hero-sub { margin: 14px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-mute); max-width: 520px; }
 .v2-root .hero-kpis { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex: 0 0 auto; width: 880px; }
@@ -292,7 +292,7 @@
 .v2-root .layout.no-filters .dashboard-main { grid-column: 1 / -1; }
 
 /* ============================ FILTER PANEL ============================ */
-.v2-root .filters { position: sticky; top: 96px; background: linear-gradient(180deg, rgba(17, 26, 48, 0.55), rgba(12, 18, 34, 0.55)); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 8px; overflow: hidden; backdrop-filter: blur(8px); }
+.v2-root .filters { position: sticky; top: 96px; background: linear-gradient(180deg, rgba(22, 24, 36, 0.55), rgba(13, 14, 22, 0.55)); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 8px; overflow: hidden; backdrop-filter: blur(8px); }
 .v2-root .layout.no-filters .filters { opacity: 0; pointer-events: none; }
 .v2-root .filter-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 10px; }
 .v2-root .filter-head h3 { margin: 0; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-mute); font-weight: 600; }
@@ -342,7 +342,7 @@
 /* ============================ CARD ============================ */
 /* Default state quiet (calm) — no tier-color border highlight, no glow.
  * Hover restores: lift, tier-color border gradient, top-right glow. */
-.v2-root .card { position: relative; background: linear-gradient(180deg, rgba(21, 32, 58, 0.65), rgba(12, 18, 34, 0.85)); border: 1px solid var(--line); border-radius: var(--r-xl); padding: 24px 24px 0; overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease); isolation: isolate; }
+.v2-root .card { position: relative; background: linear-gradient(180deg, rgba(28, 30, 44, 0.65), rgba(13, 14, 22, 0.85)); border: 1px solid var(--line); border-radius: var(--r-xl); padding: 24px 24px 0; overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease); isolation: isolate; }
 .v2-root .card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, var(--tier-color, var(--teal)), transparent 40%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.35s var(--ease); pointer-events: none; }
 .v2-root .card:hover { transform: translateY(-5px); border-color: var(--line-strong); box-shadow: var(--shadow-card); }
 .v2-root .card:hover::before { opacity: 0.9; }
@@ -392,7 +392,7 @@
  * below the tab + 1px to straddle the 1px divider). Reads as the active
  * channel's colour underlining the section it feeds. */
 .v2-root .ch-tab.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -15px; height: 2px; border-radius: 2px; background: var(--ch-color, var(--teal)); box-shadow: 0 0 10px var(--ch-color, var(--teal)); }
-.v2-root .metrics { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 -24px; padding: 20px 24px 24px; background: linear-gradient(180deg, rgba(8, 12, 24, 0.4), rgba(6, 9, 20, 0.85)); border-top: 1px solid var(--line); }
+.v2-root .metrics { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 -24px; padding: 20px 24px 24px; background: linear-gradient(180deg, rgba(10, 11, 18, 0.4), rgba(7, 8, 13, 0.85)); border-top: 1px solid var(--line); }
 .v2-root .metric { display: flex; flex-direction: column; gap: 7px; position: relative; padding-right: 10px; }
 .v2-root .metric + .metric { padding-left: 14px; border-left: 1px solid var(--line-soft); }
 .v2-root .metric-head { display: flex; align-items: center; gap: 5px; }
