@@ -1,276 +1,149 @@
-# HANDOFF — sf-pharma-360 — 2026-06-03 (rev 4)
+# HANDOFF — sf-pharma-360 — 2026-06-03 (rev 5)
 
-> **Entry point.** New Claude session reads this **FIRST**, then
-> `CLAUDE.md`, then `DESIGN-SYSTEM.md` (the active dev spec — `/dols`
-> is built on it). Run `pnpm dev` (port 4310 per `.claude/launch.json`).
+> **Entry point.** New session reads this **FIRST**, then `CLAUDE.md`,
+> then `DESIGN-SYSTEM.md`. Dev server: `.claude/launch.json` → port
+> **4310** (start via the preview tool, name `sf-pharma-360`; or
+> `npm run dev`). Build check: `node_modules/.bin/tsc --noEmit` +
+> `node_modules/.bin/next build` (never `next build` while the dev
+> server is running — corrupts `.next`).
 >
-> Previous handoff archived as
-> [`HANDOFF-2026-06-02-rev3.md`](HANDOFF-2026-06-02-rev3.md) — full
-> history of the discovery → AI-tool brief phase. Read only if you need
-> to know **how** we got here.
+> Prior handoffs archived: `HANDOFF-2026-06-03-rev4.md`,
+> `HANDOFF-2026-06-02-rev3.md` (read only for history).
 
 ---
 
-## 1. Where we are right now
+## 1. Where we are now
 
-Three concepts live side-by-side. The floating chip bottom-right
-switches between them. Switch is sticky (localStorage).
+**Single surface — `/dols`.** The old v1/v2/v3 concept rotation is GONE;
+`app/concepts/*` deleted. Two routes only:
 
-| Route | Concept | Status |
+| Route | What |
+|---|---|
+| `/` | SFG-pattern tile launcher |
+| `/dols` | **The DOLs directory** — the hi-fi prototype, all work lands here |
+
+**Source:** `chife-mod/sf-pharma-360` (public). **Live:**
+https://chife-mod.github.io/sf-pharma-360/ — GH Actions auto-deploys on
+push to `main` (~1 min; watch with `gh run watch`).
+
+### `/dols` — current state (polished, responsive, deployed)
+- **Header** (`components/v2/site-header-v2.tsx`): two glass pills, 3-step
+  responsive collapse (≤1100 sheds utility icons → ≤900 nav→hamburger →
+  ≤600 logo→mark). **Auto-hides on scroll-down, reveals on scroll-up**
+  (NB: `will-change:transform` and `overflow-x:clip` both silently break
+  `position:sticky` in Chrome — don't reintroduce them).
+- **KPI hero** (`components/v2/kpi-hero.tsx`): eyebrow + gradient headline
+  ("pharma voices, decoded in real time", nbsp glues "pharma voices"),
+  4 KPI tiles. ~30% shorter than the first cut; **−/+ minimise toggle**
+  folds it to a thin headline strip; also auto-collapses once on
+  scroll-down (stays collapsed; threshold past the hero so scroll-anchoring
+  hides the jump).
+- **Toolbar** (`components/v2/toolbar.tsx`): Filters btn (+count) · result
+  count · search (2× wide on desktop) · split-menu sort. Responsive: ≤720
+  search grows + "SORT" label drops; ≤440 sort goes icon-only.
+- **Filters** (`components/v2/filter-panel.tsx`): inline sidebar desktop;
+  ≤1024 → right-side drawer (backdrop, sticky "Show N", dark scrollbar).
+- **Card grid** (`components/v2/influencer-card.tsx`): avatar+name, tags
+  (tier color-ramp star / specialty / type+group), bio, channel tabs,
+  4-metric strip + sparklines + vertical delta arrows. 2-up → 1-up.
+- **Bg** (`components/v2/app-bg-v2.tsx`): de-blued navy (`--v2-bg #0A0B16`),
+  fixed corner glows + a square 40px grid bound to the 1650 content rail.
+- **Data:** `data/dols.ts` (9 real DOL names, photos, channels, `SORTS`,
+  `TIERS`). Single source of truth.
+
+### AI-assistant FAB — 6 variants live (for client comparison)
+Bottom-**right**, a row of FABs (the preview `ServiceMenu` — grid toggle +
+section pill — moved bottom-**left**; Next dev "N" badge silenced via
+`devIndicators:false`). All share the black-glass tile + faint under-glow +
+one drop-shadow, mounted in `app/layout.tsx`:
+
+| File | Variant | Note |
 |---|---|---|
-| `/` | SFG-pattern tile launcher | live |
-| `/dols` | **v1 — main (dev)** — Pharma OS-based, actively iterated | hot |
-| `/concepts/v2/dols` | **v2 — Sterile Dark** — Market360 mirror | frozen snapshot |
-| `/concepts/v3/dols` | **v3 — Pharma OS** — original source bundle port | frozen snapshot |
+| `ai-assistant.tsx` | woven gradient rings (logo), draw-from-centre | the "обручальные кольца" |
+| `ai-assistant-dots.tsx` | **dots-pinwheel** (3 dots spin out arcs) | **Oleg's current favourite** — bigger r=12 |
+| `ai-assistant-sparkles.tsx` | two-star sparkles, gradient stroke | universal "AI" signifier |
+| `ai-assistant-tri.tsx` | three solid filled circles | simplest |
+| `ai-assistant-ringsdots.tsx` | rings as dotted beads | literal "rings as dots" |
+| `ai-assistant-orbit.tsx` | dots orbiting faint ring-tracks (SMIL) | my "rings as dots" reading |
 
-**The rotation that landed yesterday (2026-06-02):** the previous v2
-(Pharma OS) was promoted to **the new v1** for active development. Old
-v1 (Sterile Dark) became v2. v3 captures the original Pharma OS bundle
-verbatim so we can A/B against polish.
-
-**v2 and v3 are FROZEN** — they exist for comparison only. Don't touch
-them. All polish lands on `/dols` (the new v1).
-
-**Source repo:** `chife-mod/sf-pharma-360` (public).
-**Live URL:** https://chife-mod.github.io/sf-pharma-360/ — GH Actions
-auto-deploys on push to `main` via `peaceiris/actions-gh-pages`.
+All are **placeholders** (no panel yet). Animation primitives: stroke-draw
+keyframes, `cubic-bezier` ease-outs, 0.6s start delay + `both` fill (kills
+first-cycle load jank), one unified shadow per mark (never per-element).
 
 ---
 
-## 2. What landed this session (2026-06-03)
+## 2. Project rules in force (cheat sheet — full in DESIGN-SYSTEM.md)
 
-Order of events. Each is its own commit.
+1. **Min font-size 11px.** Round-number sizes only (11/12/13/14/16/18/20/
+   22/24/28). No 9/9.5/10.5/12.5.
+2. **WCAG 2.1 AA** — text ≥4.5:1 (normal) / 3:1 (large). Audit every new
+   surface. (Snippet in DESIGN-SYSTEM.md.)
+3. **8-px spacing grid** — 2/4/8/12/16/24/32/40/48/56/64. Banned 20/28/36/44.
+4. **Icon-button standard** — 40×40 button + 20px Tabler icon, centred with
+   `inline-flex` (not grid).
+5. **Hover affordance** — `white/[0.08]` band, hover ≤ active (no bright hovers).
+6. **Tabler-first** — `@tabler/icons-react` via `components/v2/icons.tsx`.
+   Inline SVG only for: brand mark, illustrations, animated SVG, sparklines.
+7. **Single typeface = Inter** everywhere; tabular-nums on numbers.
+8. **Retina images** ≥2× display size.
+9. **Layout** — content max-width **1650**, 24 rail padding, 12-col grid,
+   16 gap, sidebar span-3 / main span-9.
+10. **`scrollbar-gutter: auto`** on `html` (NOT `both-edges` — that reserved
+    phantom strips and the corner glows stopped short. The fixed bg + centred
+    content share the same width, so the grid still aligns).
+11. **Pixel-perfect default** — centring/balance/visible-hover/baseline
+    expected without asking. Verify via `getBoundingClientRect` before shipping.
 
-### 2.0 Bottom-bar split + AI assistant FAB *(latest)*
-- **Preview cluster → bottom-LEFT.** `ServiceMenu` (grid-overlay toggle +
-  «DOLs list» section pill) moved from bottom-right to bottom-left
-  (`service-menu.css`: `left`/panel `left`). Next dev "N" badge silenced
-  via `devIndicators: false` so the left corner is clean.
-- **AI assistant FAB → bottom-RIGHT.** New `components/ai-assistant.tsx`
-  (+`.css`), mounted globally in `layout.tsx` alongside ServiceMenu. It's a
-  **product** element (kept separate from the preview-only ServiceMenu).
-  Black glass tile (matches header pills) + backdrop-blur + outline; the
-  Pharma-360 mark rebuilt as **3 outline rings** (yellow #FFE627 / magenta
-  #DD45FF / cyan #46FFE9 — the logo's 3 primaries) that **draw 0→100**
-  (stroke-dasharray), bloom ~3 cycles then settle; conic under-glow
-  shimmers from beneath. **Placeholder — no panel yet** (per decision).
-- Earlier in the session: hero made ~30% shorter + auto/manual minimise,
-  mobile sort fit, edge-glow bleed, search 2× — see git log / REVIEW-dols.
-
-### 2.1 Grid overlay aligned to 1650 content rail
-*Commit `8f02031` — "Cards: padding 24..."* (mixed with §2.2)
-
-- Grid-overlay frame `max-width` 1440 → **1650** to match content shell.
-- `html { scrollbar-gutter: stable both-edges }` added so the document
-  and fixed-position overlays (grid-overlay, future modals) share the
-  same effective centered viewport. Killed the ~8px misalignment
-  between sidebar.l = 39 and overlay-cols.l = 40 (1px is the frame
-  border).
-
-### 2.2 Card polish
-*Commit `8f02031`*
-
-- Inner card padding **16 → 24**.
-- **Default state quieted:** tier-color border highlight (`::before`)
-  opacity 0.5 → **0**; top-right `.card-glow` opacity 0.10 → **0**.
-- **Hover restores both:** border to 0.9, glow to 0.25.
-- Channel beads got `align-self: flex-start` + dropped `padding-top` so
-  they sit on the portrait's top edge (verified bead.top === avatar.top
-  at y=219).
-- Metrics strip padding/margin retuned to follow new 24 outer padding.
-- Metric head icons bumped 12 → **16** (still Tabler via `Icons.*`
-  re-export).
-- **Labels shortened** (so all five fit comfortably):
-  - "Audience Comments" → **"Comments"**
-  - "Engagement Rate" → **"Engagement"**
-- Values share font-size + `leading-none` so the 5-metric strip sits on
-  one baseline (verified: tops = `[566,566,566,566,566]`).
-
-### 2.3 Typography scale — 11px floor + round numbers
-*Commit `d1d2f34`*
-
-**Hard rule:** minimum font-size = **11px**. Matches Material 3
-`labelSmall`, Apple HIG `caption2`, Atlassian DS smallest. Sub-11 is
-rejected by every major DS.
-
-**Hard rule:** round-number sizes only. No fractional values.
-
-CSS shifts (only on active /dols; v2 and v3 snapshots stay verbatim):
-
-| Selector | Was | Now |
-|---|---|---|
-| `.metric-label` | 9.5 | **11** ⬆ floor |
-| `.v2-avatar-pill__role` / `.filter-count` | 10.5 | **11** ⬆ |
-| `.filter-trigger .ft-label` / `.service-menu__item-desc` | 11.5 | **11** ⬇ |
-| `.v2-nav-item` | 12.5 | **12** ⬇ |
-| `.v2-avatar-pill__name` / `.card-handle` | 12.5 | **13** ⬆ |
-| `.search input` / `.sort-value` / `.card-bio` / `.empty p` | 13.5 | **14** ⬆ |
-
-### 2.4 WCAG AA contrast pass
-*Commit `b663095`*
-
-**Hard rule:** every text surface ≥ **4.5:1** for normal text / **3:1**
-for large text (≥18.66px bold or ≥24px). Audited live on /dols, found
-7 surfaces below AA (worst = filter opt-tally at **2.37**).
-
-Token shifts (only on active /dols):
-
-| Token / element | Was | Now | Ratio on bg |
-|---|---|---|---|
-| `--v2-text-mute` | `#5E6A87` (3.5:1 fail) | **`#8993AD`** | **5.5:1** ✓ |
-| `--v2-text-faint` | `#45506C` (2.4:1 fail) | **`#7C869D`** | **4.6:1** ✓ |
-| Header role label color | `text-white/45` (4.48 fail) | **`text-white/55`** | **6.3:1** ✓ |
-| Header role label size | 10px (sub-floor) | **11px** | — |
-| Header divider | `bg-white/20` | **`bg-white/[0.28]`** | (decorative, keeps ~2:1 vs role) |
-
-All 8 prior failures verified live, now AA or AAA. A paste-ready
-contrast-audit snippet lives in `DESIGN-SYSTEM.md` under
-"Accessibility — WCAG 2.1 AA contrast". Run it on every new surface.
+> ⚠️ Verification note: the preview `getComputedStyle`/`getBoundingClientRect`
+> evals return **stale values** after rapid Fast-Refresh edits — trust
+> **screenshots** (for the small FABs: headless Chrome `--screenshot` at
+> `--force-device-scale-factor=3` + crop with PIL — see git history).
 
 ---
 
-## 3. Project rules now in force (carry forward)
+## 3. NEXT SESSION — plan (what we do next)
 
-These are project-wide invariants. New work must respect them. They are
-documented in `DESIGN-SYSTEM.md`; this is the cheat sheet.
+**(A) AI assistant — animation.** Keep polishing the assistant's motion.
+Oleg leans toward the **dots-pinwheel** (`ai-assistant-dots.tsx`) but it's
+not locked — the 6 variants are up for side-by-side comparison. Likely
+flow: refine the favoured variant's animation → once chosen, **consolidate
+to one** (remove the rejected components from `layout.tsx`, return the
+winner to the single standard bottom-right position `right:24`, drop the
+`--left*` offset classes).
 
-1. **Minimum font-size = 11px** (`labelSmall` floor). No 9 / 10 / 9.5 /
-   10.5 ever.
-2. **Round-number font-sizes only** (10? no — floor is 11. Then 11 / 12
-   / 13 / 14 / 16 / 18 / 20 / 21 / 22 / 24 / 28). No `12.5px`.
-3. **WCAG 2.1 AA minimum** — text ≥ 4.5:1 (normal) / 3:1 (large).
-   Audit every new text surface.
-4. **8-pixel spacing grid** — 2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48
-   / 56 / 64 … Banned: 20, 28, 36, 44 (off-grid). Only 12 is allowed
-   as a half-step in the dense end.
-5. **Icon-button standard** — 40×40 button + **20px Tabler** icon,
-   centered via `inline-flex items-center justify-center` (NOT `grid
-   place-items-center` — Tabler SVG default doesn't center horizontally
-   in CSS Grid).
-6. **Hover affordance** — `bg-white/20` minimum for icon-buttons and
-   nav items, never lower (user explicitly couldn't see prior `white/5`).
-7. **Retina images** — every avatar / photo sourced at ≥2× display
-   size (Pravatar `?w=240` for a 60px display; Unsplash `?w=160` for
-   40px display).
-8. **Pixel-perfect default** — centering, balance, visible hovers, and
-   on-baseline alignment are expected without being asked
-   (`~/.claude/projects/.../memory/principle_pixel_perfect_default.md`).
-9. **Layout binding** — content max-width **1650px**, 24 outer rail
-   padding, 12-col CSS grid, 16px gap, sidebar `col-span-3` + main
-   `col-span-9`. Grid overlay frame matches.
-10. **`scrollbar-gutter: stable both-edges`** on `html` — never remove,
-    it keeps fixed overlays aligned to document content.
-11. **Icon library first, inline SVG only with reason.** Default is
-    `@tabler/icons-react` via the `Icons` / `Social` re-exports in
-    `components/v2/icons.tsx`. Reach for it before you reach for a
-    hand-rolled `<svg>`. Inline SVG is allowed ONLY for: (a) brand
-    marks not in any library (Pharma 360 multi-circle logo), (b)
-    one-off illustrations (empty-state graphics), (c) animated SVG
-    that needs `<animate>` morphs, (d) data visualization primitives
-    (sparkline path generation). For everything else — UI affordances,
-    nav glyphs, status icons, social brand marks — use Tabler. When
-    porting a source bundle that ships inline SVGs, rewrite to Tabler
-    before declaring the port done; don't leave the inline tail.
-12. **Two-page sprint, THEN extract** — until DOL detail page ships,
-    write inline JSX in `components/v2/*`. Don't pre-build a primitive
-    library against assumed needs — the second page reveals the real
-    reuse inventory. After both pages ship, extract primitives into
-    `components/ui/` and catalog them in a `/system` route (single
-    source of truth for the visual system). Storybook / Ladle only if
-    `/system` proves insufficient.
+**(B) Start the design system.** Move from one-off `components/v2/*` JSX
+toward a **reusable component library with a navigator/examples browser** —
+the shadcn-/Storybook-style pattern Oleg referenced (a docs site that lists
+every component with all its states + token tables). Steps:
+  1. Research the top GitHub reference (shadcn-ui docs site / Storybook /
+     Ladle) — pick the lightest fit for a Next static-export prototype.
+  2. Extract primitives from the two pages into `components/ui/`
+     (`tag`, `kpi-tile`, `card`, `filter-chip`, `channel-selector`,
+     `sidebar-section`, the AI-FAB, …), each owning its variants.
+  3. Build a **`/system` catalog route** — renders every primitive ×
+     variants + token tables (color/spacing/type/radius/motion). Deploys
+     with the prototype; client gets one link to the visual system.
+  4. Storybook/Ladle only if `/system` proves insufficient.
+
+> Rule of thumb (carried): two pages reveal the real reuse inventory — the
+> DOL **detail page** (`/dols/[id]`) is still unbuilt; building it alongside
+> the design-system extraction is sensible (live ref:
+> pharma.market360.ai/influencers/[id] — KPI hero w/ photo+halo+5 numbers,
+> tabbed Brands/Diseases/Medicaments/Engagement/Comments, CTA footer).
 
 ---
 
-## 4. Open punch list — next session pickup
+## 4. Key files
 
-**Strategy locked 2026-06-03:** ship the two pages the client is waiting
-for (DOLs list polish + DOL detail rebuild), THEN extract primitives
-into `components/ui/`, THEN catalog them in a `/system` route. Storybook
-or Ladle only if `/system` proves insufficient. See §3 rule #12.
-
-Stack-ranked:
-
-1. **Channels selector polish** (the 6 large channel icons below the
-   bio on each card — `.channels` / `.ch-tab`). They already use the
-   40+20 standard. Sanity-check the active-state underline + hover.
-2. **Tags polish** — `Mid Tier` chip / `Bariatric Surgeon` chip /
-   `Type Mixed` / `Group A`. The tier chip is tier-color-filled; the
-   tag-kv (Type, Group) reads cleaner after §2.4 but the visual
-   weight of 4 chips next to each other is heavy. Worth a pass.
-3. **Sidebar filter panel** — re-do with the same pixel-perfect pass
-   we just applied to the header + cards (spacing, hover states,
-   accordion chevron motion).
-4. **Single DOL detail page** — `/dols/[id]`. Full rebuild in the
-   new aesthetic. Live ref:
-   https://pharma.market360.ai/influencers/[id]. Detail-page anatomy
-   (from the live portal): KPI hero with photo + halo + 5 big numbers,
-   tabbed view (Brands / Diseases / Medicaments / Engagement /
-   Comments), CTA footer (CREATE DASHBOARD / CREATE REPORT).
-5. **Component extraction pass** — once #4 ships, both pages have
-   revealed the real primitive inventory. Move inline JSX → typed
-   primitives in `components/ui/{tag,kpi-tile,card,filter-chip,
-   channel-selector,sidebar-section,…}.tsx`. Each one owns its
-   variants (default / hover / active / disabled / empty).
-6. **`/system` catalog route** — Next.js page that renders every
-   primitive from `components/ui/` with all variants, plus token
-   tables (colors, spacing, type scale, radius, motion). Pattern
-   mirrored from shadcn-ui.com docs site. Deploys with the prototype;
-   client gets a single link to the visual system.
-5. **Focus indicators (`:focus-visible`)** — WCAG 2.4.7 / 2.4.11. Not
-   audited yet. Keyboard nav, skip-links, ARIA on custom controls
-   (filter panel) — all open.
-6. **Tap-target size** — buttons currently 40×40; WCAG 2.5.5 AAA wants
-   44×44. Decide if we bump or accept AA.
-7. **Color-blind sanity** — engagement traffic-light (red ≥3 / yellow
-   ≥6 / green) and tier colors. Quick simulation via Chrome devtools
-   "Emulate vision deficiencies".
-8. **Inline-SVG audit on `/dols`** — sweep `components/v2/*` and
-   `app/dols/*.tsx` for stray hand-rolled `<svg>` blocks and rewrite
-   them to `@tabler/icons-react` per rule #11. Known exceptions to
-   leave alone: `<PharmaMark />` in `site-header-v2.tsx`, the
-   `Sparkline` component, the tier-star path inside the tier chip
-   (could be `IconStarFilled` — worth checking).
-9. **Three placeholder templates** the client asked for on 2026-05-21
-   (carried from `vsevolod/CLAUDE.md`) — not relevant to this prototype
-   but worth flagging when we move to the Vulcain deck.
+- **Page:** `app/dols/page.tsx` → `components/v2/*` + `app/dols/v2.css`
+  (the big stylesheet, `.v2-root`-scoped) + `app/globals.css`.
+- **Data:** `data/dols.ts`.
+- **AI FABs:** `components/ai-assistant*.tsx` (+ shared `ai-assistant.css`).
+- **Preview chrome (bottom-left):** `components/service-menu.tsx` + `.css`.
+- **Design spec:** `DESIGN-SYSTEM.md`. **Design review:**
+  `REVIEW-dols-2026-06-03.md` (Consilium scores + roadmap).
+- **Launch:** `.claude/launch.json` → `:4310`.
 
 ---
 
-## 5. Useful entrypoints
-
-- **Active concept (where you write code):** `app/dols/page.tsx` →
-  `components/v2/*` and `app/dols/v2.css`.
-- **Frozen snapshots (don't edit):** `app/concepts/v2/dols/` and
-  `app/concepts/v3/dols/`.
-- **Design system spec:** `DESIGN-SYSTEM.md` (single source of truth).
-  Historic Market360-mirror is archived as
-  `DESIGN-SYSTEM-2026-06-02-market360-mirror.md` — read only for
-  history.
-- **Concept switcher:** `components/service-menu.tsx` +
-  `components/service-menu.css`.
-- **Floating grid-overlay:** the same `service-menu.css` — toggle button
-  is to the left of the concept chip.
-- **Data mock:** `app/concepts/v3/data.ts` — 9 real DOL names, photos,
-  channel sets. Shared across all three concepts.
-- **Launch config:** `.claude/launch.json` → `pnpm dev` on `:4310`.
-
----
-
-## 6. Conventions for the next handoff
-
-This file is rev 4. The previous one is archived next to it. The
-discipline going forward:
-
-- **One HANDOFF.md** at the repo root, always the current session's
-  state. Entry point.
-- **Archive prior** on bump (today: `HANDOFF-2026-06-02-rev3.md`).
-- **Inline this session's work** with commit refs so the new agent can
-  jump back into git history.
-- **Project rules** section is cumulative — it's the cheat sheet, never
-  a session log.
-- **Open punch list** is forward-looking, ranked by likely pickup.
-
----
-
-*Written 2026-06-03 by Claude. Resume by reading §1–§3 (3 minutes), then
-pick from §4.*
+*Written 2026-06-03 (rev 5). Resume: read §1–§2 (~3 min), then §3.*
