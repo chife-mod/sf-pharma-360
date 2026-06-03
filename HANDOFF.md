@@ -41,6 +41,22 @@ auto-deploys on push to `main` via `peaceiris/actions-gh-pages`.
 
 Order of events. Each is its own commit.
 
+### 2.0 Bottom-bar split + AI assistant FAB *(latest)*
+- **Preview cluster → bottom-LEFT.** `ServiceMenu` (grid-overlay toggle +
+  «DOLs list» section pill) moved from bottom-right to bottom-left
+  (`service-menu.css`: `left`/panel `left`). Next dev "N" badge silenced
+  via `devIndicators: false` so the left corner is clean.
+- **AI assistant FAB → bottom-RIGHT.** New `components/ai-assistant.tsx`
+  (+`.css`), mounted globally in `layout.tsx` alongside ServiceMenu. It's a
+  **product** element (kept separate from the preview-only ServiceMenu).
+  Black glass tile (matches header pills) + backdrop-blur + outline; the
+  Pharma-360 mark rebuilt as **3 outline rings** (yellow #FFE627 / magenta
+  #DD45FF / cyan #46FFE9 — the logo's 3 primaries) that **draw 0→100**
+  (stroke-dasharray), bloom ~3 cycles then settle; conic under-glow
+  shimmers from beneath. **Placeholder — no panel yet** (per decision).
+- Earlier in the session: hero made ~30% shorter + auto/manual minimise,
+  mobile sort fit, edge-glow bleed, search 2× — see git log / REVIEW-dols.
+
 ### 2.1 Grid overlay aligned to 1650 content rail
 *Commit `8f02031` — "Cards: padding 24..."* (mixed with §2.2)
 

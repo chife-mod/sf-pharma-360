@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: { unoptimized: true },
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
+  // Hide the Next dev "N" badge — the bottom-left corner is now ours
+  // (preview cluster lives there). Prod export never shows it anyway.
+  devIndicators: false,
 };
 
 export default nextConfig;

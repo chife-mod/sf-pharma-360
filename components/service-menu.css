@@ -6,7 +6,7 @@
 
 .service-menu {
   position: fixed;
-  right: 24px;
+  left: 24px;
   bottom: 24px;
   z-index: 99999;
   display: flex;
@@ -83,7 +83,7 @@
 
 .service-menu__panel {
   position: absolute;
-  right: 0;
+  left: 0;
   bottom: calc(100% + 10px);
   min-width: 300px;
   padding: 6px;
@@ -176,7 +176,7 @@
 
 @media (max-width: 600px) {
   .service-menu {
-    right: 12px;
+    left: 12px;
     bottom: 12px;
     font-size: 12px;
   }

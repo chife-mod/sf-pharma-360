@@ -1,0 +1,107 @@
+/* AI assistant — premium round product FAB, bottom-right.
+   Black glass tile (like the header pills) + backdrop blur, a colourful
+   glow shimmering from underneath, and the Pharma-360 mark as three outline
+   rings that draw on, bloom for a few cycles, then settle. Placeholder. */
+
+.ai-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 99999;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+  /* black glass, matches header pills (#05071b) — slightly translucent so a
+     hint of the under-glow seeps through */
+  background: rgba(5, 7, 27, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  opacity: 0;
+  /* "чук" — pops in on load */
+  animation: ai-pop 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* colourful glow seeping from under the tile — the "power inside" shimmer */
+.ai-fab::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 999px;
+  z-index: -1;
+  background: conic-gradient(
+    from 0deg,
+    #dd45ff,
+    #ff5e5e,
+    #ffe627,
+    #46ffe9,
+    #5825ff,
+    #dd45ff
+  );
+  filter: blur(11px);
+  opacity: 0.3;
+  animation: ai-glow 4.5s ease-in-out infinite;
+}
+.ai-fab:hover { transform: translateY(-2px); }
+.ai-fab:hover::before { opacity: 0.55; }
+
+.ai-rings {
+  width: 32px;
+  height: 32px;
+  display: block;
+  overflow: visible;
+}
+.ai-rings circle {
+  fill: none;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-dasharray: 66; /* ≈ circumference of r=10.5 */
+  stroke-dashoffset: 0; /* resting (settled) = fully drawn */
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.4));
+  animation: ai-draw 2.4s ease-in-out infinite;
+}
+.ai-rings circle:nth-of-type(2) { animation-delay: 0.18s; }
+.ai-rings circle:nth-of-type(3) { animation-delay: 0.36s; }
+
+/* after the bloom cycles: stop drawing, hold the mark drawn, glow continues */
+.ai-fab.is-settled .ai-rings circle {
+  animation: none;
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition: stroke-dashoffset 0.7s ease, opacity 0.5s ease;
+}
+
+@keyframes ai-pop {
+  0%   { opacity: 0; transform: scale(0.5); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* one bloom cycle: each ring draws from 0→100, holds, fades, resets */
+@keyframes ai-draw {
+  0%   { stroke-dashoffset: 66; opacity: 0; }
+  12%  { opacity: 1; }
+  45%  { stroke-dashoffset: 0; opacity: 1; }
+  70%  { stroke-dashoffset: 0; opacity: 1; }
+  90%  { stroke-dashoffset: 0; opacity: 0; }
+  100% { stroke-dashoffset: 66; opacity: 0; }
+}
+
+/* slow colour drift + breathe of the under-glow */
+@keyframes ai-glow {
+  0%, 100% { opacity: 0.2; transform: scale(0.92) rotate(0deg); }
+  50%      { opacity: 0.5; transform: scale(1.08) rotate(28deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-fab { opacity: 1; animation: none; }
+  .ai-fab::before { animation: none; opacity: 0.3; }
+  .ai-rings circle { animation: none; stroke-dashoffset: 0; opacity: 1; }
+}

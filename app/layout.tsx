@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ServiceMenu } from "@/components/service-menu";
+import { AiAssistant } from "@/components/ai-assistant";
 
 /* One typeface across the whole product: Inter. Hierarchy comes from
  * weight + size, not from font pairing. (Geist / Inter Tight /
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         {children}
         <ServiceMenu />
+        <AiAssistant />
       </body>
     </html>
   );
