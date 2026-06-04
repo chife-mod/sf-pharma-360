@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 
-import type { Dol } from "@/data/dols";
+import type { Dol, Channel } from "@/data/dols";
 import { fmt, TIERS } from "@/data/dols";
 import type { DolDetail, TopicChip } from "@/data/dol-detail";
 import { channelMeta, Icons, tierStar } from "./icons";
@@ -18,7 +18,7 @@ const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 export function DolDetail({ dol, detail }: { dol: Dol; detail: DolDetail }) {
   const tier = TIERS[dol.tier];
   const Star = tierStar[tier.star];
-  const [channel, setChannel] = useState<"all" | string>("all");
+  const [channel, setChannel] = useState<Channel>(dol.primary);
 
   return (
     <div className="dd">
@@ -89,41 +89,39 @@ export function DolDetail({ dol, detail }: { dol: Dol; detail: DolDetail }) {
         </aside>
       </section>
 
-      {/* ── toolbar: channel tabs (plates) + date range + search + ⋮ ── */}
+      {/* ── toolbar: TWO separate tiles — channel tabs · search + date + ⋮ ── */}
       <div className="dd-toolbar">
-        <div className="dd-tabs">
-          <button
-            type="button"
-            className={"dd-tab" + (channel === "all" ? " is-active" : "")}
-            onClick={() => setChannel("all")}
-          >
-            All
-          </button>
-          {dol.channels.map((ch) => {
-            const meta = channelMeta[ch];
-            const Glyph = meta.icon;
-            return (
-              <button
-                key={ch}
-                type="button"
-                className={"dd-tab" + (channel === ch ? " is-active" : "")}
-                onClick={() => setChannel(ch)}
-                title={meta.name}
-                style={channel === ch ? { color: meta.color } : undefined}
-              >
-                <Glyph size={16} />
-              </button>
-            );
-          })}
+        {/* tile 1 — channel tabs (reuses the .channels / .ch-tab pattern with the
+            channel-colour bottom underline on the active tab) */}
+        <div className="dd-toolbar-tabs">
+          <div className="channels" style={{ margin: 0 }}>
+            {dol.channels.map((ch) => {
+              const Glyph = channelMeta[ch].icon;
+              return (
+                <button
+                  key={ch}
+                  type="button"
+                  className={"ch-tab" + (ch === channel ? " active" : "")}
+                  style={{ "--ch-color": channelMeta[ch].color } as CSSProperties}
+                  title={channelMeta[ch].name}
+                  onClick={() => setChannel(ch)}
+                >
+                  <Glyph />
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <div className="dd-toolbar-right">
-          <button type="button" className="dd-daterange">
-            <Icons.chevron size={14} /> Jul 02, 2023 – Jul 02, 2024
-          </button>
+
+        {/* tile 2 — search + date range + more */}
+        <div className="dd-toolbar-controls">
           <label className="dd-search">
             <Icons.search size={16} />
             <input placeholder="Search posts…" />
           </label>
+          <button type="button" className="dd-daterange">
+            <Icons.chevron size={14} /> Jul 02, 2023 – Jul 02, 2024
+          </button>
           <button type="button" className="dd-icon-btn" aria-label="More"><Icons.dots size={18} /></button>
         </div>
       </div>

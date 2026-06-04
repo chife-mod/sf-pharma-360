@@ -141,29 +141,33 @@
 .v2-root .dd-snap-delta.up { color: var(--teal-bright); }
 .v2-root .dd-snap-delta.down { color: var(--rose); }
 
-/* ── toolbar ── */
+/* ── toolbar: TWO separate tiles, empty space between ── */
 .v2-root .dd-toolbar {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.v2-root .dd-toolbar-tabs {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px 12px; /* extra bottom room for the active underline */
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--panel);
+}
+.v2-root .dd-toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 10px;
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   background: var(--panel);
 }
-.v2-root .dd-tabs { display: inline-flex; gap: 4px; flex-wrap: wrap; }
-.v2-root .dd-tab {
-  display: inline-flex; align-items: center; gap: 6px;
-  min-width: 38px; height: 36px; padding: 0 12px;
-  justify-content: center;
-  border-radius: var(--r-sm);
-  font-size: 13px; font-weight: 500;
-  color: var(--text-dim);
-  background: transparent; border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.18s var(--ease);
-}
-.v2-root .dd-tab:hover { color: var(--text); background: rgba(150, 170, 210, 0.06); }
-.v2-root .dd-tab.is-active { color: var(--text); background: rgba(150, 170, 210, 0.08); border-color: var(--line); }
-.v2-root .dd-toolbar-right { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+/* reuse .ch-tab (from v2.css); drop its underline into the toolbar tile */
+.v2-root .dd-toolbar-tabs .ch-tab.active::after { bottom: -8px; }
 .v2-root .dd-daterange {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 8px 12px; border-radius: var(--r-sm);
