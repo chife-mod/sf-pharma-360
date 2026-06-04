@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "./service-menu.css";
 
@@ -134,7 +135,7 @@ export function ServiceMenu() {
           <ul className="service-menu__list">
             {CONCEPTS.map((c) => (
               <li key={c.id}>
-                <a
+                <Link
                   className="service-menu__item"
                   href={c.path}
                   role="menuitem"
@@ -142,7 +143,7 @@ export function ServiceMenu() {
                 >
                   <div className="service-menu__item-title">{c.label}</div>
                   <div className="service-menu__item-desc">{c.desc}</div>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
