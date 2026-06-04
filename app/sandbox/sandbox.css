@@ -109,7 +109,7 @@
 
 /* ── de-fix EVERY inner FAB (see header note) ── */
 .sandbox-stage .ai-fab {
-  position: static;
+  position: relative; /* containing block for the ::before glow / ::after face */
   right: auto;
   bottom: auto;
   left: auto;

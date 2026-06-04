@@ -491,7 +491,7 @@
 /* the AI-assistant FAB is position:fixed in the corner; de-fix it so it sits
    inline in the catalog stage. */
 .v2-root .uikit-stage--ai .ai-fab {
-  position: static;
+  position: relative; /* containing block for the ::before glow / ::after face */
   right: auto;
   bottom: auto;
 }

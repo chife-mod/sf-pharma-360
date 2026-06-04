@@ -16,33 +16,45 @@
   place-items: center;
   padding: 0;
   cursor: pointer;
-  isolation: isolate; /* own stacking context so the glow stays UNDER */
-  background: #05071b; /* solid black, matches the header pills */
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow:
-    0 12px 36px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  isolation: isolate; /* own stacking context */
+  background: transparent; /* the opaque face is ::after, so it sits ABOVE the glow */
+  border: none;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
   opacity: 0;
   animation: ai-pop 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; /* "чук" */
+}
+
+/* the OPAQUE solid face — painted ABOVE the glow (::before, z-2) and BELOW the
+   icon. This is what makes the button fully opaque ON TOP of its own glow:
+   the glow only shows as a halo around the edges, never tinting the face. */
+.ai-fab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #05071b; /* solid black, matches the header pills */
+  border: 1px solid rgba(255, 255, 255, 0.24); /* crisp shape outline */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  z-index: -1;
 }
 
 /* faint colour glow UNDER the tile — slow drift, the "power inside" shimmer */
 .ai-fab::before {
   content: "";
   position: absolute;
-  inset: -7px;
+  inset: -10px;
   border-radius: 999px;
-  z-index: -1;
+  z-index: -2; /* BEHIND the opaque ::after face */
   background: conic-gradient(
     from 0deg,
     #dd45ff, #ff5e5e, #ffe627, #46ffe9, #5825ff, #dd45ff
   );
-  filter: blur(11px);
-  opacity: 0.16;
+  filter: blur(13px);
+  opacity: 0.26;
   animation: ai-glow 13.5s ease-in-out infinite;
 }
 .ai-fab:hover { transform: translateY(-2px); }
-.ai-fab:hover::before { opacity: 0.32; }
+.ai-fab:hover::before { opacity: 0.5; }
 
 .ai-rings {
   width: 42px;
@@ -90,13 +102,13 @@
 
 /* slow colour drift + breathe of the under-glow */
 @keyframes ai-glow {
-  0%, 100% { opacity: 0.1;  transform: scale(0.92) rotate(0deg); }
-  50%      { opacity: 0.24; transform: scale(1.08) rotate(28deg); }
+  0%, 100% { opacity: 0.16; transform: scale(0.92) rotate(0deg); }
+  50%      { opacity: 0.4;  transform: scale(1.08) rotate(28deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ai-fab { opacity: 1; animation: none; }
-  .ai-fab::before { animation: none; opacity: 0.16; }
+  .ai-fab::before { animation: none; opacity: 0.26; }
   .ai-rings .ring { animation: none; stroke-dashoffset: 0; }
 }
 
