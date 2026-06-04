@@ -1,0 +1,182 @@
+/* ============================================================
+ * Design Sandbox — /sandbox
+ * Inline gallery that showcases every AI-assistant FAB motion
+ * variant side by side, so the client can compare the animation
+ * without the buttons floating over the corner.
+ *
+ * Page chrome reuses the SFG landing pattern (.landing* in
+ * app/globals.css): cyan #00c3d9 accent, #0d0d0d canvas, Inter.
+ * Only the gallery-specific pieces live here.
+ *
+ * ── FAB de-fix technique ─────────────────────────────────────
+ * Each AiAssistant* component is `position: fixed` (.ai-fab) and
+ * pins itself bottom-right via right/bottom + per-variant offset
+ * classes (.ai-fab--left … --left5). Rendered as-is they'd all
+ * stack in the corner. We DON'T touch the component CSS; instead
+ * every override below is scoped under `.sandbox-stage` (an
+ * ancestor that only exists on this page), so it never leaks to
+ * the real floating FABs on / or /dols. Higher specificity
+ * (.sandbox-stage .ai-fab = 0,2,0) beats the component's single-
+ * class rules (.ai-fab / .ai-fab--left = 0,1,0), including their
+ * @media variants — no !important needed. We flip position to
+ * static, drop the corner offsets, and let flex centre the tile.
+ * The tile / under-glow / draw + spin animations stay fully
+ * intact — only the fixed corner-pinning is killed.
+ * ============================================================ */
+
+.sandbox {
+  /* inherits the .landing token block via the shared .landing class
+   * on the root element; nothing to redeclare here. */
+}
+
+.sandbox-main {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 36px 48px 0;
+}
+
+/* ── gallery grid: 3-up ≥1100, 2-up tablet, 1-up mobile ── */
+.sandbox-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .sandbox-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .sandbox-grid {
+    grid-template-columns: 1fr;
+  }
+  .sandbox-main {
+    padding: 24px 24px 0;
+  }
+}
+
+/* ── card ── */
+.sandbox-card {
+  background: var(--sfg-surface);
+  border: 1px solid var(--sfg-border);
+  border-radius: var(--sfg-radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* the "in progress" slot — dashed border, slightly muted */
+.sandbox-card--wip {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.14);
+  opacity: 0.72;
+}
+
+/* ── dark animation stage — matches the real app canvas (--v2-bg)
+ *    so each tile reads exactly as it does floating in production ── */
+.sandbox-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 140px;
+  border-radius: 10px;
+  background:
+    radial-gradient(
+      120% 120% at 50% 30%,
+      rgba(70, 202, 255, 0.05),
+      transparent 60%
+    ),
+    #0a0b16; /* --v2-bg literal — token isn't in scope on .landing chrome */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+/* empty constellation slot caption */
+.sandbox-stage--constellation::after {
+  content: "coming up";
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--sfg-text-muted);
+}
+
+/* ── de-fix EVERY inner FAB (see header note) ── */
+.sandbox-stage .ai-fab {
+  position: static;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  /* margins on the fixed original (none) → none needed; flex centres it */
+}
+
+/* neutralise each per-variant horizontal offset class.
+ * (.ai-fab--left … --left5 set `right: Npx`; we already set
+ *  right:auto above, but list them explicitly so intent is clear
+ *  and any future offset property on these classes is covered.) */
+.sandbox-stage .ai-fab--left,
+.sandbox-stage .ai-fab--left2,
+.sandbox-stage .ai-fab--left3,
+.sandbox-stage .ai-fab--left4,
+.sandbox-stage .ai-fab--left5 {
+  right: auto;
+}
+
+/* the original lifts on hover via translateY(-2px); keep it — it's
+ * part of the motion language and harmless inside the static cell. */
+
+/* ── meta block under the stage ── */
+.sandbox-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sandbox-meta__name {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--sfg-text-primary);
+}
+
+.sandbox-meta__file {
+  font-family: var(--font-mono, ui-monospace, "SFMono-Regular", "Menlo",
+    "Consolas", monospace);
+  font-size: 12px;
+  color: var(--sfg-accent);
+  word-break: break-all;
+}
+
+.sandbox-meta__desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--sfg-text-secondary);
+}
+
+/* small "in progress" pill on the WIP card's name row */
+.sandbox-meta__name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sandbox-wip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--sfg-text-muted);
+}

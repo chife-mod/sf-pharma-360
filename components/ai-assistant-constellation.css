@@ -1,0 +1,27 @@
+/* AI assistant — CONSTELLATION variant (orbit × sparkles merge).
+   Motion is JS rAF-driven (see ai-assistant-constellation.tsx): dots orbit
+   their tracks, sweep along a Bézier arc to the centre, then geometrically
+   morph (round dot → 4-point star) and hold as the sparkles icon, then return.
+   This stylesheet only carries the float slot, the faint tracks and the star
+   glow. The `.ai-fab` tile / glow / shadow base comes from ai-assistant.css. */
+
+/* the sole AI-assistant FAB on the dashboard → standard bottom-right corner
+   (base .ai-fab is already right:24px; kept explicit for clarity). */
+.ai-fab--cst { right: 24px; }
+
+.ai-cst { overflow: visible; }
+
+/* faint dotted orbit-tracks (opacity is driven from JS so they recede while the
+   icon is formed) */
+.ai-cst .cst-track {
+  fill: none;
+  stroke: rgba(160, 180, 220, 0.26);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 0.01 3.4;
+}
+
+/* the morphing dot/star units — a faint twinkle glow */
+.ai-cst .cst-unit {
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.12));
+}

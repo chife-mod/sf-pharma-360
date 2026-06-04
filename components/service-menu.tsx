@@ -21,6 +21,18 @@ const CONCEPTS: Concept[] = [
     path: "/dols",
   },
   {
+    id: "sandbox",
+    label: "Design sandbox",
+    desc: "AI-assistant motion lab — every FAB variant + the orbit × sparkles merge.",
+    path: "/sandbox",
+  },
+  {
+    id: "uikit",
+    label: "UIKit",
+    desc: "The design system — color / spacing / type / motion tokens + components.",
+    path: "/uikit",
+  },
+  {
     id: "launcher",
     label: "Launcher",
     desc: "Back to the dashboard index — all screens and previews.",

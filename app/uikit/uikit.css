@@ -1,0 +1,697 @@
+/* ============================================================
+ * /uikit — design-system catalog (shadcn-docs / Storybook style).
+ *
+ * Catalog CHROME only. The catalogued primitives themselves
+ * (.card, .tag, .kpi, .fchip, .opt, .ch-tab, .toolbar, …) are the
+ * REAL classes from app/dols/v2.css — imported, not redefined here.
+ * This page wraps its body in .v2-root so those scoped tokens +
+ * rules apply 1:1, then this sheet adds the docs scaffolding on top
+ * (page header, sticky nav, token tables, swatch grids, stages).
+ *
+ * Everything below references v2 tokens (var(--text), var(--line),
+ * var(--r-*), var(--ease), accent vars) — no fresh hardcoded hex
+ * where a token exists. Type sizes are round ≥11px; spacing is on
+ * the 8-px grid. Scoped under .v2-root so it never leaks.
+ * ============================================================ */
+
+.v2-root .uikit-shell {
+  position: relative; /* lift content into the positioned paint step so the
+     fixed .v2-app-bg (z-index:0) sits BEHIND it — same trick /dols uses
+     (no z-index on purpose, just tree order after <AppBgV2/>). */
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0 32px 96px;
+}
+
+/* ---- page header ---- */
+.v2-root .uikit-header {
+  padding: 56px 0 32px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+.v2-root .uikit-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.v2-root .uikit-eyebrow .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 8px var(--teal-glow);
+}
+.v2-root .uikit-title {
+  margin: 16px 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.v2-root .uikit-title .grad {
+  background: linear-gradient(135deg, var(--teal), var(--cyan) 45%, var(--violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.v2-root .uikit-sub {
+  margin: 12px 0 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-mute);
+  max-width: 640px;
+}
+
+/* ---- sticky in-page nav ---- */
+.v2-root .uikit-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 12px 0;
+  margin-bottom: 8px;
+  background: rgba(10, 11, 22, 0.82);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid var(--line);
+}
+.v2-root .uikit-nav a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.v2-root .uikit-nav a:hover {
+  color: var(--text);
+  background: rgba(150, 170, 210, 0.08);
+}
+
+/* ---- section ---- */
+.v2-root .uikit-section {
+  scroll-margin-top: 72px;
+  padding: 40px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.v2-root .uikit-section:first-of-type {
+  border-top: none;
+}
+.v2-root .uikit-section-head {
+  margin-bottom: 24px;
+}
+.v2-root .uikit-section-num {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+  font-variant-numeric: tabular-nums;
+}
+.v2-root .uikit-section-title {
+  margin: 8px 0 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.v2-root .uikit-section-desc {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-mute);
+  max-width: 680px;
+}
+
+/* sub-group inside a section */
+.v2-root .uikit-group {
+  margin-top: 32px;
+}
+.v2-root .uikit-group:first-of-type {
+  margin-top: 0;
+}
+.v2-root .uikit-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: 16px;
+}
+
+/* ============================ COLOR SWATCHES ============================ */
+.v2-root .uikit-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(184px, 1fr));
+  gap: 16px;
+}
+.v2-root .uikit-swatch {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: rgba(150, 170, 210, 0.03);
+}
+.v2-root .uikit-swatch-chip {
+  height: 72px;
+  width: 100%;
+  border-bottom: 1px solid var(--line-soft);
+}
+.v2-root .uikit-swatch-meta {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.v2-root .uikit-swatch-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-root .uikit-swatch-token {
+  font-size: 11px;
+  color: var(--text-mute);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+.v2-root .uikit-swatch-role {
+  font-size: 11px;
+  color: var(--text-faint);
+  line-height: 1.4;
+}
+
+/* ============================ SPACING BARS ============================ */
+.v2-root .uikit-spacing {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.v2-root .uikit-spacing-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.v2-root .uikit-spacing-key {
+  flex: none;
+  width: 88px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.v2-root .uikit-spacing-key span {
+  color: var(--text-mute);
+  font-weight: 400;
+  margin-left: 6px;
+}
+.v2-root .uikit-spacing-bar {
+  height: 16px;
+  border-radius: var(--r-xs);
+  background: linear-gradient(90deg, var(--teal), var(--cyan));
+  box-shadow: 0 0 14px -4px var(--teal-glow);
+}
+.v2-root .uikit-spacing-row.banned .uikit-spacing-bar {
+  background: rgba(150, 170, 210, 0.12);
+  box-shadow: none;
+}
+.v2-root .uikit-spacing-row.banned .uikit-spacing-key {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+/* ============================ TYPE SPECIMENS ============================ */
+.v2-root .uikit-type {
+  display: flex;
+  flex-direction: column;
+}
+.v2-root .uikit-type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.v2-root .uikit-type-row:first-child {
+  border-top: none;
+}
+.v2-root .uikit-type-meta {
+  flex: none;
+  width: 168px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.v2-root .uikit-type-px {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.v2-root .uikit-type-role {
+  font-size: 11px;
+  color: var(--text-mute);
+  line-height: 1.4;
+}
+.v2-root .uikit-type-specimen {
+  color: var(--text);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* weight chips row */
+.v2-root .uikit-weights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+.v2-root .uikit-weight {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 16px;
+  background: rgba(150, 170, 210, 0.03);
+  min-width: 132px;
+}
+.v2-root .uikit-weight-sample {
+  font-size: 28px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.v2-root .uikit-weight-name {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-mute);
+}
+
+/* ============================ RADIUS SAMPLES ============================ */
+.v2-root .uikit-radii {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+}
+.v2-root .uikit-radius {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.v2-root .uikit-radius-box {
+  width: 100%;
+  height: 80px;
+  background: rgba(150, 170, 210, 0.06);
+  border: 1px solid var(--line-strong);
+}
+.v2-root .uikit-radius-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.v2-root .uikit-radius-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-root .uikit-radius-val {
+  font-size: 11px;
+  color: var(--text-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================ MOTION ROWS ============================ */
+.v2-root .uikit-motion {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.v2-root .uikit-motion-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 14px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.v2-root .uikit-motion-row:first-child {
+  border-top: none;
+}
+.v2-root .uikit-motion-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-root .uikit-motion-val {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12px;
+  color: var(--text-mute);
+  line-height: 1.5;
+  word-break: break-word;
+}
+.v2-root .uikit-motion-use {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* ============================ COMPONENT STAGES ============================ */
+/* Each primitive sits on a labelled "stage" — a faint inset panel that
+ * frames the live instance, like a Storybook canvas cell. */
+.v2-root .uikit-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.v2-root .uikit-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: rgba(150, 170, 210, 0.02);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.v2-root .uikit-card.span-2 {
+  grid-column: span 2;
+}
+.v2-root .uikit-card.wip {
+  border-style: dashed;
+  border-color: var(--line-strong);
+}
+.v2-root .uikit-card-head {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.v2-root .uikit-card-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.v2-root .uikit-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-root .uikit-card-desc {
+  font-size: 12px;
+  color: var(--text-mute);
+  line-height: 1.45;
+}
+.v2-root .uikit-card-flag {
+  flex: none;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: var(--r-pill);
+  color: var(--amber);
+  border: 1px solid color-mix(in srgb, var(--amber) 38%, transparent);
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+}
+.v2-root .uikit-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 24px;
+  min-height: 96px;
+  background:
+    radial-gradient(80% 80% at 50% 0%, rgba(150, 170, 210, 0.03), transparent 70%),
+    rgba(7, 8, 13, 0.4);
+}
+.v2-root .uikit-stage.align-start {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.v2-root .uikit-stage.column {
+  flex-direction: column;
+  align-items: stretch;
+}
+.v2-root .uikit-stage.no-pad {
+  padding: 0;
+}
+
+/* per-instance label under a forced state */
+.v2-root .uikit-variant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.v2-root .uikit-variant-tag {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ---- loader + AI-assistant slots ---- */
+.v2-root .uikit-stage--loader {
+  min-height: 132px;
+}
+.v2-root .uikit-stage--loader .uikit-coming {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+.v2-root .uikit-stage--ai {
+  min-height: 132px;
+}
+/* the AI-assistant FAB is position:fixed in the corner; de-fix it so it sits
+   inline in the catalog stage. */
+.v2-root .uikit-stage--ai .ai-fab {
+  position: static;
+  right: auto;
+  bottom: auto;
+}
+
+/* ============================================================
+ * LEFT RAIL LAYOUT — sticky sidebar nav (tag/chip quick-links) + content
+ * ============================================================ */
+.v2-root .uikit-body {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+.v2-root .uikit-rail {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  padding: 4px 4px 4px 0;
+}
+.v2-root .uikit-content {
+  min-width: 0;
+}
+
+.v2-root .uikit-rail-top {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  background: rgba(150, 170, 210, 0.05);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.v2-root .uikit-rail-top:hover {
+  color: var(--text);
+  background: rgba(150, 170, 210, 0.1);
+}
+
+.v2-root .uikit-rail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.v2-root .uikit-rail-grouplabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding-left: 2px;
+}
+.v2-root .uikit-rail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.v2-root .uikit-rail-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  text-decoration: none;
+  background: rgba(150, 170, 210, 0.05);
+  border: 1px solid var(--line);
+  transition: color 0.18s var(--ease), background 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.v2-root .uikit-rail-chip:hover {
+  color: var(--text);
+  background: rgba(150, 170, 210, 0.1);
+}
+.v2-root .uikit-rail-chip[data-active="true"] {
+  color: var(--text);
+  background: color-mix(in srgb, var(--teal) 15%, transparent);
+  border-color: color-mix(in srgb, var(--teal) 48%, transparent);
+}
+
+/* full-width composite cards (KPI hero, Toolbar) + anchor scroll offset */
+.v2-root .uikit-card.span-full {
+  grid-column: 1 / -1;
+}
+.v2-root .uikit-card[id] {
+  scroll-margin-top: 24px;
+}
+.v2-root .uikit-section {
+  scroll-margin-top: 24px;
+}
+
+/* narrow: rail collapses to a sticky horizontal chip-bar above the content */
+@media (max-width: 900px) {
+  .v2-root .uikit-body {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .v2-root .uikit-rail {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 12px;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 0;
+    background: rgba(10, 11, 22, 0.85);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+  }
+  .v2-root .uikit-rail-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+  }
+  .v2-root .uikit-rail-grouplabel { display: none; }
+  .v2-root .uikit-rail-chips { flex-wrap: nowrap; }
+  .v2-root .uikit-rail-chip { white-space: nowrap; }
+  .v2-root .uikit-card[id],
+  .v2-root .uikit-section { scroll-margin-top: 72px; }
+}
+
+/* ============================================================
+ * FORCED STATES (static catalog). The live components only show
+ * hover/active on real pointer interaction; here we freeze them so
+ * every state is visible at once. These mirror the real :hover rules
+ * from v2.css exactly (lift + tier border + glow), applied via a
+ * wrapper class instead of :hover.
+ * ============================================================ */
+.v2-root .uikit-force-hover .card {
+  transform: translateY(-5px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-card);
+}
+.v2-root .uikit-force-hover .card::before {
+  opacity: 0.9;
+}
+.v2-root .uikit-force-hover .card .card-glow {
+  opacity: 0.25;
+}
+
+/* Constrain a single real card to the stage width so the catalog grid
+ * stays tidy (the live .grid sizes cards to min 420px). */
+.v2-root .uikit-card-frame {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Toolbar / filter panel are wide — give them a full-width stage that
+ * doesn't force the 420px card min. */
+.v2-root .uikit-stage--wide {
+  display: block;
+  padding: 24px;
+}
+.v2-root .uikit-stage--wide .toolbar {
+  padding: 0;
+}
+/* Render the filter sidebar inline (not sticky/fixed) inside the stage. */
+.v2-root .uikit-stage--filters {
+  display: block;
+  padding: 24px;
+  max-width: 360px;
+}
+.v2-root .uikit-stage--filters .filters {
+  position: static;
+  top: auto;
+}
+
+/* responsive */
+@media (max-width: 720px) {
+  .v2-root .uikit-card.span-2 {
+    grid-column: auto;
+  }
+  .v2-root .uikit-motion-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .v2-root .uikit-type-meta {
+    width: 112px;
+  }
+  .v2-root .uikit-spacing-key {
+    width: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-root .uikit-nav a,
+  .v2-root .uikit-swatch { transition-duration: 0.01ms !important; }
+}
