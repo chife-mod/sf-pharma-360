@@ -1,149 +1,149 @@
-# HANDOFF — sf-pharma-360 — 2026-06-03 (rev 5)
+# HANDOFF — sf-pharma-360 — 2026-06-04 (rev 6)
 
 > **Entry point.** New session reads this **FIRST**, then `CLAUDE.md`,
 > then `DESIGN-SYSTEM.md`. Dev server: `.claude/launch.json` → port
 > **4310** (start via the preview tool, name `sf-pharma-360`; or
-> `npm run dev`). Build check: `node_modules/.bin/tsc --noEmit` +
-> `node_modules/.bin/next build` (never `next build` while the dev
-> server is running — corrupts `.next`).
+> `npm run dev`). Build check: `node_modules/.bin/tsc --noEmit`
+> (+ `next build` only when the dev server is NOT running — corrupts `.next`).
 >
-> Prior handoffs archived: `HANDOFF-2026-06-03-rev4.md`,
-> `HANDOFF-2026-06-02-rev3.md` (read only for history).
+> **Live:** https://chife-mod.github.io/sf-pharma-360/ — GH Actions
+> auto-deploys on push to `main` (~1 min; `gh run watch <id>`). Repo
+> `chife-mod/sf-pharma-360`. `basePath: /sf-pharma-360`, `trailingSlash: true`,
+> `output: export`.
+>
+> Prior handoffs archived: `HANDOFF-2026-06-03-rev5.md` (and rev3/rev4).
 
 ---
 
-## 1. Where we are now
+## 1. Where we are now (all shipped + deployed)
 
-**Single surface — `/dols`.** The old v1/v2/v3 concept rotation is GONE;
-`app/concepts/*` deleted. Two routes only:
+### AI assistant FAB — DONE & consolidated
+The **`constellation`** variant (orbit × sparkles morph) WON and is now the
+**sole dashboard FAB**. `components/floating-fabs.tsx` renders only
+`<AiAssistantConstellation/>` (hidden on `/sandbox` & `/uikit` via `usePathname`).
+The other 6 variants survive **only in the `/sandbox` gallery** for reference.
 
-| Route | What |
-|---|---|
-| `/` | SFG-pattern tile launcher |
-| `/dols` | **The DOLs directory** — the hi-fi prototype, all work lands here |
+- Motion (`components/ai-assistant-constellation.tsx`, JS rAF, ~10s loop): 3 dots
+  orbit their own rings **independently** (revs 2/3/4) → peel off to the
+  **nearest** icon slot along a tangent-matched cubic Bézier (no jerk) →
+  **geometrically** morph (dot→4-point star, no fade) into the Tabler `sparkles`
+  layout (1 big **magenta** R≈11 left-of-centre + 2 small gold/cyan, right) →
+  hold → collapse → resume.
+- **Button layering (don't regress!):** opaque face is `::after` (z-index **-1**)
+  sitting ABOVE the conic glow `::before` (z-index **-2**), so the glow only
+  haloes the edges and never tints the face. Border 24%. In the de-fixed
+  galleries (`/sandbox`, `/uikit`) the FAB is `position: relative` (NOT static)
+  so those pseudo-layers stay anchored to the button.
+- The base `.ai-fab` tile/glow CSS lives in `components/ai-assistant.css`;
+  the constellation now self-imports it (it's the lone FAB).
 
-**Source:** `chife-mod/sf-pharma-360` (public). **Live:**
-https://chife-mod.github.io/sf-pharma-360/ — GH Actions auto-deploys on
-push to `main` (~1 min; watch with `gh run watch`).
+### Loader — DONE
+`components/ai-loader.tsx` — looping spinner built on the **dots-pinwheel** mark
+(`ai-assistant-dots`): 3 dots → swoosh OUT to the full pinwheel (~1.5s, eased) →
+pause → collapse back INTO dots → pause → repeat (CSS, ~4s). The active/loading
+indicator. Lives in the `/uikit` Components catalog.
 
-### `/dols` — current state (polished, responsive, deployed)
-- **Header** (`components/v2/site-header-v2.tsx`): two glass pills, 3-step
-  responsive collapse (≤1100 sheds utility icons → ≤900 nav→hamburger →
-  ≤600 logo→mark). **Auto-hides on scroll-down, reveals on scroll-up**
-  (NB: `will-change:transform` and `overflow-x:clip` both silently break
-  `position:sticky` in Chrome — don't reintroduce them).
-- **KPI hero** (`components/v2/kpi-hero.tsx`): eyebrow + gradient headline
-  ("pharma voices, decoded in real time", nbsp glues "pharma voices"),
-  4 KPI tiles. ~30% shorter than the first cut; **−/+ minimise toggle**
-  folds it to a thin headline strip; also auto-collapses once on
-  scroll-down (stays collapsed; threshold past the hero so scroll-anchoring
-  hides the jump).
-- **Toolbar** (`components/v2/toolbar.tsx`): Filters btn (+count) · result
-  count · search (2× wide on desktop) · split-menu sort. Responsive: ≤720
-  search grows + "SORT" label drops; ≤440 sort goes icon-only.
-- **Filters** (`components/v2/filter-panel.tsx`): inline sidebar desktop;
-  ≤1024 → right-side drawer (backdrop, sticky "Show N", dark scrollbar).
-- **Card grid** (`components/v2/influencer-card.tsx`): avatar+name, tags
-  (tier color-ramp star / specialty / type+group), bio, channel tabs,
-  4-metric strip + sparklines + vertical delta arrows. 2-up → 1-up.
-- **Bg** (`components/v2/app-bg-v2.tsx`): de-blued navy (`--v2-bg #0A0B16`),
-  fixed corner glows + a square 40px grid bound to the 1650 content rail.
-- **Data:** `data/dols.ts` (9 real DOL names, photos, channels, `SORTS`,
-  `TIERS`). Single source of truth.
+### /sandbox — DONE
+Inline comparison gallery of every FAB motion variant + the constellation merge.
+**Frozen reference — leave as-is** (user: "не трогай").
 
-### AI-assistant FAB — 6 variants live (for client comparison)
-Bottom-**right**, a row of FABs (the preview `ServiceMenu` — grid toggle +
-section pill — moved bottom-**left**; Next dev "N" badge silenced via
-`devIndicators:false`). All share the black-glass tile + faint under-glow +
-one drop-shadow, mounted in `app/layout.tsx`:
+### /uikit — REDESIGNED
+shadcn-docs style: **left sticky scroll-spy rail** of tag/chip quick-links
+(`↑ Top` + **Foundations** Color/Spacing/Type/Radius&Motion + **Components**
+Tags/Buttons/Icons/KPI/Card/Pagination/Loader/AI-assistant). Full-width shell
+(1680). KPI-hero / Toolbar span full width. Loader card + **AI assistant** card
+(constellation, de-fixed). `IntersectionObserver` drives the active chip.
 
-| File | Variant | Note |
-|---|---|---|
-| `ai-assistant.tsx` | woven gradient rings (logo), draw-from-centre | the "обручальные кольца" |
-| `ai-assistant-dots.tsx` | **dots-pinwheel** (3 dots spin out arcs) | **Oleg's current favourite** — bigger r=12 |
-| `ai-assistant-sparkles.tsx` | two-star sparkles, gradient stroke | universal "AI" signifier |
-| `ai-assistant-tri.tsx` | three solid filled circles | simplest |
-| `ai-assistant-ringsdots.tsx` | rings as dotted beads | literal "rings as dots" |
-| `ai-assistant-orbit.tsx` | dots orbiting faint ring-tracks (SMIL) | my "rings as dots" reading |
+### Launcher (`/`) + ServiceMenu pill
+Both **Design sandbox** & **UIKit** are Live and linked. The pill
+(`components/service-menu.tsx`) uses Next **`<Link>`** (basePath-aware) — a raw
+`<a href>` linked to the domain root on Pages (the bug we fixed).
 
-All are **placeholders** (no panel yet). Animation primitives: stroke-draw
-keyframes, `cubic-bezier` ease-outs, 0.6s start delay + `both` fill (kills
-first-cycle load jank), one unified shadow per mark (never per-element).
+### DOL detail `/dols/[id]` — FIRST ITERATION shipped
+`app/dols/[id]/page.tsx` (static-export via `generateStaticParams` over the 9
+DOLs) → `components/v2/dol-detail.tsx` + `app/dols/[id]/detail.css`. Mock detail
+data: `data/dol-detail.ts` (`buildDetail(dol)`, deterministic).
+Sections: back-link · **profile** (avatar, tags, bio, CTAs) + right
+**Audience snapshot** (per-channel followers/eng%/Δ) · **two-tile toolbar**
+(channel tabs — reuse `.ch-tab` with the channel-colour active underline |
+search + date range + ⋮, empty space between) · **KPI strip** · Brands ·
+Discussed conditions / Medications tiles · Top hashtags / Key topics (bars) ·
+Per-post averages · Top commenters. Reachable by **direct URL only** (cards on
+`/dols` don't link to it yet). All English, v2 dark system.
 
 ---
 
 ## 2. Project rules in force (cheat sheet — full in DESIGN-SYSTEM.md)
 
-1. **Min font-size 11px.** Round-number sizes only (11/12/13/14/16/18/20/
-   22/24/28). No 9/9.5/10.5/12.5.
-2. **WCAG 2.1 AA** — text ≥4.5:1 (normal) / 3:1 (large). Audit every new
-   surface. (Snippet in DESIGN-SYSTEM.md.)
+1. **Min font-size 11px**, round-number sizes only (11/12/13/14/16/18/20/22/24/28).
+2. **WCAG 2.1 AA** — text ≥4.5:1 / 3:1 large. Audit new surfaces.
 3. **8-px spacing grid** — 2/4/8/12/16/24/32/40/48/56/64. Banned 20/28/36/44.
-4. **Icon-button standard** — 40×40 button + 20px Tabler icon, centred with
-   `inline-flex` (not grid).
-5. **Hover affordance** — `white/[0.08]` band, hover ≤ active (no bright hovers).
-6. **Tabler-first** — `@tabler/icons-react` via `components/v2/icons.tsx`.
-   Inline SVG only for: brand mark, illustrations, animated SVG, sparklines.
-7. **Single typeface = Inter** everywhere; tabular-nums on numbers.
-8. **Retina images** ≥2× display size.
-9. **Layout** — content max-width **1650**, 24 rail padding, 12-col grid,
-   16 gap, sidebar span-3 / main span-9.
-10. **`scrollbar-gutter: auto`** on `html` (NOT `both-edges` — that reserved
-    phantom strips and the corner glows stopped short. The fixed bg + centred
-    content share the same width, so the grid still aligns).
-11. **Pixel-perfect default** — centring/balance/visible-hover/baseline
-    expected without asking. Verify via `getBoundingClientRect` before shipping.
+4. **Icon-button standard** — 40×40 button + 20px Tabler icon, `inline-flex`.
+5. **Hover affordance** — `white/[0.08]` band; hover ≤ active.
+6. **Tabler-first** via `components/v2/icons.tsx`. Inline SVG only for brand
+   mark, illustrations, animated SVG, sparklines, real brand logos.
+7. **Single typeface = Inter**; tabular-nums on numbers.
+8. **Retina images** ≥2×. 9. **Layout** max-w 1650, 24 rail, 12-col, 16 gap.
+10. **Pixel-perfect default** — centring/balance/visible-hover expected.
 
-> ⚠️ Verification note: the preview `getComputedStyle`/`getBoundingClientRect`
-> evals return **stale values** after rapid Fast-Refresh edits — trust
-> **screenshots** (for the small FABs: headless Chrome `--screenshot` at
-> `--force-device-scale-factor=3` + crop with PIL — see git history).
+> ⚠️ **Preview caveats (learned this session):** the preview `getComputedStyle`/
+> `innerWidth` evals intermittently report a **4px window** (stale ctx) — trust
+> **screenshots**, not eval-measured sizes. Preview **screenshots go blank after
+> a programmatic scroll** (flaky) — verify lower sections via a DOM-count eval or
+> in a real browser. Pages 404s get **edge-cached** — use a `?v=` cache-bust to
+> confirm a fresh deploy.
 
 ---
 
-## 3. NEXT SESSION — plan (what we do next)
+## 3. NEXT SESSION — plan (resume here)
 
-**(A) AI assistant — animation.** Keep polishing the assistant's motion.
-Oleg leans toward the **dots-pinwheel** (`ai-assistant-dots.tsx`) but it's
-not locked — the 6 variants are up for side-by-side comparison. Likely
-flow: refine the favoured variant's animation → once chosen, **consolidate
-to one** (remove the rejected components from `layout.tsx`, return the
-winner to the single standard bottom-right position `right:24`, drop the
-`--left*` offset classes).
+We just did a **component-reuse REVIEW** of the DOL detail page. The page works
+but I **duplicated** a few styles that already exist in `v2.css`. Refactor +
+finish the page:
 
-**(B) Start the design system.** Move from one-off `components/v2/*` JSX
-toward a **reusable component library with a navigator/examples browser** —
-the shadcn-/Storybook-style pattern Oleg referenced (a docs site that lists
-every component with all its states + token tables). Steps:
-  1. Research the top GitHub reference (shadcn-ui docs site / Storybook /
-     Ladle) — pick the lightest fit for a Next static-export prototype.
-  2. Extract primitives from the two pages into `components/ui/`
-     (`tag`, `kpi-tile`, `card`, `filter-chip`, `channel-selector`,
-     `sidebar-section`, the AI-FAB, …), each owning its variants.
-  3. Build a **`/system` catalog route** — renders every primitive ×
-     variants + token tables (color/spacing/type/radius/motion). Deploys
-     with the prototype; client gets one link to the visual system.
-  4. Storybook/Ladle only if `/system` proves insufficient.
+**(A) Refactor DOL detail to reuse v2 components (DRY):**
+| Duplicated (`dd-*`) | Reuse instead |
+|---|---|
+| `.dd-kpi` KPI tiles | `.kpi` (+ `.kpi-icon/val/label/delta`; `KpiHero` pattern) |
+| `.dd-tag` tags | `.tag` / `.tags` |
+| `.dd-search` | `.search` |
+| `.dd-pp` per-post metrics | `.metric` (+ `.metric-spark` / `Sparkline` component) |
+| `.dd-icon-btn` (⋮) | `.v2-icon-btn` (40×40 standard) |
+Genuinely-new, keep as-is: Audience snapshot, topic tiles, rank-bars, profile header.
 
-> Rule of thumb (carried): two pages reveal the real reuse inventory — the
-> DOL **detail page** (`/dols/[id]`) is still unbuilt; building it alongside
-> the design-system extraction is sensible (live ref:
-> pharma.market360.ai/influencers/[id] — KPI hero w/ photo+halo+5 numbers,
-> tabbed Brands/Diseases/Medicaments/Engagement/Comments, CTA footer).
+**(B) Real brand logos in the Audience snapshot.** Currently `channelMeta`
+(Tabler brand glyphs). User wants **real logos** ("не Tabler") on the RIGHT
+snapshot — inline simple-icons SVGs. **Tabs keep our channel glyphs** (user OK).
+
+**(C) Disease / Medication line illustrations.** **Consilium already ran** (this
+session) — Gemini + Codex returned concepts at
+`/Users/oleg/Dev/oz/consilium/sessions/2026-06-04-dol-disease-line-illustrations/`
+(`02b-gemini.md`, `02c-raw.txt` — **NOT yet synthesized/cleaned**). Next:
+synthesize → write `99-final` → **generate the line-art via nano-banana**
+(Gemini image gen) → replace the placeholder `.dd-topic-art` sparkle icons.
+
+**(D) Wire `/dols` influencer cards → `/dols/[id]`** (the InfluencerCard in
+`components/v2/influencer-card.tsx`; make the card a `<Link href={`/dols/${d.id}`}>`).
+
+Open priority question for the user: do A+B+C+D in one pass, or order them.
 
 ---
 
 ## 4. Key files
 
-- **Page:** `app/dols/page.tsx` → `components/v2/*` + `app/dols/v2.css`
-  (the big stylesheet, `.v2-root`-scoped) + `app/globals.css`.
-- **Data:** `data/dols.ts`.
-- **AI FABs:** `components/ai-assistant*.tsx` (+ shared `ai-assistant.css`).
-- **Preview chrome (bottom-left):** `components/service-menu.tsx` + `.css`.
-- **Design spec:** `DESIGN-SYSTEM.md`. **Design review:**
-  `REVIEW-dols-2026-06-03.md` (Consilium scores + roadmap).
-- **Launch:** `.claude/launch.json` → `:4310`.
+- **DOL detail:** `app/dols/[id]/page.tsx` · `components/v2/dol-detail.tsx` ·
+  `app/dols/[id]/detail.css` · `data/dol-detail.ts`. Chrome inherited from
+  `app/dols/layout.tsx` (`.v2-root` + `AppBgV2` + `SiteHeaderV2` + `.v2-shell`).
+- **DOLs list:** `app/dols/page.tsx` → `components/v2/dashboard.tsx`. Tokens +
+  reusable component classes: `app/dols/v2.css` (`.kpi`, `.tag`, `.metric`,
+  `.ch-tab`, `.search`, `.v2-icon-btn`, `.toolbar`, …).
+- **AI FAB / loader:** `components/ai-assistant-constellation.{tsx,css}` ·
+  `components/ai-assistant.css` (base `.ai-fab`) · `components/floating-fabs.tsx`
+  · `components/ai-loader.{tsx,css}` · the 6 archived variants `components/ai-assistant-*.tsx`.
+- **Sandbox / UIKit:** `app/sandbox/{page.tsx,sandbox.css}` ·
+  `app/uikit/{page.tsx,uikit.css}`.
+- **Refs:** `Screenshots/02_LOM/0{1..4}.png` (current live + the 3 drafts the user
+  likes). Live page being rebuilt: pharma.market360.ai/influencers/[id].
+- **Design spec:** `DESIGN-SYSTEM.md`. **Consilium illustrations:** session path in §3C.
 
----
-
-*Written 2026-06-03 (rev 5). Resume: read §1–§2 (~3 min), then §3.*
+*Written 2026-06-04 (rev 6). Resume: read §1–§2 (~3 min), then §3.*
