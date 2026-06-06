@@ -1,4 +1,4 @@
-# HANDOFF — sf-pharma-360 — 2026-06-04 (rev 6)
+# HANDOFF — sf-pharma-360 — 2026-06-06 (rev 7)
 
 > **Entry point.** New session reads this **FIRST**, then `CLAUDE.md`,
 > then `DESIGN-SYSTEM.md`. Dev server: `.claude/launch.json` → port
@@ -59,17 +59,55 @@ Both **Design sandbox** & **UIKit** are Live and linked. The pill
 (`components/service-menu.tsx`) uses Next **`<Link>`** (basePath-aware) — a raw
 `<a href>` linked to the domain root on Pages (the bug we fixed).
 
-### DOL detail `/dols/[id]` — FIRST ITERATION shipped
+### DOL detail `/dols/[id]` — REDESIGNED per client video review (2026-06-06)
 `app/dols/[id]/page.tsx` (static-export via `generateStaticParams` over the 9
 DOLs) → `components/v2/dol-detail.tsx` + `app/dols/[id]/detail.css`. Mock detail
-data: `data/dol-detail.ts` (`buildDetail(dol)`, deterministic).
-Sections: back-link · **profile** (avatar, tags, bio, CTAs) + right
-**Audience snapshot** (per-channel followers/eng%/Δ) · **two-tile toolbar**
-(channel tabs — reuse `.ch-tab` with the channel-colour active underline |
-search + date range + ⋮, empty space between) · **KPI strip** · Brands ·
-Discussed conditions / Medications tiles · Top hashtags / Key topics (bars) ·
-Per-post averages · Top commenters. Reachable by **direct URL only** (cards on
-`/dols` don't link to it yet). All English, v2 dark system.
+data: `data/dol-detail.ts` (`buildDetail(dol)`, deterministic). All English, v2
+dark. **Reachable by direct URL only** — list cards don't link yet (see §3).
+Shipped this session from Vsevolod's feedback:
+- **Sticky "прилипала" bar** (`top:80`, below the global topbar) — **3 zones**
+  per the AAYED reference (Screenshots/02_LOM or transcript): LEFT avatar + name
+  + "Xk audience · N channels" (always visible) · CENTER channel switcher · RIGHT
+  tools (search + date range + ⋮). CSS = a `1fr auto 1fr` grid so tabs stay
+  centred. (Earlier reveal-on-scroll attempt dropped — client wanted identity
+  always shown.)
+- **Audience snapshot**: **real social logos** (hand-authored inline-SVG app
+  tiles in `components/v2/brand-logos.tsx` → `SocialLogo`, deliberately NOT
+  Tabler) + a **Sparkline of audience growth** (`+abs ↑pct% vs prev period`,
+  replaces the old red/green pill) + per-channel followers/eng%/Δ. Search bigger.
+- **Brands**: clickable **logo chips** (`BrandMark` = brand-colour monogram
+  tile; no open pharma-logo set exists — real assets can drop in later).
+- **Conditions / Medications tiles**: relevant Tabler glyph per topic +
+  **mention-trend Sparkline** + **dotted-underline count** signalling clickable.
+  Custom line-illustrations CANCELLED (see §3 note). Hashtag/topic rank rows are
+  clickable too (dotted labels).
+- **Mentions drawer** (`components/v2/mentions-drawer.tsx`): right slide-in panel
+  with real social logos + dates + ♥/💬 — replaces the old modal popup. Opened
+  by any topic/brand/hashtag. Mock samples via `mentionsFor(dol,label)`.
+- **Audience-reaction zone**: dark band (`.dd-reaction`, amber dot) wrapping
+  Per-post averages (reused `.metric` + Sparkline) + Top commenters —
+  philosophy: light surfaces = what the DOL posts, dark = audience reaction.
+- **DRY refactor (was §3A):** `dd-kpi→.kpi`, `dd-tag→.tag`, `dd-search→.search`,
+  `dd-pp→.metric`, `dd-icon-btn→.v2-icon-btn`. Genuinely-new `.dd-*` kept.
+- New data: `audienceTrend`, `audienceGrowth`, per-topic `trend`,
+  `Mention`/`mentionsFor` in `data/dol-detail.ts`. `BRAND_META`/`BRANDS` +
+  per-DOL `brands` now live in **`data/dols.ts`** (single source for the Brands
+  filter + logo chips).
+
+### DOLs list `/dols` — feedback batch DONE (2026-06-06)
+From Vsevolod's video, all shipped in `components/v2/{dashboard,influencer-card,
+filter-panel}.tsx` + `app/dols/v2.css`:
+- **Favorites:** ⭐ star on each card (top-right, always visible; amber when on),
+  persisted to `localStorage["sf-pharma-360:favorites"]`. **My Favorites** toggle
+  at the top of the filter panel (count = #starred) filters to them.
+- **Brands filter** (left) — array-membership filter on `Dol.brands`
+  (special-cased alongside `channels` in dashboard + `FilterSection` tally).
+- **Compare = hover checkbox** (NOT a kebab): on card hover a checkbox appears →
+  multi-select (max 4) → floating **Compare bar** (bottom-centre, enabled ≥2) +
+  a teal ring on selected cards (`.card.is-comparing`). The old ⋮ kebab is gone;
+  a hover-only **Report** button sits beside the star.
+- **Cards link to detail:** whole card is a **stretched `<Link>`** (`.card-link`,
+  z-1); interactive controls (channel tabs, star, checkbox, report) sit at z-2.
 
 ---
 
@@ -90,52 +128,63 @@ Per-post averages · Top commenters. Reachable by **direct URL only** (cards on
 > `innerWidth` evals intermittently report a **4px window** (stale ctx) — trust
 > **screenshots**, not eval-measured sizes. Preview **screenshots go blank after
 > a programmatic scroll** (flaky) — verify lower sections via a DOM-count eval or
-> in a real browser. Pages 404s get **edge-cached** — use a `?v=` cache-bust to
-> confirm a fresh deploy.
+> in a real browser. **IntersectionObserver callbacks never fire** in the preview
+> env (tested 2026-06-06) — use a **scroll listener** for scroll-driven reveals.
+> **Dev server has NO basePath** — routes are `/dols/…`, not `/sf-pharma-360/dols/…`
+> (basePath only applies to the exported build). Pages 404s get **edge-cached** —
+> use a `?v=` cache-bust to confirm a fresh deploy.
 
 ---
 
 ## 3. NEXT SESSION — plan (resume here)
 
-We just did a **component-reuse REVIEW** of the DOL detail page. The page works
-but I **duplicated** a few styles that already exist in `v2.css`. Refactor +
-finish the page:
+Both the **detail page** and the **`/dols` list** feedback batches (§1) are
+**DONE & verified in preview** — **not deployed yet** (deploy on the user's
+"Пушками деплой"). Decided with the client: **no kebab** — Compare is the hover
+checkbox flow, Report is a direct hover button (one action ≠ worth a menu).
 
-**(A) Refactor DOL detail to reuse v2 components (DRY):**
-| Duplicated (`dd-*`) | Reuse instead |
-|---|---|
-| `.dd-kpi` KPI tiles | `.kpi` (+ `.kpi-icon/val/label/delta`; `KpiHero` pattern) |
-| `.dd-tag` tags | `.tag` / `.tags` |
-| `.dd-search` | `.search` |
-| `.dd-pp` per-post metrics | `.metric` (+ `.metric-spark` / `Sparkline` component) |
-| `.dd-icon-btn` (⋮) | `.v2-icon-btn` (40×40 standard) |
-Genuinely-new, keep as-is: Audience snapshot, topic tiles, rank-bars, profile header.
+**Remaining / stubs to finish next:**
+- **Compare view.** The checkbox selection + floating Compare bar work, but the
+  **Compare button is a stub** (no destination yet). Build the actual compare
+  view (old SF had an N-up metric comparison). Selection state =
+  `Dashboard.compare: string[]` (max 4).
+- **Report action.** The per-card hover **Report** button + the detail "Add to
+  report" CTA are **visual stubs** — wire to the report builder when ready.
+- **Deploy** to GH Pages after client sign-off.
 
-**(B) Real brand logos in the Audience snapshot.** Currently `channelMeta`
-(Tabler brand glyphs). User wants **real logos** ("не Tabler") on the RIGHT
-snapshot — inline simple-icons SVGs. **Tabs keep our channel glyphs** (user OK).
+**Nice-to-haves (note only, not requested):** persist compare selection across
+reloads; "select all visible"; a search box inside the Brands filter if the list
+grows; touch-device affordance for the hover controls (currently shown via
+`@media (hover:none)`).
 
-**(C) Disease / Medication line illustrations.** **Consilium already ran** (this
-session) — Gemini + Codex returned concepts at
-`/Users/oleg/Dev/oz/consilium/sessions/2026-06-04-dol-disease-line-illustrations/`
-(`02b-gemini.md`, `02c-raw.txt` — **NOT yet synthesized/cleaned**). Next:
-synthesize → write `99-final` → **generate the line-art via nano-banana**
-(Gemini image gen) → replace the placeholder `.dd-topic-art` sparkle icons.
+**(4) Wire list cards → `/dols/[id]`** — make `InfluencerCard` a
+`<Link href={`/dols/${d.id}`}>` (cards currently don't link; detail is direct-URL
+only). Keep the channel-tab clicks / menu from triggering navigation.
 
-**(D) Wire `/dols` influencer cards → `/dols/[id]`** (the InfluencerCard in
-`components/v2/influencer-card.tsx`; make the card a `<Link href={`/dols/${d.id}`}>`).
-
-Open priority question for the user: do A+B+C+D in one pass, or order them.
+**Resolved / cancelled this round:**
+- Mentions interaction = **drawer** (done on detail). ✓
+- Custom disease/medication **line-illustrations CANCELLED** by client ("скорее
+  нет, меня устраивает"). The old Consilium session
+  (`2026-06-04-dol-disease-line-illustrations/`) is **dead** — don't generate.
+- Plates/cards stay **dark** (no lightening) — client likes the current look; a
+  light/dark toggle is a *future* top-bar item, not now.
+- Strategy aside (W460 leftover in the export PDF; idea to give influencers the
+  tool free for media-kits) = **context only, not a design task**.
 
 ---
 
 ## 4. Key files
 
 - **DOL detail:** `app/dols/[id]/page.tsx` · `components/v2/dol-detail.tsx` ·
-  `app/dols/[id]/detail.css` · `data/dol-detail.ts`. Chrome inherited from
-  `app/dols/layout.tsx` (`.v2-root` + `AppBgV2` + `SiteHeaderV2` + `.v2-shell`).
-- **DOLs list:** `app/dols/page.tsx` → `components/v2/dashboard.tsx`. Tokens +
-  reusable component classes: `app/dols/v2.css` (`.kpi`, `.tag`, `.metric`,
+  `app/dols/[id]/detail.css` · `data/dol-detail.ts` · `components/v2/brand-logos.tsx`
+  (`SocialLogo` real logos + `BrandMark`) · `components/v2/mentions-drawer.tsx`.
+  Chrome inherited from `app/dols/layout.tsx` (`.v2-root` + `AppBgV2` +
+  `SiteHeaderV2` + `.v2-shell`).
+- **DOLs list (next batch lives here):** `app/dols/page.tsx` →
+  `components/v2/dashboard.tsx` · `components/v2/influencer-card.tsx` (favorites
+  star, hover Compare/Report, card→detail Link) · `components/v2/filter-panel.tsx`
+  + `FILTER_DEFS`/`Dol.brands` in `data/dols.ts` (Brands + My Favorites filters).
+  Tokens + reusable classes: `app/dols/v2.css` (`.kpi`, `.tag`, `.metric`,
   `.ch-tab`, `.search`, `.v2-icon-btn`, `.toolbar`, …).
 - **AI FAB / loader:** `components/ai-assistant-constellation.{tsx,css}` ·
   `components/ai-assistant.css` (base `.ai-fab`) · `components/floating-fabs.tsx`
@@ -143,7 +192,10 @@ Open priority question for the user: do A+B+C+D in one pass, or order them.
 - **Sandbox / UIKit:** `app/sandbox/{page.tsx,sandbox.css}` ·
   `app/uikit/{page.tsx,uikit.css}`.
 - **Refs:** `Screenshots/02_LOM/0{1..4}.png` (current live + the 3 drafts the user
-  likes). Live page being rebuilt: pharma.market360.ai/influencers/[id].
-- **Design spec:** `DESIGN-SYSTEM.md`. **Consilium illustrations:** session path in §3C.
+  likes). Live page being rebuilt: pharma.market360.ai/influencers/[id]. The
+  audience-snapshot / sticky-header references the client showed are in this
+  session's transcript (Tina Karol growth popup + AAYED sticky header + snapshot).
+- **Design spec:** `DESIGN-SYSTEM.md`.
 
-*Written 2026-06-04 (rev 6). Resume: read §1–§2 (~3 min), then §3.*
+*Written 2026-06-06 (rev 7). Resume: read §1–§2 (~3 min), then §3 (the `/dols`
+list batch). Detail page is done; deploy pending the user's go.*

@@ -2,15 +2,29 @@
 
 import { useState } from "react";
 import type { CSSProperties } from "react";
+import Link from "next/link";
 import { Icons, channelMeta, tierStar } from "./icons";
 import { Sparkline } from "./sparkline";
 import { TIERS, fmt, type Dol } from "@/data/dols";
 
-/* InfluencerCard — verbatim port from the v2 source bundle
- * (project/app/card.jsx). Per-card tier color drives the
- * border gradient + glow + avatar ring via CSS var --tier-color.
- */
-export function InfluencerCard({ d }: { d: Dol }) {
+/* InfluencerCard — v2 card. The whole card is a stretched link to the
+ * DOL detail page; interactive controls (favorite star, compare checkbox,
+ * report button, channel tabs) sit above the link via z-index. */
+export function InfluencerCard({
+  d,
+  isFav = false,
+  onToggleFav,
+  inCompare = false,
+  onToggleCompare,
+  onReport,
+}: {
+  d: Dol;
+  isFav?: boolean;
+  onToggleFav?: (id: string) => void;
+  inCompare?: boolean;
+  onToggleCompare?: (id: string) => void;
+  onReport?: (id: string) => void;
+}) {
   const tier = TIERS[d.tier];
   const [active, setActive] = useState(d.primary);
   const chMeta = channelMeta[active];
@@ -30,11 +44,45 @@ export function InfluencerCard({ d }: { d: Dol }) {
   const TierStar = tierStar[tier.star];
 
   return (
-    <div className="card" style={{ "--tier-color": tier.color } as CSSProperties}>
+    <div
+      className={"card" + (inCompare ? " is-comparing" : "")}
+      style={{ "--tier-color": tier.color } as CSSProperties}
+    >
+      {/* stretched link — whole card navigates to detail */}
+      <Link href={`/dols/${d.id}`} className="card-link" aria-label={`Open ${d.name}`} />
       <div className="card-glow" />
 
-      {/* top row — avatar + name/handle beside it (beads removed; the
-       * channel row below the bio is the single channel surface). */}
+      {/* hover/persistent actions (above the link) */}
+      <div className="card-actions">
+        <button
+          type="button"
+          className={"card-act card-check" + (inCompare ? " on" : "")}
+          aria-pressed={inCompare}
+          title="Select to compare"
+          onClick={() => onToggleCompare?.(d.id)}
+        >
+          <Icons.check />
+        </button>
+        <button
+          type="button"
+          className="card-act card-report"
+          title="Create report"
+          onClick={() => onReport?.(d.id)}
+        >
+          <Icons.doc />
+        </button>
+        <button
+          type="button"
+          className={"card-fav" + (isFav ? " on" : "")}
+          aria-pressed={isFav}
+          title={isFav ? "Remove from favorites" : "Add to favorites"}
+          onClick={() => onToggleFav?.(d.id)}
+        >
+          {isFav ? <Icons.starFull /> : <Icons.star />}
+        </button>
+      </div>
+
+      {/* top row — avatar + name/handle */}
       <div className="card-top">
         <div className="id-cluster">
           <div className="avatar">
@@ -55,13 +103,9 @@ export function InfluencerCard({ d }: { d: Dol }) {
             </div>
           </div>
         </div>
-        <button className="menu-btn" aria-label="More">
-          <Icons.dots />
-        </button>
       </div>
 
-      {/* tags — 3 colour roles: tier (size-ranked ramp + graduated star),
-       * specialty (sphere, fixed violet), type+group (neutral metadata). */}
+      {/* tags */}
       <div className="tags">
         <span className="tag tier">
           <TierStar className="tier-star" />
@@ -88,6 +132,7 @@ export function InfluencerCard({ d }: { d: Dol }) {
           return (
             <button
               key={c}
+              type="button"
               className={"ch-tab" + (c === active ? " active" : "")}
               style={{ "--ch-color": channelMeta[c].color } as CSSProperties}
               title={channelMeta[c].name}

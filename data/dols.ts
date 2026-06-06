@@ -38,7 +38,24 @@ export type Dol = {
   spark: number[];
   engSpark: number[];
   bucket: Bucket;
+  brands: string[];
 };
+
+/* Brand directory — pharma names a metabolic-medicine KOL would mention.
+ * Single source of truth (detail page + Brands filter + logo chips).
+ * No open icon set for pharma logos → `BrandMark` renders a brand-colour
+ * monogram tile (honest wordmark; real assets can drop in later). */
+export const BRAND_META: Record<string, { color: string; mono: string }> = {
+  "Novo Nordisk":         { color: "#001965", mono: "N" },
+  "Eli Lilly":            { color: "#D52B1E", mono: "L" },
+  "Pfizer":               { color: "#007AB0", mono: "P" },
+  "AstraZeneca":          { color: "#7A1B8B", mono: "A" },
+  "Sanofi":               { color: "#7A00E6", mono: "S" },
+  "Boehringer Ingelheim": { color: "#00786A", mono: "B" },
+  "Bayer":                { color: "#10384F", mono: "B" },
+  "Merck":                { color: "#00857C", mono: "M" },
+};
+export const BRANDS = Object.keys(BRAND_META);
 
 /* Tier = audience-size ladder. Color ramps warm→cool with size
  * (small = orange, big = blue); star fills up with size. Both signal
@@ -73,7 +90,7 @@ function spark(seed: number, n = 12, vol = 0.4): number[] {
   return out;
 }
 
-type DolSeed = Omit<Dol, "spark" | "engSpark" | "bucket">;
+type DolSeed = Omit<Dol, "spark" | "engSpark" | "bucket" | "brands">;
 
 const RAW: DolSeed[] = [
   /* Real names sourced from pharma.market360.ai/influencers
@@ -194,6 +211,11 @@ export const DOLS: Dol[] = RAW.map((d) => ({
   spark: spark(d.seed, 12, 0.42),
   engSpark: spark(d.seed + 5, 12, 0.5),
   bucket: bucketFor(d.metrics.followers),
+  // 3–6 brands rotated by seed (deterministic)
+  brands: Array.from(
+    { length: 3 + (d.seed % 4) },
+    (_, i) => BRANDS[(d.seed + i) % BRANDS.length],
+  ),
 }));
 
 export type FilterDef =
@@ -214,6 +236,7 @@ export const FILTER_DEFS: FilterDef[] = [
   { key: "gender",   label: "Gender", type: "check", options: ["Male", "Female"] },
   { key: "channels", label: "Channel", type: "chips",
     options: ["facebook", "instagram", "x", "linkedin", "youtube", "tiktok", "threads"] },
+  { key: "brands",   label: "Brands", type: "check", options: BRANDS },
 ];
 
 export type SortDir = "asc" | "desc";

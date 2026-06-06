@@ -28,6 +28,11 @@ type FilterPanelProps = {
    * sticky "Show N" apply button. Both no-ops / hidden on desktop. */
   onClose?: () => void;
   resultCount?: number;
+  /* favorites-only toggle (client-side selection, not a Dol field).
+   * Optional so the UIKit catalog can render the panel without it. */
+  favOnly?: boolean;
+  onToggleFavOnly?: () => void;
+  favCount?: number;
 };
 
 export function FilterPanel({
@@ -36,14 +41,17 @@ export function FilterPanel({
   onClear,
   onClose,
   resultCount,
+  favOnly = false,
+  onToggleFavOnly,
+  favCount = 0,
 }: FilterPanelProps) {
   const total = Object.values(filters).reduce((a, v) => a + v.length, 0);
   return (
     <aside className="filters">
       <div className="filter-head">
         <h3>Filters</h3>
-        <button className="filter-clear" disabled={!total} onClick={onClear}>
-          {total ? "Clear all" : "No filters"}
+        <button className="filter-clear" disabled={!total && !favOnly} onClick={onClear}>
+          {total || favOnly ? "Clear all" : "No filters"}
         </button>
         {/* drawer-only close (X) — hidden on desktop via CSS */}
         <button
@@ -56,6 +64,20 @@ export function FilterPanel({
       </div>
 
       <div className="filter-sections">
+        {/* My Favorites — quick toggle (client-side selection) */}
+        <button
+          type="button"
+          className={"filter-fav" + (favOnly ? " on" : "")}
+          aria-pressed={favOnly}
+          onClick={() => onToggleFavOnly?.()}
+        >
+          <span className="filter-fav-ico">
+            {favOnly ? <Icons.starFull /> : <Icons.star />}
+          </span>
+          <span className="filter-fav-label">My Favorites</span>
+          <span className="filter-fav-count">{favCount}</span>
+        </button>
+
         {FILTER_DEFS.map((def, i) => (
           <FilterSection
             key={def.key as string}
@@ -95,6 +117,8 @@ function FilterSection({
     DOLS.filter((d: Dol) =>
       def.key === "channels"
         ? d.channels.includes(opt as Channel)
+        : def.key === "brands"
+        ? d.brands.includes(opt)
         : (d as unknown as Record<string, unknown>)[def.key as string] === opt
     ).length;
 
