@@ -139,20 +139,23 @@ filter-panel}.tsx` + `app/dols/v2.css`:
 ## 3. NEXT SESSION — plan (resume here)
 
 Both the **detail page** and the **`/dols` list** feedback batches (§1) are
-**DONE & verified in preview** — **not deployed yet** (deploy on the user's
-"Пушками деплой"). Decided with the client: **no kebab** — Compare is the hover
-checkbox flow, Report is a direct hover button (one action ≠ worth a menu).
+**DONE, reviewed & DEPLOYED** (push to main → GH Actions, 2026-06-06; commit
+`51f7451`). A code-review pass (superpowers:code-reviewer) ran and its findings
+were applied (11px-min caption, modal/drawer body-scroll-lock, on-grid spacing,
+`type=button`, Pfizer chip contrast, compare-cap toast, auto-close compare <2).
+Decided with the client: **no kebab** — Compare is the hover checkbox flow,
+Report is a direct hover button (one action ≠ worth a menu).
 
-**Remaining / stubs to finish next:**
-- **Compare view.** The checkbox selection + floating Compare bar work, but the
-  **Compare button is a stub** (no destination yet). Build the actual compare
-  view (old SF had an N-up metric comparison). Selection state =
-  `Dashboard.compare: string[]` (max 4).
-- **Report action.** The per-card hover **Report** button + the detail "Add to
-  report" CTA are **visual stubs** — wire to the report builder when ready.
-- **Deploy** to GH Pages after client sign-off.
+**Done this round (was "remaining"):**
+- ✅ **Compare view** — `components/v2/compare-modal.tsx`: column compare of the
+  selected DOLs, per-metric leader highlight, remove-column, body-scroll-lock.
+  Opened from the floating Compare bar (`Dashboard.compare: string[]`, max 4).
+- ⚠️ **Report / Export = toast stubs.** Per-card Report, detail Add-to-report /
+  Watchlist / Export, and CompareModal "Create report" all fire a transient
+  toast (`.v2-toast`). **Real wiring belongs in the report-builder** (sibling
+  `sfg-reports` project) — intentionally out of scope here.
 
-**Nice-to-haves (note only, not requested):** persist compare selection across
+**Still open / nice-to-have (not requested):** persist compare selection across
 reloads; "select all visible"; a search box inside the Brands filter if the list
 grows; touch-device affordance for the hover controls (currently shown via
 `@media (hover:none)`).
