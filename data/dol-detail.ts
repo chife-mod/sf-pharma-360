@@ -4,11 +4,12 @@
 
 import { DOLS, type Channel, type Dol } from "./dols";
 
-export type AudienceRow = { channel: Channel; followers: number; eng: number; delta: number };
+export type AudienceRow = { channel: Channel; followers: number; eng: number; delta: number; trend: number[]; posts: number; comments: number; commenters: number };
 export type TopicChip = { id: string; label: string; count: number; tint: TopicTint; trend: number[] };
 export type RankItem = { label: string; value: number };
 export type PerPost = { key: string; label: string; value: string; topic: string; up: boolean; spark: number[] };
 export type Commenter = { name: string; handle: string; img: string };
+export type BrandStat = { brand: string; views: number; likes: number; comments: number };
 
 /* a single post/comment surfaced in the mentions drawer */
 export type Mention = {
@@ -22,6 +23,22 @@ export type Mention = {
 
 export type TopicTint = "teal" | "cyan" | "violet" | "magenta" | "amber" | "blue";
 
+/* Everything that should re-read when the channel switcher changes lives
+ * here — so picking Instagram vs Facebook redraws diseases, medicaments,
+ * hashtags, topics, per-post averages, brand views and the comment blocks,
+ * not just the KPI strip. Bigger channels (more audience share) show more
+ * activity; values + ordering differ per channel for a live, real feel. */
+export type ChannelSections = {
+  diseases: TopicChip[];
+  medications: TopicChip[];
+  hashtags: RankItem[];
+  topics: RankItem[];
+  perPost: PerPost[];
+  brandStats: BrandStat[];
+  commentsInsights: RankItem[];
+  commentersInterest: RankItem[];
+};
+
 export type DolDetail = {
   audience: AudienceRow[];
   /** total-audience growth, last 12 periods (for the snapshot sparkline) */
@@ -30,11 +47,9 @@ export type DolDetail = {
   audienceGrowth: { abs: number; pct: number; up: boolean };
   totals: { followers: number; posts: number; comments: number; commenters: number; engagement: number };
   brands: string[];
-  diseases: TopicChip[];
-  medications: TopicChip[];
-  hashtags: RankItem[];
-  topics: RankItem[];
-  perPost: PerPost[];
+  /** channel → all the per-channel section data (KPIs come off `audience`) */
+  byChannel: Record<Channel, ChannelSections>;
+  /** people, not numbers — kept channel-independent */
   commenters: Commenter[];
 };
 
@@ -60,6 +75,9 @@ const TOPICS = [
   "Surgery outcomes", "Medication efficacy", "Diet & nutrition", "Patient stories",
   "Side effects", "Clinical evidence", "Pre-op guidance", "Post-op recovery",
 ];
+/* audience-reaction blocks (mirror the original's dark section) */
+const COMMENT_INSIGHTS = ["Questions", "Personal stories", "Praise & support", "Concerns", "Tips & advice", "Myth-busting"];
+const COMMENTER_INTERESTS = ["Health & Wellness", "Nutrition", "Fitness", "Parenting", "Lifestyle", "Beauty"];
 
 const COMMENTER_FIRST = ["Maya", "Omar", "Lina", "Yusuf", "Hana", "Karim", "Noor", "Sami", "Rana", "Tariq"];
 
@@ -85,6 +103,68 @@ function trendLine(seed: number, n = 10, up = 0.58): number[] {
   return out;
 }
 
+const pick = <T,>(arr: T[], n: number) => arr.slice(0, n);
+const slug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+/* Build one channel's worth of section data. `intensity` scales every count
+ * with that channel's audience share, so a small channel reads quieter than a
+ * big one; per-channel seeds also reshuffle the ranked lists. Deterministic. */
+function buildSections(dol: Dol, channel: Channel, intensity: number): ChannelSections {
+  const r = rng(dol.seed * 7 + 13 + hash(channel) * 31 + 1);
+  // scaled integer in [lo,hi] * intensity, never below 1
+  const k = (lo: number, hi: number) => Math.max(1, Math.round((lo + r() * (hi - lo)) * intensity));
+  const ch = hash(channel);
+
+  const diseases: TopicChip[] = pick(DISEASES, 6).map((label, i) => ({
+    id: slug(label),
+    label,
+    count: k(6, 66),
+    tint: TINTS[i % TINTS.length],
+    trend: trendLine(dol.seed * 13 + i * 31 + 1 + ch, 10, 0.5),
+  }));
+  const medications: TopicChip[] = pick(MEDICATIONS, 5).map((label, i) => ({
+    id: slug(label),
+    label,
+    count: k(4, 44),
+    tint: TINTS[(i + 2) % TINTS.length],
+    trend: trendLine(dol.seed * 17 + i * 23 + 5 + ch, 10, 0.55),
+  }));
+
+  const hashtags: RankItem[] = pick(HASHTAGS, 8)
+    .map((label) => ({ label, value: k(4, 94) }))
+    .sort((a, b) => b.value - a.value);
+  const topics: RankItem[] = pick(TOPICS, 7)
+    .map((label) => ({ label, value: k(2, 42) }))
+    .sort((a, b) => b.value - a.value);
+
+  const views = Math.round((18000 + r() * 60000) * intensity);
+  const likes = Math.round((600 + r() * 2200) * intensity);
+  const cpp = Math.max(1, Math.round((20 + r() * 70) * intensity));
+  const perPost: PerPost[] = [
+    { key: "views", label: "Average views per post", value: fmtK(views), topic: fmtK(Math.round(views * 1.1)), up: true, spark: trendLine(dol.seed * 3 + 2 + ch, 10, 0.6) },
+    { key: "likes", label: "Average likes per post", value: fmtK(likes), topic: fmtK(Math.round(likes * 1.05)), up: true, spark: trendLine(dol.seed * 5 + 4 + ch, 10, 0.56) },
+    { key: "comments", label: "Average comments per post", value: String(cpp), topic: String(cpp + 1), up: r() > 0.4, spark: trendLine(dol.seed * 7 + 6 + ch, 10, 0.48) },
+  ];
+
+  const brandStats: BrandStat[] = dol.brands
+    .map((brand) => ({
+      brand,
+      views: Math.round((5000 + r() * 80000) * intensity),
+      likes: Math.round((200 + r() * 5000) * intensity),
+      comments: Math.max(1, Math.round((10 + r() * 400) * intensity)),
+    }))
+    .sort((a, b) => b.views - a.views);
+
+  const commentsInsights: RankItem[] = pick(COMMENT_INSIGHTS, 5)
+    .map((label) => ({ label, value: k(2, 42) }))
+    .sort((a, b) => b.value - a.value);
+  const commentersInterest: RankItem[] = pick(COMMENTER_INTERESTS, 5)
+    .map((label) => ({ label, value: k(1, 15) }))
+    .sort((a, b) => b.value - a.value);
+
+  return { diseases, medications, hashtags, topics, perPost, brandStats, commentsInsights, commentersInterest };
+}
+
 export function buildDetail(dol: Dol): DolDetail {
   const r = rng(dol.seed * 7 + 13);
 
@@ -93,12 +173,26 @@ export function buildDetail(dol: Dol): DolDetail {
   const totalFollowers = Math.round(base * (3 + r() * 9)); // richer than the list number
   const weights = dol.channels.map(() => 0.3 + r());
   const wsum = weights.reduce((a, b) => a + b, 0);
-  const audience: AudienceRow[] = dol.channels.map((channel, i) => ({
-    channel,
-    followers: Math.round((weights[i] / wsum) * totalFollowers),
-    eng: +(1 + r() * 7).toFixed(2),
-    delta: +((r() - 0.4) * 18).toFixed(1),
-  }));
+  const posts = 120 + Math.round(r() * 900);
+  const comments = 200 + Math.round(r() * 4000);
+  const commentersN = Math.round(comments * (0.55 + r() * 0.3));
+
+  // per-channel rows carry their own posts/comments/commenters so the channel
+  // switcher can drive the KPI strip (followers/posts/… update per network).
+  const audience: AudienceRow[] = dol.channels.map((channel, i) => {
+    const followers = Math.round((weights[i] / wsum) * totalFollowers);
+    const share = followers / Math.max(1, totalFollowers);
+    return {
+      channel,
+      followers,
+      eng: +(0.01 + r() * 0.7).toFixed(2),
+      delta: +((r() - 0.4) * 18).toFixed(1),
+      trend: trendLine(dol.seed * 29 + i * 37 + 3, 9, 0.55),
+      posts: Math.max(1, Math.round(posts * share * (0.7 + r() * 0.6))),
+      comments: Math.round(comments * share * (0.7 + r() * 0.6)),
+      commenters: Math.round(commentersN * share * (0.7 + r() * 0.6)),
+    };
+  });
 
   // headline audience growth + the 12-point trend behind it
   const growthPct = +(0.6 + r() * 5.4).toFixed(1);
@@ -108,42 +202,17 @@ export function buildDetail(dol: Dol): DolDetail {
     up: true,
   };
 
-  const posts = 120 + Math.round(r() * 900);
-  const comments = 200 + Math.round(r() * 4000);
-  const commentersN = Math.round(comments * (0.55 + r() * 0.3));
+  const sortedAudience = audience.sort((a, b) => b.followers - a.followers);
 
-  const pick = <T,>(arr: T[], n: number) => arr.slice(0, n);
-
-  const diseases: TopicChip[] = pick(DISEASES, 6).map((label, i) => ({
-    id: label.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-    label,
-    count: 6 + Math.round(r() * 60),
-    tint: TINTS[i % TINTS.length],
-    trend: trendLine(dol.seed * 13 + i * 31 + 1, 10, 0.5),
-  }));
-  const medications: TopicChip[] = pick(MEDICATIONS, 5).map((label, i) => ({
-    id: label.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-    label,
-    count: 4 + Math.round(r() * 40),
-    tint: TINTS[(i + 2) % TINTS.length],
-    trend: trendLine(dol.seed * 17 + i * 23 + 5, 10, 0.55),
-  }));
-
-  const hashtags: RankItem[] = pick(HASHTAGS, 8)
-    .map((label) => ({ label, value: 4 + Math.round(r() * 90) }))
-    .sort((a, b) => b.value - a.value);
-  const topics: RankItem[] = pick(TOPICS, 7)
-    .map((label) => ({ label, value: 2 + Math.round(r() * 40) }))
-    .sort((a, b) => b.value - a.value);
-
-  const views = 18000 + Math.round(r() * 60000);
-  const likes = 600 + Math.round(r() * 2200);
-  const cpp = 20 + Math.round(r() * 70);
-  const perPost: PerPost[] = [
-    { key: "views", label: "Avg. views / post", value: fmtK(views), topic: fmtK(Math.round(views * 1.1)), up: true, spark: trendLine(dol.seed * 3 + 2, 10, 0.6) },
-    { key: "likes", label: "Avg. likes / post", value: fmtK(likes), topic: fmtK(Math.round(likes * 1.05)), up: true, spark: trendLine(dol.seed * 5 + 4, 10, 0.56) },
-    { key: "comments", label: "Avg. comments / post", value: String(cpp), topic: String(cpp + 1), up: r() > 0.4, spark: trendLine(dol.seed * 7 + 6, 10, 0.48) },
-  ];
+  // per-channel section data — intensity scales with the channel's audience
+  // share so a big network reads busier than a small one.
+  const byChannel = Object.fromEntries(
+    sortedAudience.map((row) => {
+      const share = row.followers / Math.max(1, totalFollowers);
+      const intensity = 0.5 + share * 1.8;
+      return [row.channel, buildSections(dol, row.channel, intensity)];
+    })
+  ) as Record<Channel, ChannelSections>;
 
   const commenters: Commenter[] = Array.from({ length: 8 }).map((_, i) => {
     const first = COMMENTER_FIRST[(dol.seed + i) % COMMENTER_FIRST.length];
@@ -152,7 +221,7 @@ export function buildDetail(dol: Dol): DolDetail {
   });
 
   return {
-    audience: audience.sort((a, b) => b.followers - a.followers),
+    audience: sortedAudience,
     audienceTrend: trendLine(dol.seed * 9 + 21, 12, 0.62),
     audienceGrowth,
     totals: {
@@ -163,11 +232,7 @@ export function buildDetail(dol: Dol): DolDetail {
       engagement: +(audience.reduce((a, b) => a + b.eng, 0) / audience.length).toFixed(2),
     },
     brands: dol.brands,
-    diseases,
-    medications,
-    hashtags,
-    topics,
-    perPost,
+    byChannel,
     commenters,
   };
 }

@@ -64,7 +64,18 @@ export function FilterPanel({
       </div>
 
       <div className="filter-sections">
-        {/* My Favorites — quick toggle (client-side selection) */}
+        {FILTER_DEFS.map((def, i) => (
+          <FilterSection
+            key={def.key as string}
+            def={def}
+            sel={filters[def.key as string] || []}
+            onToggle={onToggle}
+            openByDefault={i === 0}
+          />
+        ))}
+
+        {/* My Favorites — special, personal filter, pinned at the BOTTOM
+            with a brighter separator so it reads as different from the rest. */}
         <button
           type="button"
           className={"filter-fav" + (favOnly ? " on" : "")}
@@ -77,16 +88,6 @@ export function FilterPanel({
           <span className="filter-fav-label">My Favorites</span>
           <span className="filter-fav-count">{favCount}</span>
         </button>
-
-        {FILTER_DEFS.map((def, i) => (
-          <FilterSection
-            key={def.key as string}
-            def={def}
-            sel={filters[def.key as string] || []}
-            onToggle={onToggle}
-            openByDefault={i === 0}
-          />
-        ))}
       </div>
 
       {/* drawer-only sticky apply — hidden on desktop via CSS */}

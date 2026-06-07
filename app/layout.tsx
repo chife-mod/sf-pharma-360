@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { ServiceMenu } from "@/components/service-menu";
 import { FloatingFabs } from "@/components/floating-fabs";
+import { AnimatedFavicon } from "@/components/animated-favicon";
 
 /* One typeface across the whole product: Inter. Hierarchy comes from
  * weight + size, not from font pairing. (Geist / Inter Tight /
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${inter.variable} antialiased min-h-screen bg-background text-foreground`}
       >
         {children}
+        <AnimatedFavicon />
         <ServiceMenu />
         <FloatingFabs />
       </body>

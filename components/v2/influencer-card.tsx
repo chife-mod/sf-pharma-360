@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Icons, channelMeta, tierStar } from "./icons";
 import { Sparkline } from "./sparkline";
 import { TIERS, fmt, type Dol } from "@/data/dols";
 
-/* InfluencerCard — v2 card. The whole card is a stretched link to the
- * DOL detail page; interactive controls (favorite star, compare checkbox,
- * report button, channel tabs) sit above the link via z-index. */
+/* InfluencerCard — v2 card. The whole card is a stretched link to the DOL
+ * detail page; interactive controls sit above it via z-index. Hover reveals
+ * a Compare checkbox + a ⋮ kebab (favorites / report / dashboard / view).
+ * Favorited cards show a persistent gold star badge. */
 export function InfluencerCard({
   d,
   isFav = false,
@@ -17,6 +19,7 @@ export function InfluencerCard({
   inCompare = false,
   onToggleCompare,
   onReport,
+  onDashboard,
 }: {
   d: Dol;
   isFav?: boolean;
@@ -24,10 +27,24 @@ export function InfluencerCard({
   inCompare?: boolean;
   onToggleCompare?: (id: string) => void;
   onReport?: (id: string) => void;
+  onDashboard?: (id: string) => void;
 }) {
   const tier = TIERS[d.tier];
+  const router = useRouter();
   const [active, setActive] = useState(d.primary);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const kebabRef = useRef<HTMLDivElement>(null);
   const chMeta = channelMeta[active];
+
+  // close the kebab menu on any click outside it
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDoc = (e: MouseEvent) => {
+      if (!kebabRef.current?.contains(e.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [menuOpen]);
 
   // per-channel metric variance (feels live)
   const idx = d.channels.indexOf(active);
@@ -43,43 +60,75 @@ export function InfluencerCard({
 
   const TierStar = tierStar[tier.star];
 
+  // helper: run an action without triggering the stretched link
+  const act = (fn?: () => void) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    fn?.();
+  };
+
   return (
     <div
-      className={"card" + (inCompare ? " is-comparing" : "")}
+      className={"card" + (inCompare ? " is-comparing" : "") + (menuOpen ? " menu-open" : "")}
       style={{ "--tier-color": tier.color } as CSSProperties}
     >
       {/* stretched link — whole card navigates to detail */}
       <Link href={`/dols/${d.id}`} className="card-link" aria-label={`Open ${d.name}`} />
       <div className="card-glow" />
 
-      {/* hover/persistent actions (above the link) */}
+      {/* actions (above the link). Compare + kebab reveal on hover;
+          the gold favorite badge is persistent when favorited. */}
       <div className="card-actions">
         <button
           type="button"
-          className={"card-act card-check" + (inCompare ? " on" : "")}
+          className={"card-compare" + (inCompare ? " on" : "")}
           aria-pressed={inCompare}
-          title="Select to compare"
-          onClick={() => onToggleCompare?.(d.id)}
+          onClick={act(() => onToggleCompare?.(d.id))}
         >
-          <Icons.check />
+          <span className="card-compare-box">{inCompare ? <Icons.check /> : null}</span>
+          Compare
         </button>
-        <button
-          type="button"
-          className="card-act card-report"
-          title="Create report"
-          onClick={() => onReport?.(d.id)}
-        >
-          <Icons.doc />
-        </button>
-        <button
-          type="button"
-          className={"card-fav" + (isFav ? " on" : "")}
-          aria-pressed={isFav}
-          title={isFav ? "Remove from favorites" : "Add to favorites"}
-          onClick={() => onToggleFav?.(d.id)}
-        >
-          {isFav ? <Icons.starFull /> : <Icons.star />}
-        </button>
+
+        <div className="card-kebab-wrap" ref={kebabRef}>
+          <button
+            type="button"
+            className={"card-kebab" + (menuOpen ? " open" : "")}
+            aria-label="More actions"
+            aria-expanded={menuOpen}
+            onClick={act(() => setMenuOpen((o) => !o))}
+          >
+            <Icons.dots />
+          </button>
+          {menuOpen ? (
+            <div className="card-menu" role="menu">
+              <button type="button" className="card-menu-item" role="menuitem" onClick={act(() => { onToggleFav?.(d.id); setMenuOpen(false); })}>
+                {isFav ? <Icons.starFull /> : <Icons.star />}
+                {isFav ? "Remove from favorites" : "Add to favorites"}
+              </button>
+              <button type="button" className="card-menu-item" role="menuitem" onClick={act(() => { onReport?.(d.id); setMenuOpen(false); })}>
+                <Icons.doc /> Create report
+              </button>
+              <button type="button" className="card-menu-item" role="menuitem" onClick={act(() => { onDashboard?.(d.id); setMenuOpen(false); })}>
+                <Icons.trendUp /> Create dashboard
+              </button>
+              <button type="button" className="card-menu-item" role="menuitem" onClick={act(() => { setMenuOpen(false); router.push(`/dols/${d.id}`); })}>
+                <Icons.eye /> View details
+              </button>
+            </div>
+          ) : null}
+        </div>
+
+        {isFav ? (
+          <button
+            type="button"
+            className="card-fav-badge"
+            title="Remove from favorites"
+            aria-label="Remove from favorites"
+            onClick={act(() => onToggleFav?.(d.id))}
+          >
+            <Icons.starFull />
+          </button>
+        ) : null}
       </div>
 
       {/* top row — avatar + name/handle */}
@@ -136,7 +185,7 @@ export function InfluencerCard({
               className={"ch-tab" + (c === active ? " active" : "")}
               style={{ "--ch-color": channelMeta[c].color } as CSSProperties}
               title={channelMeta[c].name}
-              onClick={() => setActive(c)}
+              onClick={act(() => setActive(c))}
             >
               <Icon />
             </button>

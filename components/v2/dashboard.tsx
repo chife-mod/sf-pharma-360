@@ -253,6 +253,10 @@ export function Dashboard() {
                     const dol = DOLS.find((x) => x.id === id);
                     showToast(`“${dol?.name}” added to report — opens in Report Builder`);
                   }}
+                  onDashboard={(id) => {
+                    const dol = DOLS.find((x) => x.id === id);
+                    showToast(`Building dashboard for “${dol?.name}”…`);
+                  }}
                 />
               ))
             ) : (

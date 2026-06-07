@@ -10,55 +10,62 @@
   font-variant-numeric: tabular-nums;
 }
 
-.v2-root .dd-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  align-self: flex-start;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-dim);
-  text-decoration: none;
-  padding: 6px 10px 6px 6px;
-  border-radius: var(--r-pill);
-  transition: color 0.2s var(--ease), background 0.2s var(--ease);
-}
-.v2-root .dd-back:hover { color: var(--text); background: rgba(150, 170, 210, 0.06); }
-
-/* ── profile + snapshot ── */
-.v2-root .dd-top {
+/* ── hero: 3-column grid (profile · summary · by-network) with a label
+   row (back · audience title) sharing one baseline above the cards ── */
+.v2-root .dd-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 20px;
-  align-items: start;
+  grid-template-columns: repeat(5, 1fr); /* aligns to the 5-col KPI strip below */
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "back    back    audtitle audtitle audtitle"
+    "profile profile summary  network  network";
+  gap: 16px 14px;
+  align-items: stretch;
 }
+.v2-root .dd-hero-back {
+  grid-area: back; align-self: end; width: fit-content;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 17px; font-weight: 600; color: var(--text-mute);
+  text-decoration: none; transition: color 0.2s var(--ease);
+}
+.v2-root .dd-hero-back:hover { color: var(--text); }
+.v2-root .dd-hero-audtitle {
+  grid-area: audtitle; align-self: end; margin: 0;
+  font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--text);
+}
+.v2-root .dd-profile { grid-area: profile; }
+.v2-root .dd-aud-summary { grid-area: summary; }
+.v2-root .dd-aud-network { grid-area: network; }
+
+/* ── profile (full-width: avatar · identity · CTAs) ── */
 .v2-root .dd-profile {
   display: flex;
-  gap: 20px;
-  padding: 24px;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px 28px;
   border: 1px solid var(--line);
   border-radius: var(--r-xl);
   background: linear-gradient(135deg, rgba(24, 26, 40, 0.5), rgba(13, 14, 22, 0.55));
 }
 .v2-root .dd-avatar {
-  width: 88px;
-  height: 88px;
+  width: 112px;
+  height: 112px;
   flex: none;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid var(--line-strong);
 }
-.v2-root .dd-profile-main { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.v2-root .dd-profile-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
 .v2-root .dd-namerow { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .v2-root .dd-name {
   margin: 0;
   font-family: var(--font-display, inherit);
-  font-size: 26px;
+  font-size: 36px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
-.v2-root .dd-handle { font-size: 13px; color: var(--text-mute); }
+.v2-root .dd-handle { font-size: 12px; color: var(--text-mute); }
 
 .v2-root .dd-bio {
   margin: 0;
@@ -67,14 +74,14 @@
   color: var(--text-mute);
   max-width: 62ch;
 }
-.v2-root .dd-cta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.v2-root .dd-cta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
 .v2-root .dd-btn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
   padding: 9px 14px;
   border-radius: var(--r-sm);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-dim);
   background: rgba(150, 170, 210, 0.05);
@@ -91,57 +98,67 @@
 }
 .v2-root .dd-btn--primary:hover { filter: brightness(1.06); }
 
-/* snapshot */
-.v2-root .dd-snapshot {
-  display: flex;
-  flex-direction: column;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--r-xl);
-  background: var(--panel-3);
-}
+/* ── audience cards (placed via the dd-hero grid areas) ── */
+.v2-root .dd-aud-card { display: flex; flex-direction: column; padding: 20px; border: 1px solid var(--line); border-radius: var(--r-xl); background: var(--panel-3); }
+.v2-root .dd-aud-shead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.v2-root .dd-aud-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+.v2-root .dd-aud-total { margin-top: 8px; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; color: var(--text); }
+.v2-root .dd-aud-sub { margin-top: 3px; font-size: 12px; color: var(--text-mute); }
+.v2-root .dd-aud-growthrow { display: flex; align-items: baseline; gap: 8px; margin-top: 12px; }
+.v2-root .dd-aud-growth { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 600; color: var(--teal-bright); }
+.v2-root .dd-aud-growthcap { font-size: 12px; color: var(--text-faint); }
+.v2-root .dd-aud-bigspark { flex: 1; min-height: 84px; margin: 16px 0; display: flex; align-items: center; }
+.v2-root .dd-aud-engrow { display: flex; align-items: baseline; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line-soft); }
+.v2-root .dd-aud-engval { font-size: 22px; font-weight: 700; color: var(--text); }
+.v2-root .dd-aud-englbl { font-size: 12px; color: var(--text-mute); }
 .v2-root .dd-snapshot-head {
   display: flex; align-items: baseline; justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 8px;
 }
-.v2-root .dd-snapshot-title { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
+.v2-root .dd-snapshot-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
 .v2-root .dd-snapshot-sub { font-size: 12px; color: var(--text-mute); }
 
-/* total-audience growth → sparkline (replaces the old red/green pill) */
-.v2-root .dd-growth {
-  display: flex; flex-direction: column; gap: 8px;
-  padding: 14px 0 16px; margin-bottom: 2px;
-  border-bottom: 1px solid var(--line-soft);
-}
-.v2-root .dd-growth-meta { display: flex; align-items: baseline; gap: 8px; }
-.v2-root .dd-growth-abs { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
-.v2-root .dd-growth-pct { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 600; }
-.v2-root .dd-growth-pct.up { color: var(--teal-bright); }
-.v2-root .dd-growth-cap { font-size: 11px; color: var(--text-faint); margin-left: auto; }
-.v2-root .dd-growth-spark { height: 34px; }
-
 .v2-root .dd-snapshot-list { margin: 0; padding: 0; list-style: none; }
+/* per channel: audience + eng rate + trend sparkline; whole row is a link */
+/* shared column grid for the header + every channel row (kept identical
+   so columns line up). One type scale: 11 uppercase · 13 row content. */
+.v2-root .dd-snap-colhead,
 .v2-root .dd-snap-row {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  /* spread the 3 data columns across the (now 2-col-wide) card */
+  grid-template-columns: minmax(0, 1.5fr) 1fr 1fr 1.1fr;
   align-items: center;
-  gap: 10px;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--line-soft);
+  gap: 16px;
+  width: 100%;
 }
-.v2-root .dd-snap-row:last-child { border-bottom: none; }
-.v2-root .dd-snap-ch { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; color: var(--text); min-width: 0; }
-.v2-root .dd-snap-foll { font-size: 13px; font-weight: 600; color: var(--text); }
-.v2-root .dd-snap-eng { font-size: 12px; color: var(--text-mute); width: 44px; text-align: right; }
-.v2-root .dd-snap-delta { display: inline-flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; width: 48px; justify-content: flex-end; }
-.v2-root .dd-snap-delta.up { color: var(--teal-bright); }
-.v2-root .dd-snap-delta.down { color: var(--rose); }
+.v2-root .dd-snap-colhead { padding: 0 6px 8px; border-bottom: 1px solid var(--line-soft); }
+.v2-root .dd-snap-hcol { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-mute); text-align: right; white-space: nowrap; }
+.v2-root .dd-snap-htrend { text-align: left; }
+.v2-root .dd-snap-row {
+  padding: 9px 6px;
+  border: none; background: none; cursor: pointer; text-align: left;
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: var(--r-xs);
+  transition: background 0.15s var(--ease);
+}
+.v2-root .dd-snapshot-list li:last-child .dd-snap-row { border-bottom: none; }
+.v2-root .dd-snap-row:hover { background: rgba(150, 170, 210, 0.06); }
+.v2-root .dd-snap-ch { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; color: var(--text); min-width: 0; white-space: nowrap; }
+.v2-root .dd-snap-foll { font-size: 14px; font-weight: 600; color: var(--text); text-align: right; }
+.v2-root .dd-snap-eng { font-size: 14px; color: var(--text-mute); text-align: right; }
+.v2-root .dd-snap-spark { height: 20px; }
+
+/* audience-reaction bar lists (Comments insights / Commenters interest) */
+.v2-root .dd-bar-label { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-dim); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.v2-root .dd-bar-label svg { width: 15px; height: 15px; color: var(--text-mute); flex: none; }
 
 /* ── sticky bar ("прилипала") — 3 zones: identity | switcher | tools ── */
 .v2-root .dd-bar {
   position: sticky;
-  top: 80px;
+  /* 16px from the top when the menu is hidden, slides to 88 (under the menu)
+     when it reappears — driven by SiteHeaderV2 via --dd-stick-top. */
+  top: var(--dd-stick-top, 88px);
+  transition: top 0.3s ease-out;
   z-index: 30;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -155,22 +172,25 @@
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow: var(--shadow-card);
 }
-/* LEFT — identity (always visible) */
-.v2-root .dd-bar-id { display: flex; align-items: center; gap: 10px; min-width: 0; justify-self: start; }
+/* LEFT — identity: hidden until the profile scrolls out (no duplicate name) */
+.v2-root .dd-bar-id { display: flex; align-items: center; gap: 10px; min-width: 0; justify-self: start; opacity: 0; transform: translateX(-6px); pointer-events: none; transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); }
+.v2-root .dd-bar.is-stuck .dd-bar-id { opacity: 1; transform: none; pointer-events: auto; }
 .v2-root .dd-bar-avatar { width: 36px; height: 36px; flex: none; border-radius: 50%; object-fit: cover; border: 1px solid var(--line-strong); }
 .v2-root .dd-bar-idtext { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
 .v2-root .dd-bar-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .v2-root .dd-bar-meta { font-size: 11px; color: var(--text-mute); white-space: nowrap; }
 /* CENTER — channel switcher */
 .v2-root .dd-bar .channels { justify-self: center; }
-.v2-root .dd-bar .ch-tab.active::after { bottom: -4px; }
+/* active-channel underline glued to the BOTTOM EDGE of the sticky panel */
+.v2-root .dd-bar .ch-tab.active::after { bottom: -9px; }
 /* RIGHT — tools */
 .v2-root .dd-bar-controls { display: flex; align-items: center; gap: 8px; justify-self: end; }
+.v2-root .dd-bar-menuwrap { position: relative; }
 .v2-root .dd-bar-search { width: clamp(170px, 16vw, 280px); }
 .v2-root .dd-daterange {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 0 14px; height: 42px; border-radius: var(--r-sm);
-  font-size: 12px; font-weight: 500; color: var(--text-dim);
+  font-size: 14px; font-weight: 500; color: var(--text-dim);
   background: rgba(150, 170, 210, 0.05); border: 1px solid var(--line); cursor: pointer;
   white-space: nowrap; transition: all 0.2s var(--ease);
 }
@@ -182,7 +202,7 @@
 /* ── section ── */
 .v2-root .dd-section { display: flex; flex-direction: column; gap: 16px; }
 .v2-root .dd-section-head { display: flex; align-items: center; gap: 10px; }
-.v2-root .dd-section-num { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--teal); }
+.v2-root .dd-section-num { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: var(--teal); }
 .v2-root .dd-section-title { margin: 0; font-size: 17px; font-weight: 600; color: var(--text); }
 .v2-root .dd-two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
 
@@ -199,7 +219,7 @@
 .v2-root .dd-brand-chip {
   display: inline-flex; align-items: center; gap: 9px;
   padding: 8px 12px 8px 8px; border-radius: var(--r-pill);
-  font-size: 13px; font-weight: 500; color: var(--text);
+  font-size: 14px; font-weight: 500; color: var(--text);
   background: var(--raise); border: 1px solid var(--line);
   cursor: pointer; transition: transform 0.2s var(--ease), border-color 0.2s var(--ease);
 }
@@ -207,7 +227,9 @@
 .v2-root .dd-brand-name { line-height: 1; }
 
 /* ── topic tiles (diseases / medications) — clickable ── */
-.v2-root .dd-topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }
+/* fixed 4 columns so 5- and 6-tile sections both wrap to 2 rows → the
+   Diseases / Medicaments columns end up the same height. */
+.v2-root .dd-topics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-content: start; }
 .v2-root .dd-topic {
   --t: var(--teal);
   display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
@@ -229,7 +251,9 @@
   background: color-mix(in srgb, var(--t) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--t) 30%, transparent);
 }
-.v2-root .dd-topic-label { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.25; }
+/* reserve 2 lines so 1-line and 2-line labels make equal-height tiles
+   (so the Diseases / Medicaments columns line up). */
+.v2-root .dd-topic-label { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.25; min-height: 2.5em; display: grid; place-items: center; text-align: center; }
 .v2-root .dd-topic-spark { width: 100%; height: 20px; opacity: 0.9; }
 .v2-root .dd-topic-count {
   font-size: 11px; color: var(--text-faint);
@@ -248,7 +272,7 @@
 .v2-root .dd-rank-label {
   justify-self: start; max-width: 100%;
   display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  font-size: 13px; color: var(--text-dim);
+  font-size: 14px; color: var(--text-dim);
   background: none; border: none; padding: 0 0 1px; cursor: pointer;
   border-bottom: 1px dotted var(--line-strong);
   transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
@@ -277,9 +301,33 @@
 /* ── per-post averages (cards wrap the reused .metric) ── */
 .v2-root .dd-perpost { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .v2-root .dd-pp { padding: 16px; border: 1px solid var(--line); border-radius: var(--r-lg); background: rgba(150, 170, 210, 0.025); }
-.v2-root .dd-pp .metric-val { font-size: 24px; }
+.v2-root .dd-pp .metric-val { font-size: 22px; }
 .v2-root .dd-pp .metric-delta { font-size: 11px; }
 .v2-root .dd-pp .metric-delta span { white-space: nowrap; }
+
+/* ── average views per brand (metric switcher + brand logo cards) ── */
+.v2-root .dd-brandviews { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--panel); padding: 16px 18px 18px; }
+.v2-root .dd-bv-tabs { display: inline-flex; gap: 4px; padding: 3px; margin-bottom: 16px; border-radius: var(--r-sm); background: rgba(150, 170, 210, 0.06); border: 1px solid var(--line); }
+.v2-root .dd-bv-tab { padding: 6px 14px; border-radius: var(--r-xs); border: none; background: none; color: var(--text-mute); font-size: 12px; font-weight: 500; cursor: pointer; transition: color 0.15s var(--ease), background 0.15s var(--ease); }
+.v2-root .dd-bv-tab:hover { color: var(--text); }
+.v2-root .dd-bv-tab.active { background: var(--raise); color: var(--text); }
+
+/* brand cards: square white logo tile + value + thin relative bar. Auto-fill
+ * keeps tiles a tidy ~150px square (one row on wide screens), no empty gap. */
+.v2-root .dd-bv-grid { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.v2-root .dd-bv-card { display: flex; flex-direction: column; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-md); background: rgba(150, 170, 210, 0.03); transition: border-color 0.15s var(--ease), background 0.15s var(--ease); }
+.v2-root .dd-bv-card:hover { border-color: rgba(150, 170, 210, 0.22); background: rgba(150, 170, 210, 0.05); }
+/* square white tile so the dark / coloured-ink wordmark logos stay legible.
+ * padding lives on the tile with border-box so the logo's max-w/h:100% is
+ * measured INSIDE the padding → wide lockups never clip at the edges. */
+.v2-root .dd-bv-logo { display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; border-radius: var(--r-md); background: #fff; overflow: hidden; padding: 14px; box-sizing: border-box; }
+.v2-root .dd-bv-logo img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
+.v2-root .dd-bv-wordmark { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; line-height: 1; text-align: center; padding: 0 10px; }
+.v2-root .dd-bv-val { font-size: 22px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1; }
+.v2-root .dd-bv-cap { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); margin-top: -4px; }
+.v2-root .dd-bv-bar { height: 4px; border-radius: var(--r-pill); background: rgba(150, 170, 210, 0.10); overflow: hidden; margin-top: 2px; }
+.v2-root .dd-bv-bar span { display: block; height: 100%; border-radius: var(--r-pill); background: linear-gradient(90deg, var(--teal), var(--cyan)); }
+@media (max-width: 480px) { .v2-root .dd-bv-grid { grid-template-columns: repeat(2, 1fr); } }
 
 /* ── top commenters ── */
 .v2-root .dd-commenters { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
@@ -288,7 +336,7 @@
   padding: 16px 10px; border: 1px solid var(--line); border-radius: var(--r-lg); background: rgba(150, 170, 210, 0.02);
 }
 .v2-root .dd-commenter img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line-strong); }
-.v2-root .dd-commenter-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.v2-root .dd-commenter-name { font-size: 14px; font-weight: 600; color: var(--text); }
 .v2-root .dd-commenter-handle { font-size: 11px; color: var(--text-faint); }
 
 /* ── mentions drawer ── */
@@ -311,7 +359,7 @@
 .v2-root .dd-drawer-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px; border-bottom: 1px solid var(--line); }
 .v2-root .dd-drawer-headmain { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .v2-root .dd-drawer-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent, var(--teal)); }
-.v2-root .dd-drawer-title { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
+.v2-root .dd-drawer-title { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
 .v2-root .dd-drawer-sub { font-size: 12px; color: var(--text-mute); }
 .v2-root .dd-drawer-body { flex: 1 1 auto; overflow-y: auto; padding: 6px 14px 24px; scrollbar-width: thin; scrollbar-color: rgba(150, 170, 210, 0.22) transparent; }
 .v2-root .dd-drawer-body::-webkit-scrollbar { width: 8px; }
@@ -321,9 +369,9 @@
 .v2-root .dd-mention-ch { flex: none; margin-top: 2px; }
 .v2-root .dd-mention-main { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
 .v2-root .dd-mention-top { display: flex; align-items: baseline; gap: 8px; }
-.v2-root .dd-mention-author { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.v2-root .dd-mention-author { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .v2-root .dd-mention-date { font-size: 11px; color: var(--text-faint); margin-left: auto; flex: none; }
-.v2-root .dd-mention-text { margin: 0; font-size: 13px; line-height: 1.5; color: var(--text-dim); }
+.v2-root .dd-mention-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--text-dim); }
 .v2-root .dd-mention-stats { display: flex; gap: 14px; margin-top: 2px; }
 .v2-root .dd-mention-stat { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-mute); }
 .v2-root .dd-mention-stat svg { color: var(--text-faint); }
@@ -332,10 +380,30 @@
 @media (max-width: 1100px) {
   .v2-root .dd-kpis { grid-template-columns: repeat(3, 1fr); }
 }
+/* intermediate: profile FULL-WIDTH on top, Summary | By network stay 2-up
+   below it (don't collapse straight to one column). Nothing clipped. */
+@media (max-width: 1200px) {
+  .v2-root .dd-hero {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "back     back"
+      "profile  profile"
+      "audtitle audtitle"
+      "summary  network";
+  }
+}
 @media (max-width: 1000px) {
-  .v2-root .dd-top { grid-template-columns: 1fr; }
   .v2-root .dd-two { grid-template-columns: 1fr; }
   .v2-root .dd-perpost { grid-template-columns: 1fr; }
+  .v2-root .dd-profile { flex-direction: column; }
+}
+/* narrow (phones): everything stacks 1-up */
+@media (max-width: 640px) {
+  .v2-root .dd-hero {
+    grid-template-columns: 1fr;
+    grid-template-areas: "back" "profile" "audtitle" "summary" "network";
+  }
+  .v2-root .dd-topics { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 960px) {
   /* stack the 3 zones: identity, switcher, tools each full-width */

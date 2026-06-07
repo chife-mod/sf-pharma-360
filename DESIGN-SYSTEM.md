@@ -422,22 +422,39 @@ dots), card channel tabs (`.ch-tab`).
 eyebrow labels, axis ticks, and badge counters. Matches Material 3
 `labelSmall`, Apple HIG `caption2`, Atlassian DS "UI Text smallest".
 
-Round-number sizes only — no half-pixel values:
+**CANONICAL SCALE — exactly 6 steps. Same role → same size, everywhere.**
+(Consolidated 2026-06-07 on the DOL-detail page from a sprawl of
+10/12/14/18/20/24/26/30/34. That page is now the reference implementation;
+the `/dols` list (`v2.css`) should be harmonised to this scale next.)
 
-| Role | px |
-|---|---|
-| KPI numbers / metric values | 21 |
-| Card name / display heading | 22 |
-| Body input / sort value / bio | 14 |
-| Card handle / body small | 13 |
-| Nav uppercase / count badge / opt-label | 12 |
-| **Floor**: uppercase labels, filter chips, badge | **11** |
-| ⛔ forbidden | < 11 |
+| Step | px | Role |
+|---|---|---|
+| Hero | **36** | H1 / hero title — DOL name, "The Pulse of Pharma…" |
+| Stat-L | **28** | Big card numbers — KPI value, total audience, brands count |
+| Stat-M | **22** | Secondary numbers — per-post avg, eng value |
+| Heading | **17** | Sub-headings — section titles, block headers, drawer title, back/breadcrumb |
+| **Body** | **14** | Primary content — bio, names, row values, buttons, inputs, brand/topic/rank labels |
+| Secondary | **12** | Supporting text — handle, sub-captions, deltas, counts, dates, "vs prev period" |
+| **Floor** | **11** | UPPERCASE micro-labels — eyebrows, column/section headers, tags, KPI labels |
+| ⛔ forbidden | < 11 | — |
 
-Refactored 2026-06-03 from a fractional scale (9.5 / 10.5 / 11.5 /
-12.5 / 13.5) inherited from the Pharma OS source bundle. Active /dols
-surface is clean; concept snapshots (`/concepts/v2/dols`,
-`/concepts/v3/dols`) preserve their original sizes by design.
+Text rule (client-locked): **14 body · 12 secondary · 11 caps.** Numbers/headings
+use 17 / 22 / 28 / 36. That's the whole scale — 7 steps, nothing else.
+
+**Consistency law (non-negotiable):**
+- **One scale, role-based.** A given role uses ONE size project-wide. **No
+  1-px gradations** (never 11 *and* 12 for the same role — pick one).
+- **No per-card / per-instance sizes or paddings.** Don't invent bespoke
+  `font-size` / `padding` on a card. Reuse the role from the scale + the
+  8-px spacing grid. If a new role is truly needed, add it to THIS table first.
+- Hierarchy comes from **weight + colour**, not from ±1-2px nudges.
+- **Inherit principles through shared components + styles — never by
+  copy-paste.** We do NOT re-declare texts / buttons / blocks from layout to
+  layout. Reuse the components (`InfluencerCard`, `Toolbar`, `KpiHero`,
+  `Sparkline`, `MentionsDrawer`, …) and the shared classes/tokens (`.kpi`,
+  `.tag`, `.metric`, `.search`, `.v2-icon-btn`, the type scale). A new screen
+  *composes* existing pieces; it doesn't fork their styling. If two layouts
+  need the same thing, it lives in one place.
 
 ### Accessibility — WCAG 2.1 AA contrast (project-wide, 2026-06-03)
 

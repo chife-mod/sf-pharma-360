@@ -46,3 +46,6 @@ next-env.d.ts
 # This project uses npm (package-lock.json). Ignore stray pnpm artifacts.
 pnpm-lock.yaml
 pnpm-workspace.yaml
+
+.env.local
+cookies.txt

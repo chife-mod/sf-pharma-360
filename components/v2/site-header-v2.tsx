@@ -64,6 +64,16 @@ export function SiteHeaderV2() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* Share the menu's shown/hidden state with sub-page sticky bars (DOL detail
+   * "прилипала") via a CSS var: when the menu is gone it pins to the very top
+   * (16px); when the menu slides back in, the bar slides down under it. */
+  useEffect(() => {
+    document.documentElement.style.setProperty("--dd-stick-top", hidden ? "16px" : "88px");
+    return () => {
+      document.documentElement.style.removeProperty("--dd-stick-top");
+    };
+  }, [hidden]);
+
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node))
