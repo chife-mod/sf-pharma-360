@@ -11,7 +11,7 @@ import manifest from "./brand-logos-manifest.json";
  * are). On GH Pages the app lives under /sf-pharma-360, so prefix manually. */
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-type Entry = { file: string; ext: string; matchedSlug: string } | null;
+type Entry = { file: string; ext?: string; matchedSlug?: string } | null;
 const MAP = manifest as Record<string, Entry>;
 
 /** Public URL of a brand's real logo, or null if none was found in MinIO. */

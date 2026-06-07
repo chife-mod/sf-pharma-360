@@ -20,6 +20,147 @@
 
 ---
 
+## ✅ CURRENT DESIGN SYSTEM — pixel-truth snapshot (2026-06-07)
+
+> **This block is the authoritative spec.** Extracted from the live build —
+> tokens in `app/dols/v2.css`, computed styles on **`/dols`** (list) and
+> **`/dols/[id]`** (detail), verified by `Consistency Verification/audit.js`
+> (both pages PASS). Where the older sections below (OKLCH / Space Grotesk /
+> lucide "Market360-mirror") disagree with this, **this wins** — they are kept
+> only as history. Foundations are CSS custom properties scoped to `.v2-root`
+> (`--v2-*` raw + unprefixed aliases like `--teal`). **Components use the
+> aliases or `color-mix()`, never raw hex — the ONE exception is `#fff` as the
+> ground for brand-logo tiles** (logos need white to stay legible on dark).
+
+### 1. Colour
+
+**Surfaces** (dark, navy-violet):
+| token | hex | use |
+|---|---|---|
+| `--bg` | `#0A0B16` | page background |
+| `--panel` | `#10111B` | cards / panels |
+| `--panel-2` | `#161824` | nested raised panels |
+| `--panel-3` | `#0D0E17` | recessed panels |
+| `--raise` | `#1A1C28` | active tab / segmented bg |
+| `--inset` | `#0B0C14` | inputs / wells |
+
+**Text:**
+| token | hex | ratio on bg | use |
+|---|---|---|---|
+| `--text` | `#EAEEF8` | ~15:1 | primary |
+| `--text-dim` | `#93A0BC` | — | secondary |
+| `--text-mute` | `#8993AD` | 5.5 AA | muted labels |
+| `--text-faint` | `#7C869D` | 4.6 AA | faint caps / tallies |
+
+**Accents** — categorical; **max 4 live per screen**, one dominant accent per entity:
+| token | hex | role |
+|---|---|---|
+| `--teal` / `--teal-bright` | `#2DD4BF` / `#34E7CE` | primary action · rising trend |
+| `--cyan` | `#22D3EE` | hashtags · secondary KPI |
+| `--violet` | `#A78BFA` | Type meta · posts KPI |
+| `--magenta` | `#F25CB0` | notifications · comments KPI · AI |
+| `--amber` | `#F5B544` | commenters KPI · "Rising" tier |
+| `--orange` | `#FB923C` | specialty · "Micro" tier · warnings |
+| `--rose` | `#FB7185` | **falling trend** (declining sparkline) |
+| `--blue` | `#60A5FA` | "Elite" tier |
+| `--green` | `#4ADE80` | Type/Group meta chips |
+
+Tints via `color-mix(in srgb, var(--accent) N%, transparent)`. Aurora glow
+tints (`--*-glow`, ~0.30 alpha) only on `.v2-app-bg` and large sections.
+
+### 2. Lines / outlines
+
+**Never solid grey.** 1px blue-grey at low alpha:
+- `--line` `rgba(150,170,210,0.10)` — default card/divider border
+- `--line-soft` `rgba(150,170,210,0.06)` — faint inner separators
+- `--line-strong` `rgba(160,180,220,0.18)` — emphasis (avatar ring, hover border)
+
+Hover border lift on cards: `rgba(150,170,210,0.22)`.
+
+### 3. Radius
+
+`--r-xs 6` · `--r-sm 9` · `--r-md 13` · `--r-lg 18` · `--r-xl 22` · `--r-pill 999`.
+Tags/buttons → pill or sm; tiles/cards → md/lg; big containers → lg/xl.
+
+### 4. Shadow & motion
+
+- `--shadow-card` `0 18px 50px -22px rgba(0,0,0,.85), 0 2px 8px -2px rgba(0,0,0,.5)`
+- `--shadow-pop` `0 24px 60px -18px rgba(0,0,0,.9)` (menus/popovers)
+- `--ease` `cubic-bezier(0.16, 1, 0.3, 1)`; transitions 0.15s (micro) – 0.3s (sticky/slide).
+- Hover: card lifts/border-brightens; **no** heavy shadows without blur.
+
+### 5. Type — ONE typeface (Inter), 7-step scale
+
+`--font` = Inter everywhere; `--font-num` = Inter + `tabular-nums` for figures.
+Hierarchy = **size + weight + colour**, never font pairing. **No size off this
+scale, no 1-px gradations, same role = same size on both pages.**
+
+| px | role | weight | example classes |
+|---|---|---|---|
+| **36** | H1 / hero | 700 | `dd-name`, hero headline |
+| **28** | big numbers | 700 | `kpi-val`, `dd-aud-total` |
+| **22** | medium numbers · card names | **700** (numbers) / 600 (`card-name`) | `metric-val`, `dd-bv-val`, `dd-aud-engval` |
+| **17** | sub-headings | 600 | `dd-section-title`, `dd-hero-audtitle`, `cmp-title` |
+| **14** | **body** | 400 (text) / 600 (emph) | `dd-bio`, `dd-rank-label`, `dd-topic-label`, nav, `card-handle` |
+| **12** | secondary | 400 / 500 (tabs) / 600 (`*-val`) | `dd-handle`, `dd-aud-sub`, `dd-rank-val`, `dd-bv-tab` |
+| **11** | UPPERCASE caps (tracked) | 500 / 600 | `kpi-label`, `dd-section-num`, `dd-bv-cap`, `tag`, `dd-snap-hcol` |
+| ⛔ <11 | forbidden | | |
+
+Weights in use: **400 / 500 / 600 / 700**. Number values that share a size
+share a weight (all 22px numbers = 700). Full 35-role table:
+`Consistency Verification/REPORT.md`.
+
+### 6. Spacing — strict 8-px grid
+
+`2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 56 / 64 …`. **12 is the only allowed
+half-step** (dense end). **Banned:** 20 / 28 / 36 / 44. Layout: content rail
+`max-width 1650`, `24px` gutters, **`16px` gaps everywhere**, `16px` tile
+padding. 12-col grid (filters `col-span-3`, main `col-span-9`).
+
+### 7. Icons — `@tabler/icons-react` (library-first)
+
+Via `Icons` / `Social` re-exports in `components/v2/icons.tsx`. Inline `<svg>`
+only for: brand marks not in any lib, one-off illustrations, animated SVG, and
+data-viz primitives (`Sparkline`). Icon-button standard: **40×40 button · 20×20
+glyph · stroke 1.6 · 10px breathing ring · flex-centered**, hover `bg-white/20`
++ `text-white`. Icons inherit `text-*` from parent — never self-coloured
+(exception: real social-network logos in `brand-logos.tsx`, which are
+brand-coloured app tiles).
+
+### 8. Component recipes (reuse — never copy-paste)
+
+- **KPI tile** `.kpi` — `--kpi-accent` drives icon + glow; 28px value, 11px
+  caps label, optional 11px delta top-right.
+- **Tag** `.tag` (`tier` / `specialty` / `meta` k-v) — 11px caps, pill, soft
+  bg + 1px line; tier colour from the audience-size ramp (`TIERS`).
+- **Sparkline** (`Sparkline`) — area gradient + 1.5px line, **no endpoint dot**
+  (removed 2026-06-07); **teal when rising, `--rose` when net-declining**;
+  seeded id for SSR stability.
+- **Brand logo tile** `.dd-bv-logo` — **square white tile** (`#fff`,
+  `aspect-ratio:1`, `--r-md`), logo = clean SVG at uniform width + **24px inset
+  all edges**, centred. Logos from MinIO `sf-ai` / official sites; brand set
+  curated to those with real SVGs (Novo Nordisk, Eli Lilly, Pfizer,
+  AstraZeneca, Sanofi).
+- **Sticky bar** `.dd-bar` — pins at `var(--dd-stick-top)` (16px when the top
+  menu is hidden-on-scroll, 88px when shown); identity reveals after the
+  profile scrolls out; channel switcher redraws **all** sections below.
+- **Channel switcher** `.ch-tab` — active gets accent underline; switching a
+  network re-reads `detail.byChannel[channel]`.
+- Reused primitives: `InfluencerCard`, `Toolbar`, `KpiHero`, `MentionsDrawer`,
+  `CompareModal`, `.metric`, `.search`, `.v2-icon-btn`, `.card-menu`.
+
+### 9. Laws (non-negotiable)
+
+1. **One scale, role-based** — a role uses ONE size on both pages; no ±1px.
+2. **No per-card/per-instance sizes or paddings** — reuse a role + the 8-px grid.
+3. **Inherit via shared components + tokens, never copy-paste** layout-to-layout.
+4. **Dark-only.** No light-mode tokens. No pure `#000`; `#fff` only as the
+   brand-logo tile ground.
+5. **AA contrast** (4.5:1) on every text surface — re-audit new surfaces.
+6. Verify with `audit.js` after every visual change: `pass: true` to ship.
+
+---
+
 ## ⏮ Rollback — surface de-blue (2026-06-03)
 
 On 2026-06-03 the whole surface palette was darkened and de-blued (the
@@ -50,6 +191,11 @@ were left untouched.
 ---
 
 ## Market360 Pharma — Dashboard Design System
+
+> ⚠️ **HISTORICAL (Market360-mirror, superseded).** This section described an
+> earlier OKLCH / Space Grotesk / lucide direction. The shipped system is HEX
+> tokens + Inter + Tabler — see "✅ CURRENT DESIGN SYSTEM" at the top. Kept for
+> the origin trail only.
 
 **Direction:** Premium dark "Pharma OS" — глубокий midnight navy/violet
 фон с яркими неоновыми акцентами (teal, magenta, orange, violet).

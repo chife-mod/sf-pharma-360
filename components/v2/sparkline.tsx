@@ -1,5 +1,4 @@
-/* Tiny SVG sparkline — verbatim port from the v2 source bundle
- * (project/app/card.jsx). Renders an area + line + endpoint dot.
+/* Tiny SVG sparkline — area + line, no endpoint dot (removed 2026-06-07).
  * `gid` is derived from data so SSR + client agree (no Math.random
  * in the original would produce hydration mismatch).
  */
@@ -45,7 +44,6 @@ export function Sparkline({ data, color, w = 100, h = 16, fill = true, seed }: P
         strokeLinejoin="round"
         vectorEffect="non-scaling-stroke"
       />
-      <circle cx={pts[pts.length - 1][0]} cy={pts[pts.length - 1][1]} r={1.8} fill={color} />
     </svg>
   );
 }

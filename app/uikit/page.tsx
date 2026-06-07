@@ -96,17 +96,15 @@ const SPACING = [
 const BANNED_SPACING = [20, 28, 36, 44];
 
 // Type scale — round sizes only, floor 11px. Roles from DESIGN-SYSTEM.md.
+// Canonical 7-step scale (locked 2026-06-07; same on /dols + /dols/[id]).
 const TYPE_SCALE = [
-  { px: 28, w: 700, role: "KPI numeral (display)" },
-  { px: 24, w: 600, role: "Section title" },
-  { px: 22, w: 600, role: "Card name / heading" },
-  { px: 20, w: 600, role: "Metric value" },
-  { px: 18, w: 500, role: "Empty-state title" },
-  { px: 16, w: 600, role: "Count number" },
-  { px: 14, w: 400, role: "Body / input / bio" },
-  { px: 13, w: 400, role: "Handle / body small" },
-  { px: 12, w: 500, role: "Nav uppercase / count badge" },
-  { px: 11, w: 600, role: "Floor — labels / chips / tally" },
+  { px: 36, w: 700, role: "H1 / hero — DOL name, hero title" },
+  { px: 28, w: 700, role: "Big numbers — KPI value, total audience" },
+  { px: 22, w: 700, role: "Medium numbers · card name" },
+  { px: 17, w: 600, role: "Sub-heading — section & block titles" },
+  { px: 14, w: 400, role: "Body — bio, names, row values, buttons" },
+  { px: 12, w: 400, role: "Secondary — handle, captions, deltas, counts" },
+  { px: 11, w: 600, role: "Caps — eyebrows, KPI labels, tags" },
 ];
 
 // Radii — from v2.css --v2-r-* scale.
@@ -858,7 +856,7 @@ function PaginationStage() {
                 width: 32,
                 height: 32,
                 borderRadius: "var(--r-sm)",
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: 600,
                 color: active ? "var(--bg)" : "var(--text-dim)",
                 background: active

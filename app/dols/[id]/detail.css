@@ -317,12 +317,11 @@
 .v2-root .dd-bv-grid { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
 .v2-root .dd-bv-card { display: flex; flex-direction: column; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-md); background: rgba(150, 170, 210, 0.03); transition: border-color 0.15s var(--ease), background 0.15s var(--ease); }
 .v2-root .dd-bv-card:hover { border-color: rgba(150, 170, 210, 0.22); background: rgba(150, 170, 210, 0.05); }
-/* square white tile. Logos are PRE-NORMALIZED to a uniform 256² white square
- * (scripts/normalize_logos.cjs: same content width + same 28px baked margin for
- * every brand), so the tile needs NO padding — the image fills it and the baked
- * white margin blends into the white tile. Identical internal spacing for all. */
-.v2-root .dd-bv-logo { display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; border-radius: var(--r-md); background: #fff; overflow: hidden; }
-.v2-root .dd-bv-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* square white tile. Logos are clean SVGs all authored at the same width, so
+ * the image fills the tile width (→ identical logo width for every brand) with
+ * a uniform 24px inset on every edge; height stays proportional, centred. */
+.v2-root .dd-bv-logo { display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; border-radius: var(--r-md); background: #fff; overflow: hidden; padding: 24px; box-sizing: border-box; }
+.v2-root .dd-bv-logo img { width: 100%; height: auto; max-height: 100%; object-fit: contain; display: block; }
 .v2-root .dd-bv-wordmark { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; line-height: 1; text-align: center; padding: 0 10px; }
 .v2-root .dd-bv-val { font-size: 22px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1; }
 .v2-root .dd-bv-cap { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); margin-top: -4px; }

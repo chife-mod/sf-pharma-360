@@ -45,15 +45,14 @@ export type Dol = {
  * Single source of truth (detail page + Brands filter + logo chips).
  * No open icon set for pharma logos → `BrandMark` renders a brand-colour
  * monogram tile (honest wordmark; real assets can drop in later). */
+/* Curated to the brands we have real (SVG) logos for. Merck / Bayer /
+ * Boehringer dropped 2026-06-07 (no clean asset; logos drive perception). */
 export const BRAND_META: Record<string, { color: string; mono: string }> = {
-  "Novo Nordisk":         { color: "#001965", mono: "N" },
-  "Eli Lilly":            { color: "#D52B1E", mono: "L" },
-  "Pfizer":               { color: "#007AB0", mono: "P" },
-  "AstraZeneca":          { color: "#7A1B8B", mono: "A" },
-  "Sanofi":               { color: "#7A00E6", mono: "S" },
-  "Boehringer Ingelheim": { color: "#00786A", mono: "B" },
-  "Bayer":                { color: "#10384F", mono: "B" },
-  "Merck":                { color: "#00857C", mono: "M" },
+  "Novo Nordisk": { color: "#001965", mono: "N" },
+  "Eli Lilly":    { color: "#D52B1E", mono: "L" },
+  "Pfizer":       { color: "#007AB0", mono: "P" },
+  "AstraZeneca":  { color: "#7A1B8B", mono: "A" },
+  "Sanofi":       { color: "#7A00E6", mono: "S" },
 };
 export const BRANDS = Object.keys(BRAND_META);
 
@@ -211,9 +210,10 @@ export const DOLS: Dol[] = RAW.map((d) => ({
   spark: spark(d.seed, 12, 0.42),
   engSpark: spark(d.seed + 5, 12, 0.5),
   bucket: bucketFor(d.metrics.followers),
-  // 3–6 brands rotated by seed (deterministic)
+  // 3–5 unique brands rotated by seed (deterministic; capped at BRANDS.length
+  // so a smaller brand set never repeats a logo on one DOL)
   brands: Array.from(
-    { length: 3 + (d.seed % 4) },
+    { length: Math.min(3 + (d.seed % 4), BRANDS.length) },
     (_, i) => BRANDS[(d.seed + i) % BRANDS.length],
   ),
 }));

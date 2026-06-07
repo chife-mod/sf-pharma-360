@@ -9,6 +9,18 @@
 |-------|:---------:|:---------:|:----------:|:--------:|
 | `/dols` (list) | 0 | 0 | 0 | ✅ |
 | `/dols/[id]` (detail) | 0 | 0 | 0 | ✅ |
+| `/uikit` (catalog) | 0 | 0 | 0 | ✅ |
+
+### UIKit alignment (2026-06-07)
+`/uikit` had drifted off the system and was realigned to match the live pages:
+- `TYPE_SCALE` demo showed the OLD sprawl (28/24/22/20/18/16/14/13/12/11) →
+  replaced with the canonical 7 steps (36/28/22/17/14/12/11).
+- `uikit-section-title` 24→22, `uikit-swatch-name` 13→12, hero title 40→36,
+  sub 16→14, all 13px catalog labels →12, pagination demo 13→14.
+
+### Sparkline (2026-06-07)
+Endpoint dot removed from `Sparkline` (verified 0 dots across 22 sparklines on
+the detail page). Area + line only.
 
 **Both pages on one denominator** — type scale {11,12,14,17,22,28,36}, weights
 {400,500,600,700}. No 13 / 16 / 19 / 20 anywhere. No role rendered at two

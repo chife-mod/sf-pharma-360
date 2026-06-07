@@ -1,42 +1,7 @@
 {
-  "Novo Nordisk": {
-    "file": "novo_nordisk.png",
-    "ext": "png",
-    "matchedSlug": "novo_nordisk"
-  },
-  "Eli Lilly": {
-    "file": "eli_lilly.png",
-    "ext": "png",
-    "matchedSlug": "eli_lilly"
-  },
-  "Pfizer": {
-    "file": "pfizer.png",
-    "ext": "png",
-    "matchedSlug": "pfizer-wordmark"
-  },
-  "AstraZeneca": {
-    "file": "astrazeneca.png",
-    "ext": "png",
-    "matchedSlug": "astrazeneca"
-  },
-  "Sanofi": {
-    "file": "sanofi.png",
-    "ext": "png",
-    "matchedSlug": "sanofi"
-  },
-  "Boehringer Ingelheim": {
-    "file": "boehringer_ingelheim.png",
-    "ext": "png",
-    "matchedSlug": "boehringer_ingelheim"
-  },
-  "Bayer": {
-    "file": "bayer.png",
-    "ext": "png",
-    "matchedSlug": "bayer"
-  },
-  "Merck": {
-    "file": "merck.png",
-    "ext": "png",
-    "matchedSlug": "merck"
-  }
+  "Novo Nordisk": { "file": "novo_nordisk.svg", "ext": "svg" },
+  "Eli Lilly": { "file": "lilly.svg", "ext": "svg" },
+  "Pfizer": { "file": "pfizer.svg", "ext": "svg" },
+  "AstraZeneca": { "file": "astra-zenica.svg", "ext": "svg" },
+  "Sanofi": { "file": "sanofi.svg", "ext": "svg" }
 }
