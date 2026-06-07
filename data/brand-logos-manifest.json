@@ -9,7 +9,11 @@
     "ext": "png",
     "matchedSlug": "eli_lilly"
   },
-  "Pfizer": null,
+  "Pfizer": {
+    "file": "pfizer.png",
+    "ext": "png",
+    "matchedSlug": "pfizer-wordmark"
+  },
   "AstraZeneca": {
     "file": "astrazeneca.png",
     "ext": "png",
