@@ -28,7 +28,7 @@ function auditConsistency(opts) {
   // logo wordmarks are an explicit exemption (brand lockups, not UI type)
   const EXEMPT_ROLE = /(v2-brand-market|v2-brand-360|dd-bv-wordmark)/;
   // only audit OUR component roles, not Tailwind utility soup on shared chrome
-  const SEMANTIC = /^(dd-|kpi|metric|tag\b|tags\b|card-|nav-|sort-|count-|cmp-|fchip|opt-|filter-|hdr-|search|ch-tab|channels|avatar|brand-pharma|empty)/;
+  const SEMANTIC = /^(dd-|kpi|metric|tag\b|tags\b|card-|nav-|sort-|count-|cmp-|fchip|opt-|filter-|hdr-|search|ch-tab|channels|avatar|brand-pharma|empty|asd-|uikit-)/;
 
   const root = document.querySelector(".v2-root") || document.body;
   const leaves = [...root.querySelectorAll("*")].filter((e) => {

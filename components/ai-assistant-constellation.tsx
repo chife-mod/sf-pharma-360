@@ -204,7 +204,14 @@ export function AiAssistantConstellation() {
   };
 
   return (
-    <button type="button" className="ai-fab ai-fab--cst" aria-label="AI assistant" title="AI assistant">
+    <button
+      type="button"
+      className="ai-fab ai-fab--cst"
+      aria-label="AI assistant"
+      title="AI assistant"
+      onClick={() => window.dispatchEvent(new CustomEvent("sf-open-assistant"))}
+    >
+
       <svg className="ai-rings ai-cst" viewBox="2 1.25 40 40" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="g-cst-y" x1="0" y1="0" x2="1" y2="1">

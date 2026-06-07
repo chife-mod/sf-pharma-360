@@ -2,13 +2,16 @@
 
 import { useEffect } from "react";
 
-/* Animated favicon — coloured dots fly into a dark disc on a conveyor (with
- * pauses + easing), overlapping like the brand mark; overlaps blend additively
- * so intersections show mixed colours. Canvas frames are swapped into the
- * <link rel="icon"> (the reliable cross-browser way — GIF/SVG favicons don't
- * animate in Chrome). */
+/* Animated favicon — a circular MASK with big colour circles riding a conveyor
+ * right→left. They overlap; overlaps blend ADDITIVELY so intersections show
+ * mixed (logo) colours. Motion is shift→pause→shift→pause with an ease-in-out.
+ * A static <link rel="icon" href=/favicon.svg> stays the baseline (shown before
+ * JS / where the browser throttles favicon animation); this enhances it by
+ * swapping the link href to canvas frames. Restores the static href on cleanup. */
 export function AnimatedFavicon() {
   useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+
     const S = 64;
     const cvs = document.createElement("canvas");
     cvs.width = S;
@@ -16,74 +19,74 @@ export function AnimatedFavicon() {
     const ctx = cvs.getContext("2d");
     if (!ctx) return;
 
-    let link = document.querySelector<HTMLLinkElement>("link[rel~='icon']");
-    const created = !link;
-    if (!link) {
-      link = document.createElement("link");
-      link.rel = "icon";
-      document.head.appendChild(link);
+    // update EVERY icon link (Next can emit more than one) so whichever the
+    // browser actually displays gets the animation.
+    const links = Array.from(document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']"));
+    let createdLink: HTMLLinkElement | null = null;
+    if (!links.length) {
+      createdLink = document.createElement("link");
+      createdLink.rel = "icon";
+      document.head.appendChild(createdLink);
+      links.push(createdLink);
     }
-    const prevHref = link.href;
+    const prev = links.map((l) => [l, l.getAttribute("href")] as const);
 
     const cx = S / 2;
     const cy = S / 2;
-    const R = S * 0.165; // dot radius
-    const reach = S * 0.6; // fly-in start distance
-    const ease = (x: number) => 1 - Math.pow(1 - x, 3); // ease-out cubic
+    const R_DISC = S * 0.47; // mask radius
+    const R_BIG = S * 0.42; // travelling circle radius
+    const SLOT = S * 0.5; // spacing → adjacent circles overlap (mix in the middle)
+    const COLORS = ["#34E7CE", "#F25CB0", "#F5B544", "#A78BFA"]; // teal · magenta · gold · violet
+    const STEP_FRAMES = 14; // frames per shift+pause (~1.3s at 90ms)
+    const MOVE = 0.6; // first 60% of a step moves (eased), rest pauses
+    const PERIOD = STEP_FRAMES * COLORS.length; // seamless loop (shift ≡ 0 again)
+    const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-    // 3 dots — colour, resting slot (offset from centre), entry angle, phase
-    const dots = [
-      { c: "#34E7CE", ox: -0.13, oy: -0.05, ang: -2.4, phase: 0 },   // teal
-      { c: "#F25CB0", ox: 0.14, oy: -0.07, ang: -0.5, phase: 0.33 }, // magenta
-      { c: "#F5B544", ox: 0.0, oy: 0.15, ang: 1.7, phase: 0.66 },    // gold
-    ];
-
-    const CYCLE = 90; // frames per loop (~9s at 100ms)
     let frame = 0;
     let timer = 0;
 
     const draw = () => {
-      ctx.clearRect(0, 0, S, S);
-      // dark brand disc
-      ctx.fillStyle = "#05071B";
-      ctx.beginPath();
-      ctx.arc(cx, cy, S * 0.47, 0, Math.PI * 2);
-      ctx.fill();
+      const stepf = frame / STEP_FRAMES;
+      const istep = Math.floor(stepf);
+      const local = stepf - istep;
+      const moveE = local < MOVE ? easeInOut(local / MOVE) : 1;
+      const shift = (istep + moveE) * SLOT;
 
+      ctx.clearRect(0, 0, S, S);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, R_DISC, 0, Math.PI * 2);
+      ctx.clip(); // circular mask
+      ctx.fillStyle = "#05071B"; // dark disc ground
+      ctx.fillRect(0, 0, S, S);
       ctx.globalCompositeOperation = "lighter"; // additive → blended overlaps
-      for (const d of dots) {
-        const local = ((frame / CYCLE + d.phase) % 1); // 0..1
-        let p: number;
-        if (local < 0.32) p = ease(local / 0.32);            // fly in
-        else if (local < 0.68) p = 1;                         // pause (settled)
-        else p = 1 - ease((local - 0.68) / 0.32);             // fly back out
-        const sx = cx + Math.cos(d.ang) * reach;
-        const sy = cy + Math.sin(d.ang) * reach;
-        const tx = cx + d.ox * S;
-        const ty = cy + d.oy * S;
-        const x = sx + (tx - sx) * p;
-        const y = sy + (ty - sy) * p;
-        ctx.fillStyle = d.c;
+
+      const kLo = Math.floor((shift - cx - R_BIG) / SLOT) - 1;
+      const kHi = Math.ceil((shift + S - cx + R_BIG) / SLOT) + 1;
+      for (let k = kLo; k <= kHi; k++) {
+        const x = cx + k * SLOT - shift;
+        ctx.fillStyle = COLORS[((k % COLORS.length) + COLORS.length) % COLORS.length];
         ctx.beginPath();
-        ctx.arc(x, y, R, 0, Math.PI * 2);
+        ctx.arc(x, cy, R_BIG, 0, Math.PI * 2);
         ctx.fill();
       }
-      ctx.globalCompositeOperation = "source-over";
+      ctx.restore();
 
       try {
-        link!.href = cvs.toDataURL("image/png");
+        const url = cvs.toDataURL("image/png");
+        for (const l of links) l.setAttribute("href", url);
       } catch {
         /* ignore */
       }
-      frame = (frame + 1) % CYCLE;
-      timer = window.setTimeout(draw, 100);
+      frame = (frame + 1) % PERIOD;
+      timer = window.setTimeout(draw, 90);
     };
     draw();
 
     return () => {
       window.clearTimeout(timer);
-      if (created) link?.remove();
-      else if (link) link.href = prevHref;
+      if (createdLink) createdLink.remove();
+      for (const [l, h] of prev) if (l !== createdLink && h != null) l.setAttribute("href", h);
     };
   }, []);
 

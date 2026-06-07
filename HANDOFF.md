@@ -111,6 +111,20 @@ the target is visible without scrolling. `getComputedStyle` reads are flaky
 
 ---
 
+## 🔭 Backlog / ideas (not built yet)
+
+- **FAB hover → dots fly into the icon.** Today the constellation FAB only
+  merges its 3 orbiting dots into the sparkles glyph on the timed ~10s loop.
+  IDEAL: on **hover**, from wherever the dots currently are, they "шух" sweep
+  into the icon (trigger the merge phase early), and reverse on hover-out.
+  Needs the rAF loop in `ai-assistant-constellation.tsx` to accept a hover flag
+  and ease toward the merged state instead of following only loop time.
+  (Hover **glow** grow+intensify is already done in `ai-assistant.css`.)
+- **AI Copilot** iteration 2+: real `Edit scope` editor (popover), open-thread →
+  restore its scope snapshot, response-length toggle, citation → scroll-to-source.
+
+---
+
 ## 1. Where we are now (all shipped + deployed)
 
 ### AI assistant FAB — DONE & consolidated
