@@ -13,13 +13,16 @@
 
 .asd {
   position: fixed; top: 0; right: 0; bottom: 0; z-index: 100001;
-  display: flex; flex-direction: row;
+  display: flex; flex-direction: column;
   background: var(--panel); border-left: 1px solid var(--line-strong);
   box-shadow: -24px 0 60px -24px rgba(0, 0, 0, 0.7);
   animation: asd-slide 0.28s var(--ease); color: var(--text); font-family: var(--font);
   transform: translateZ(0); /* own composite layer → stops the scroll flicker */
   backface-visibility: hidden;
 }
+/* the rail + main sit in a row; the version switch is a full-width footer */
+.asd-cols { flex: 1; min-height: 0; display: flex; flex-direction: row; }
+.asd-foot { flex: none; }
 /* dark, thin scrollbars inside the drawer (no default light bars, no double) */
 .asd-body, .asd-rail-scroll { scrollbar-width: thin; scrollbar-color: rgba(150, 170, 210, 0.22) transparent; overscroll-behavior: contain; }
 .asd-body::-webkit-scrollbar, .asd-rail-scroll::-webkit-scrollbar { width: 10px; }

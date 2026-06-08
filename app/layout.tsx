@@ -4,7 +4,7 @@ import "./globals.css";
 
 import { ServiceMenu } from "@/components/service-menu";
 import { FloatingFabs } from "@/components/floating-fabs";
-import { AssistantDrawer } from "@/components/v2/assistant-drawer";
+import { AssistantDrawer } from "@/components/v2/assistant-drawer-host";
 import { AnimatedFavicon } from "@/components/animated-favicon";
 
 /* Raw favicon URL must be basePath-aware (GH Pages serves under

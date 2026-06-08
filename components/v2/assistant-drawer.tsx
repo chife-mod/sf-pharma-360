@@ -25,6 +25,7 @@ import {
   PROMPT_GROUPS, ALL_PROMPTS, DYNAMIC_SUGGESTIONS, HISTORY_THREADS, SOURCES,
   CONTENT_TYPES, TAGS_BY_CONTENT, THEMES, answerFor, scopeSummary, type PromptDef,
 } from "@/data/assistant";
+import { VersionSwitch, type DrawerVersionProps } from "./assistant-version-switch";
 
 const PERIOD = "Jun 07, 2025 – Jun 07, 2026"; // fixed (no Date in static export)
 const ANALYSIS = ALL_PROMPTS.filter((p) => p.kind === "analysis"); // actions (14)
@@ -229,9 +230,8 @@ function PromptSectionLabel({ kind, children }: { kind: "dyn" | "analyze" | "fil
   );
 }
 
-export function AssistantDrawer() {
+export function AssistantDrawerV1({ open, onClose, version, onVersion }: DrawerVersionProps) {
   const scope = useScope();
-  const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [width, setWidth] = useState(760);
   const sizedRef = useRef(false);
@@ -260,11 +260,13 @@ export function AssistantDrawer() {
   );
   const filterById = useMemo(() => Object.fromEntries(allFilters.map((f) => [f.id, f])), [allFilters]);
 
+  // host owns the FAB event + open state; size on first open
   useEffect(() => {
-    const onOpen = () => { setOpen(true); if (!sizedRef.current) { setWidth(Math.round(Math.min(960, Math.max(700, window.innerWidth * 0.52)))); sizedRef.current = true; } };
-    window.addEventListener("sf-open-assistant", onOpen);
-    return () => window.removeEventListener("sf-open-assistant", onOpen);
-  }, []);
+    if (open && !sizedRef.current) {
+      setWidth(Math.round(Math.min(960, Math.max(700, window.innerWidth * 0.52))));
+      sizedRef.current = true;
+    }
+  }, [open]);
 
   // tags depend on content → drop active tag filters that no longer exist (themes persist)
   useEffect(() => {
@@ -281,10 +283,10 @@ export function AssistantDrawer() {
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key !== "Escape") return; if (promptPickerOpen) setPromptPickerOpen(false); else if (pickerOpen) setPickerOpen(false); else if (contentOpen) setContentOpen(false); else setOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key !== "Escape") return; if (promptPickerOpen) setPromptPickerOpen(false); else if (pickerOpen) setPickerOpen(false); else if (contentOpen) setContentOpen(false); else onClose(); };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, pickerOpen, promptPickerOpen, contentOpen]);
+  }, [open, pickerOpen, promptPickerOpen, contentOpen, onClose]);
 
   useEffect(() => {
     if (!contentOpen) return;
@@ -362,10 +364,11 @@ export function AssistantDrawer() {
 
   return (
     <div className="v2-root" style={{ display: "contents" }}>
-      <div className="asd-scrim" onClick={() => setOpen(false)} />
+      <div className="asd-scrim" onClick={onClose} />
       <aside className="asd" style={panelStyle} role="dialog" aria-label="AI Copilot">
         {!expanded ? <div className="asd-resize" onMouseDown={onResizeStart} aria-hidden /> : null}
 
+        <div className="asd-cols">
         {!railCollapsed ? (
           <div className="asd-rail">
             <div className="asd-rail-head">
@@ -391,7 +394,7 @@ export function AssistantDrawer() {
             </div>
             <div className="asd-head-r">
               <button type="button" className="asd-iconbtn" aria-label={expanded ? "Collapse" : "Expand"} onClick={() => setExpanded((e) => !e)}>{expanded ? <IconArrowsDiagonalMinimize2 size={18} stroke={1.7} /> : <IconArrowsDiagonal size={18} stroke={1.7} />}</button>
-              <button type="button" className="asd-iconbtn" aria-label="Close" onClick={() => setOpen(false)}><IconX size={18} stroke={1.7} /></button>
+              <button type="button" className="asd-iconbtn" aria-label="Close" onClick={onClose}><IconX size={18} stroke={1.7} /></button>
             </div>
           </header>
 
@@ -544,6 +547,8 @@ export function AssistantDrawer() {
             </>
           ) : null}
         </div>
+        </div>
+        <div className="asd-foot"><VersionSwitch version={version} onVersion={onVersion} /></div>
       </aside>
     </div>
   );
