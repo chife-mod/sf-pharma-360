@@ -1,5 +1,11 @@
-# HANDOFF — sf-pharma-360 — 2026-06-07 (rev 8)
+# HANDOFF — sf-pharma-360 — 2026-06-08 (rev 9)
 
+> 🔥 **HOT THREAD:** the **AI Copilot drawer + Explore galaxy** — see the
+> dedicated [`HANDOFF-ai-copilot.md`](HANDOFF-ai-copilot.md) for where we are,
+> goals, what's done, and what to do next. It's **shipped to live** (commit
+> `598cb4f`); next step = refine Explore to the CleanMyMac "Space Lens" look
+> (central circle + satellites + icons + zoom).
+>
 > **Entry point.** New session reads this **FIRST**, then `CLAUDE.md`,
 > then `DESIGN-SYSTEM.md`. Dev server: `.claude/launch.json` → port
 > **4322** (start via the preview tool, name `sf-pharma-360`; or
@@ -18,12 +24,13 @@
 
 ---
 
-## 0. Latest session — 2026-06-07 (DOL detail polish, NOT yet deployed)
+## 0. Latest session — 2026-06-08 (ALL DEPLOYED ✅)
 
-DOL **detail** page (`/dols/[id]`, `components/v2/dol-detail.tsx` + scoped
-`app/dols/[id]/detail.css`) and the **list** page (`/dols`, `app/dols/v2.css`)
-got a polish pass. All `tsc --noEmit` clean; `next build` static export passes
-(17 pages, 9 DOL detail paths). **In-progress, not committed/deployed.**
+Everything below + the **AI Copilot drawer & Explore galaxy**
+([`HANDOFF-ai-copilot.md`](HANDOFF-ai-copilot.md)) is **shipped to live**
+(commits up to `598cb4f`). DOL **detail** (`/dols/[id]`) + **list** (`/dols`)
+polish, then the AI Copilot + Explore + animated/static favicon. `tsc` clean;
+`next build` static export passes.
 
 1. **Animated favicon** — `components/animated-favicon.tsx` (mounted in
    `app/layout.tsx`). Canvas, 3 brand dots (teal/magenta/gold) fly into a dark
